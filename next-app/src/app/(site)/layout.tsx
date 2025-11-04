@@ -1,3 +1,4 @@
+import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { ReactNode } from "react";
 
@@ -11,9 +12,7 @@ export default function PublicLayout({ children }: Props) {
     <div className="flex min-h-dvh flex-col">
       <Header />
       <main>{children}</main>
-      <footer className="mt-auto">
-        <div className="container">Footer</div>
-      </footer>
+      <Footer />
     </div>
   );
 }
