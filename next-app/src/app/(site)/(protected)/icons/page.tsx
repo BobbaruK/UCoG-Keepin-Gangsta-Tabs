@@ -1,6 +1,8 @@
 import { AccountIcon } from "@/components/icons/account";
+import { AddIcon } from "@/components/icons/add";
 import { AdminIcon } from "@/components/icons/admin";
 import { AirplayIcon } from "@/components/icons/airplay";
+import { ArrowLeftIcon } from "@/components/icons/arrow-left";
 import { BanIcon } from "@/components/icons/ban";
 import { CalendarIcon } from "@/components/icons/calendar";
 import { CameraIcon } from "@/components/icons/camera";
@@ -11,6 +13,7 @@ import { ChevronUpIcon } from "@/components/icons/chevron-up";
 import { CogIcon } from "@/components/icons/cog";
 import { CopyIcon } from "@/components/icons/copy";
 import { DiscordIcon } from "@/components/icons/discord";
+import { EditIcon } from "@/components/icons/edit";
 import { EnvelopeIcon } from "@/components/icons/envelope";
 import { ErrorIcon } from "@/components/icons/error";
 import { GamepadIcon } from "@/components/icons/gamepad";
@@ -225,6 +228,18 @@ const icons: {
   {
     name: "RolesIcon",
     icon: RolesIcon,
+  },
+  {
+    name: "AddIcon",
+    icon: AddIcon,
+  },
+  {
+    name: "EditIcon",
+    icon: EditIcon,
+  },
+  {
+    name: "ArrowLeftIcon",
+    icon: ArrowLeftIcon,
   },
 ];
 
