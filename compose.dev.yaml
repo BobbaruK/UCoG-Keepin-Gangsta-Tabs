@@ -1,0 +1,62 @@
+services:
+  next-app:
+    container_name: webapp-cog-keepin-gangsta-tabs-dev
+    build:
+      context: ./next-app
+      dockerfile: /docker/dev.Dockerfile
+
+    # Set environment variables directly in the compose file
+    environment:
+      ENV_VARIABLE: ${ENV_VARIABLE}
+      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+      TEST_VARIABLE: ${TEST_VARIABLE}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_DEFAULT_REGISTER_PASSWORD: ${NEXT_PUBLIC_DEFAULT_REGISTER_PASSWORD}
+      # DB
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public
+      # Better Auth
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      # Resend
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      # Github
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      # Github
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      # Admin and Owner Emails
+      ADMIN_EMAILS: ${ADMIN_EMAILS}
+      OWNER_EMAILS: ${OWNER_EMAILS}
+
+    restart: always
+    ports:
+      - 3001:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./next-app/src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16-alpine
+    container_name: ${DB_HOST}
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  OWNER
+}
+
+model auth_user {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  name             String
+  firstName        String
+  lastName         String
+  slug             String    @unique
+  username         String    @unique
+  displayUsername  String    @unique
+  email            String    @unique
+  emailVerified    Boolean   @default(false)
+  image            String?
+  bio              String?
+  role             UserRole  @default(USER)
+  banned           Boolean?  @default(false)
+  banReason        String?
+  banExpires       DateTime?
+  twoFactorEnabled Boolean?  @default(false)
+  isAccountVisible Boolean?  @default(true)
+  lastLoginMethod  String?
+  lastLoginAt      DateTime  @default(now())
+
+  sessions   auth_session[]
+  accounts   auth_account[]
+  twofactors auth_two_factor[]
+
+  @@index([email, slug])
+  @@map("user")
+}
+
+model auth_session {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  expiresAt      DateTime
+  token          String   @unique
+  ipAddress      String?
+  userAgent      String?
+  impersonatedBy String?
+
+  userId String
+  user   auth_user @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, token])
+  @@map("session")
+}
+
+model auth_account {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  userId String
+  user   auth_user @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model auth_verification {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  identifier String
+  value      String
+  expiresAt  DateTime
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model auth_two_factor {
+  id String @id @unique @default(cuid())
+
+  secret      String
+  backupCodes String
+  userId      String
+
+  auth_user auth_user @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([secret])
+  @@map("two_factor")
+}
