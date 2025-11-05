@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     enableColumnPinning: true,
-    columnResizeMode: "onChange",
+    // columnResizeMode: "onChange",
     state: {
       columnVisibility,
     },
@@ -191,7 +191,7 @@ export function DataTable<TData, TValue>({
                               header.getContext(),
                             )}
                         {/* {column.getSize()} */}
-                        <div
+                        {/* <div
                           className={cn(
                             "bg-primary hover:bg-muted absolute top-0 right-0 h-full w-1 cursor-col-resize touch-none",
                             header.column.getIsResizing()
@@ -201,7 +201,7 @@ export function DataTable<TData, TValue>({
                           onDoubleClick={() => header.column.resetSize()}
                           onMouseDown={header.getResizeHandler()}
                           onTouchStart={header.getResizeHandler()}
-                        />
+                        /> */}
                       </TableHead>
                     );
                   })}
