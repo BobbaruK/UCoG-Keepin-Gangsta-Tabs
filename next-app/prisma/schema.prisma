@@ -132,8 +132,23 @@ model cog_side_effect {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name        String
+  name        String         @unique
   description String?
   type        SideEffectType @default(MOVEMENT)
   value       Int
+
+  cog_trait cog_trait[]
+}
+
+model cog_trait {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String  @unique
+  description String?
+  image       String?
+
+  sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id])
+  cog_side_effectId String?
 }
