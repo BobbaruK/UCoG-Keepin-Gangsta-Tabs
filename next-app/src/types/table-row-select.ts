@@ -1,4 +1,4 @@
-import { cog_side_effect } from "@/generated/prisma";
+import { cog_side_effect, cog_trait } from "@/generated/prisma";
 import { UserSession } from "./session";
 
 export type TableRowSelect =
@@ -9,4 +9,8 @@ export type TableRowSelect =
   | {
       type: "side-effects";
       data: cog_side_effect[] | null;
+    }
+  | {
+      type: "traits";
+      data: cog_trait[] | null;
     };
