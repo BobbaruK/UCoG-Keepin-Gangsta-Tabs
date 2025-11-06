@@ -5,7 +5,6 @@ import {
   API_AUTH_PREFIX,
   AUTH_ROUTES,
   FORBIDDEN_ROUTES,
-  PUBLIC_ROUTES,
 } from "./constants/routes";
 
 export async function proxy(request: NextRequest) {
@@ -17,7 +16,7 @@ export async function proxy(request: NextRequest) {
   const isLoggedIn = !!sessionCookie;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(API_AUTH_PREFIX);
-  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
+  // const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
   const isForbiddenRoute = FORBIDDEN_ROUTES.includes(nextUrl.pathname);
 
@@ -32,9 +31,9 @@ export async function proxy(request: NextRequest) {
     return;
   }
 
-  if (!isLoggedIn && !isPublicRoute) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // if (!isLoggedIn && !isPublicRoute) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
   return;
 }
