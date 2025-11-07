@@ -1,4 +1,10 @@
-const MESSAGES_FN = () => {
+export const MESSAGES_FN = ({
+  resource,
+  resourceName,
+}: {
+  resource?: string;
+  resourceName?: string;
+}) => {
   return {
     ACCOUNT_LINK_SUCCESSFUL: "Account linked successfully.",
     ACCOUNT_UNLINK_SUCCESSFUL: "Account unlinked successfully.",
@@ -43,7 +49,28 @@ const MESSAGES_FN = () => {
     USER_ALREADY_UNBANNED: "User is not banned.",
     USER_NOT_EXIST: "User does not exist.",
     USERNAME_NOT_AVAILABLE: "Username not available.",
+
+    // COG
+    RESOURCE_CREATE_SUCCESS: resource
+      ? `You have successfully created ${resource}${resourceName ? `: ${resourceName}.` : "."}`
+      : `You have successfully created this resource`,
+    RESOURCE_CREATE_UNAUTHORIZED: resource
+      ? `You are not authorized to create ${resource}.`
+      : `You are not authorized to create this resource.`,
+    RESOURCE_EDIT_SUCCESS: resource
+      ? `You have successfully updated ${resource}${resourceName ? `: ${resourceName}.` : "."}`
+      : `You have successfully updated this resource`,
+    RESOURCE_EDIT_UNAUTHORIZED: resource
+      ? `You are not authorized to update ${resource}.`
+      : `You are not authorized to update this resource.`,
+    RESOURCE_DELETE_SUCCESS: resource
+      ? `You have successfully deleted ${resource}${resourceName ? `: ${resourceName}.` : "."}`
+      : `You have successfully deleted this resource`,
+    RESOURCE_DELETE_UNAUTHORIZED: resource
+      ? `You are not authorized to delete ${resource}.`
+      : `You are not authorized to delete this resource.`,
+    RESOURCE_NOT_EXISTS: `Resource does note exists.`,
   };
 };
 
-export const MESSAGES = MESSAGES_FN();
+export const MESSAGES = MESSAGES_FN({});
