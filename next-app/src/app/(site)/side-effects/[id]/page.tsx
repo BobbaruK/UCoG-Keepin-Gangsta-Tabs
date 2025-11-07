@@ -1,8 +1,10 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { getSideEffect } from "@/core/admin/side-effects/data/get-side-effects";
-import { UserRole } from "@/generated/prisma";
+import { MESSAGES } from "@/constants/messages";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import SideEffectPresentation from "@/features/side-effects/components/side-effect-presentation";
+import { getSideEffect } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -25,12 +27,12 @@ const SideEffectPage = async ({ params }: Props) => {
       <PageStructure>
         <PageTitle
           label={"unknown"}
-          backBtnHref={`/side-effect`}
-          role={session?.user.role as UserRole}
+          backBtnHref={sideEffectsTitle.href}
+          session={session}
         />
         <CustomAlert
           title={"Error!"}
-          description={"MESSAGES.USER_NOT_EXIST"}
+          description={MESSAGES.RESOURCE_NOT_EXISTS}
           variant="danger"
         />
       </PageStructure>
@@ -40,14 +42,16 @@ const SideEffectPage = async ({ params }: Props) => {
     <PageStructure>
       <PageTitle
         label={sideEffect.name}
-        backBtnHref="/side-effect"
-        editBtnHref={`/side-effect/${id}/edit`}
-        role={session?.user.role as UserRole}
+        backBtnHref={sideEffectsTitle.href}
+        editBtnHref={`${sideEffectsTitle.href}/${id}/edit`}
+        session={session}
       />
 
-      <div>
+      <SideEffectPresentation sideEffect={sideEffect} />
+
+      {/* <div>
         <pre>{JSON.stringify({ sideEffect }, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };

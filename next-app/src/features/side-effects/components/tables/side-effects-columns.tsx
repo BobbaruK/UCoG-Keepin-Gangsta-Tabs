@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -64,9 +66,9 @@ export const sideEffectColumns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    // size: 110,
+    // minSize: 105,
+    // maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -87,7 +89,7 @@ export const sideEffectColumns = ({
         <div className="flex flex-col gap-2">
           <Link
             className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`/side-effect/${sideEffectId}`}
+            href={`${sideEffectsTitle.href}/${sideEffectId}`}
           >
             {name}
           </Link>
@@ -103,11 +105,11 @@ export const sideEffectColumns = ({
     },
     accessorFn: (originalRow) => originalRow.type.toLowerCase(),
     enableHiding: false,
-    enableSorting: true,
+    enableSorting: false,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    // size: 110,
+    // minSize: 105,
+    // maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -132,9 +134,9 @@ export const sideEffectColumns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    // size: 110,
+    // minSize: 105,
+    // maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -147,7 +149,18 @@ export const sideEffectColumns = ({
       );
     },
 
-    cell: ({ row }) => row.original.value,
+    cell: ({ row }) => {
+      const sideEffect = row.original;
+      const sideEffectValue = sideEffect.value;
+
+      return (
+        <Badge
+          variant={Math.sign(sideEffectValue) === 1 ? "success" : "danger"}
+        >
+          {sideEffectValue}
+        </Badge>
+      );
+    },
   },
   // Description
   {
@@ -159,9 +172,9 @@ export const sideEffectColumns = ({
     enableHiding: true,
     enableSorting: false,
     enablePinning: false,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    // size: 110,
+    // minSize: 105,
+    // maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -187,9 +200,9 @@ export const sideEffectColumns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    size: 170,
-    minSize: 170,
-    maxSize: 200,
+    // size: 170,
+    // minSize: 170,
+    // maxSize: 200,
     header: ({ column }) => {
       return (
         <THeadDropdown

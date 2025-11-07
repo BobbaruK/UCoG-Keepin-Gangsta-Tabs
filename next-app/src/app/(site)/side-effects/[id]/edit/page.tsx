@@ -1,8 +1,11 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { getSideEffect } from "@/core/admin/side-effects/data/get-side-effects";
-import { UserRole } from "@/generated/prisma";
+import { MESSAGES } from "@/constants/messages";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
+import EditSideEffectForm from "@/features/side-effects/components/forms/edit-side-effect";
+import { getSideEffect } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -18,6 +21,8 @@ const SideEffectEditPage = async ({ params }: Props) => {
     headers: await headers(),
   });
 
+  redirectNonAdminUsers({ to: `${sideEffectsTitle.href}/${id}`, session });
+
   const sideEffect = await getSideEffect(id);
 
   if (!sideEffect)
@@ -25,12 +30,12 @@ const SideEffectEditPage = async ({ params }: Props) => {
       <PageStructure>
         <PageTitle
           label={"unknown"}
-          backBtnHref={`/side-effect`}
-          role={session?.user.role as UserRole}
+          backBtnHref={`${sideEffectsTitle.href}/${id}`}
+          session={session}
         />
         <CustomAlert
           title={"Error!"}
-          description={"MESSAGES.USER_NOT_EXIST"}
+          description={MESSAGES.RESOURCE_NOT_EXISTS}
           variant="danger"
         />
       </PageStructure>
@@ -40,13 +45,11 @@ const SideEffectEditPage = async ({ params }: Props) => {
     <PageStructure>
       <PageTitle
         label={`Edit "${sideEffect.name}"`}
-        backBtnHref={`/side-effect/${id}`}
-        role={session?.user.role as UserRole}
+        backBtnHref={`${sideEffectsTitle.href}/${id}`}
+        session={session}
       />
 
-      <div>
-        <pre>{JSON.stringify({ sideEffect }, null, 2)}</pre>
-      </div>
+      <EditSideEffectForm sideEffect={sideEffect} />
     </PageStructure>
   );
 };

@@ -1,9 +1,9 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { loadSearchParams } from "@/components/search-params";
-import { DataTableTransitionWrapper } from "@/core/admin/side-effects/components/tables/data-table-transition-wrapper";
-import { getSideEffects } from "@/core/admin/side-effects/data/get-side-effects";
-import { UserRole } from "@/generated/prisma";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { DataTableTransitionWrapper } from "@/features/side-effects/components/tables/data-table-transition-wrapper";
+import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
 import { Metadata } from "next";
 import { headers } from "next/headers";
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Side Effects",
 };
 
-const UsersPage = async ({ searchParams }: Props) => {
+const SideEffectsPage = async ({ searchParams }: Props) => {
   const {
     // pagination
     pageIndex,
@@ -39,6 +39,15 @@ const UsersPage = async ({ searchParams }: Props) => {
   const sideEffects = await getSideEffects({
     pageNumber: pageIndex,
     perPage: pageSize,
+    orderBy: {
+      [sortBy]: sort,
+    },
+    where: {
+      name: {
+        contains: search,
+        mode: "insensitive",
+      },
+    },
   });
 
   const selectedSideEffects = await getSideEffects({
@@ -53,9 +62,9 @@ const UsersPage = async ({ searchParams }: Props) => {
   return (
     <PageStructure>
       <PageTitle
-        label={"Side effects"}
-        addBtnHref="/side-effect/add"
-        role={session?.user.role as UserRole}
+        label={sideEffectsTitle.label.plural}
+        addBtnHref={`${sideEffectsTitle.href}/add`}
+        session={session}
       />
 
       <DataTableTransitionWrapper
@@ -64,11 +73,11 @@ const UsersPage = async ({ searchParams }: Props) => {
         dataSelected={selectedSideEffects?.data || []}
       />
 
-      <div>
+      {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };
 
-export default UsersPage;
+export default SideEffectsPage;

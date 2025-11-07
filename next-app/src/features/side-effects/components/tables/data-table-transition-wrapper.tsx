@@ -49,12 +49,12 @@ export const DataTableTransitionWrapper = ({
         data={data}
         columnVisibilityObj={{
           description: true,
-          createdAt: true,
+          createdAt: false,
         }}
         columnPinning={
           {
-            // left: ["select"],
-            // right: ["actions"],
+            left: ["select"],
+            right: ["actions"],
           }
         }
         twSkeletonHeightCell="h-[64px]"

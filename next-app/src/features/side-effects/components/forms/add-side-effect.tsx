@@ -8,14 +8,6 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -26,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { MESSAGES } from "@/constants/messages";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { SideEffectType } from "@/generated/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -47,7 +40,7 @@ const AddSideEffectForm = () => {
       name: "",
       type: SideEffectType.ACTION,
       description: "",
-      value: 0,
+      value: 0, // TODO: if delete number gives error; cannot input negative numbers
     },
   });
 
@@ -64,7 +57,7 @@ const AddSideEffectForm = () => {
 
           if (data.success) {
             toast.success(data.success);
-            router.push("/side-effect");
+            router.push(sideEffectsTitle.href);
           }
         })
         .catch(() => {
@@ -182,7 +175,7 @@ const AddSideEffectForm = () => {
           />
 
           <CustomButton
-            buttonLabel={`Add side effect`}
+            buttonLabel={`Add ${sideEffectsTitle.label.singular.toLowerCase()}`}
             type="submit"
             className="ms-auto"
             disabled={isPending}
@@ -191,83 +184,6 @@ const AddSideEffectForm = () => {
         </FieldGroup>
       </FieldSet>
     </form>
-  );
-
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6"
-      >
-        <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="text"
-                    placeholder="+1 Movement"
-                    disabled={isPending}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Description here"
-                    className="resize-none"
-                    disabled={isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="value"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Value</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="number"
-                    placeholder="-1"
-                    disabled={isPending}
-                    {...form.register("value", { valueAsNumber: true })}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <CustomButton
-          buttonLabel={`Add side effect`}
-          type="submit"
-          className="ms-auto"
-          disabled={isPending}
-          skeletonClassName="ms-auto w-32"
-        />
-      </form>
-    </Form>
   );
 };
 

@@ -12,13 +12,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
+import { UserRole } from "@/generated/prisma";
 import { useSearchParams } from "@/hooks/use-search-params";
+import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { TableRowSelect } from "@/types/table-row-select";
 import { TransitionStartFunction, useState } from "react";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
 import { deleteSideEffect } from "../../actions/delete-side-effect";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 
 interface Props {
   dataSelected: TableRowSelect;
@@ -31,9 +34,10 @@ const PaginationActions = ({
   isLoading,
   startTransition,
 }: Props) => {
-  const [{ selected }, setSearchParams] = useSearchParams(startTransition);
+  const [{}, setSearchParams] = useSearchParams(startTransition);
   const [copiedText, copy] = useCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const { data: session } = useSession();
 
   const sideEffectsData =
     dataSelected.type === "side-effects" && dataSelected.data
@@ -113,8 +117,7 @@ const PaginationActions = ({
           title: {
             label: "Are you absolutely sure?",
           },
-          description:
-            "This action cannot be undone. This will permanently delete selected side effects and remove it's data from our servers.",
+          description: `This action cannot be undone. This will permanently delete selected ${sideEffectsTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
         }}
       >
         <div className="flex items-center justify-end">
@@ -150,16 +153,18 @@ const PaginationActions = ({
             <CopyIcon />
             Copy id(s)
           </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => setOpenDeleteDialog(true)}
-          >
-            <TrashIcon />
-            Delete
-          </DropdownMenuItem>
+          {session && session.user.role !== UserRole.USER && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                <TrashIcon />
+                Delete
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

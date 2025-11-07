@@ -1,0 +1,195 @@
+"use client";
+
+import { CustomButton } from "@/components/custom-button";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { MESSAGES } from "@/constants/messages";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { SideEffectType } from "@/generated/prisma";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
+import { formInputId } from "@/lib/utils/form-input-id";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
+import { editSideEffect } from "../../actions/edit-side-effect";
+import { SideEffectSchema } from "../../schemas/side-effect";
+import { SideEffect } from "../../types/side-effect";
+
+interface Props {
+  sideEffect: SideEffect;
+}
+
+const EditSideEffectForm = ({ sideEffect }: Props) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const form = useForm<z.infer<typeof SideEffectSchema>>({
+    resolver: zodResolver(SideEffectSchema),
+    defaultValues: {
+      name: sideEffect.name,
+      type: sideEffect.type,
+      description: sideEffect.description || "",
+      value: sideEffect.value, // TODO: if delete number gives error; cannot input negative numbers
+    },
+  });
+
+  const { formId, inputId } = formInputId("add-side-effect-form");
+  const sideEffectTypes = Object.values(SideEffectType);
+
+  const onSubmit = (values: z.infer<typeof SideEffectSchema>) => {
+    startTransition(async () => {
+      editSideEffect(sideEffect.id, values)
+        .then(async (data) => {
+          if (data.error) {
+            toast.error(data.error);
+          }
+
+          if (data.success) {
+            toast.success(data.success);
+            router.push(sideEffectsTitle.href);
+          }
+        })
+        .catch(() => {
+          toast.error(MESSAGES.SOMETHING_WRONG);
+        });
+    });
+  };
+
+  return (
+    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+      <FieldSet>
+        <FieldGroup>
+          <Controller
+            name="name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>Name</FieldLabel>
+                <Input
+                  {...field}
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  placeholder="+1 Movement"
+                  autoComplete="off"
+                  type="text"
+                  disabled={isPending}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="description"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                className="md:col-span-2"
+              >
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  Description
+                </FieldLabel>
+                <Textarea
+                  {...field}
+                  aria-invalid={fieldState.invalid}
+                  id={inputId(field.name)}
+                  placeholder="Write a small and meaningful description."
+                  rows={4}
+                  disabled={isPending}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="type"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>Type</FieldLabel>
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger
+                    id={inputId(field.name)}
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectValue placeholder="Choose type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sideEffectTypes.map((sideEffect) => (
+                      <SelectItem key={sideEffect} value={sideEffect}>
+                        {capitalizeFirstLetter(sideEffect)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="value"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>Value</FieldLabel>
+                <Input
+                  {...field}
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  placeholder="-1"
+                  autoComplete="off"
+                  type="number"
+                  disabled={isPending}
+                  {...form.register("value", { valueAsNumber: true })}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <CustomButton
+            buttonLabel={`Update ${sideEffectsTitle.label.singular.toLowerCase()}`}
+            type="submit"
+            className="ms-auto"
+            disabled={isPending}
+            skeletonClassName="ms-auto w-32"
+          />
+        </FieldGroup>
+      </FieldSet>
+    </form>
+  );
+};
+
+export default EditSideEffectForm;

@@ -1,7 +1,8 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import AddSideEffectForm from "@/core/admin/side-effects/components/forms/add-side-effect";
-import { UserRole } from "@/generated/prisma";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
+import AddSideEffectForm from "@/features/side-effects/components/forms/add-side-effect";
 import { auth } from "@/lib/auth";
 import { Metadata } from "next";
 import { headers } from "next/headers";
@@ -10,17 +11,19 @@ export const metadata: Metadata = {
   title: "Add Side Effect",
 };
 
-const UsersPage = async () => {
+const SideEffectsPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
+  redirectNonAdminUsers({ to: sideEffectsTitle.href, session });
+
   return (
     <PageStructure>
       <PageTitle
-        label={"Add side effects"}
-        backBtnHref="/side-effect"
-        role={session?.user.role as UserRole}
+        label={`Add ${sideEffectsTitle.label.singular}`}
+        backBtnHref={sideEffectsTitle.href}
+        session={session}
       />
 
       <AddSideEffectForm />
@@ -32,4 +35,4 @@ const UsersPage = async () => {
   );
 };
 
-export default UsersPage;
+export default SideEffectsPage;

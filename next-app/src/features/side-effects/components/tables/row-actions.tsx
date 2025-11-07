@@ -3,6 +3,7 @@
 import { CustomButton } from "@/components/custom-button";
 import { AccountIcon } from "@/components/icons/account";
 import { CopyIcon } from "@/components/icons/copy";
+import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
@@ -14,7 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { cog_side_effect, UserRole } from "@/generated/prisma";
+import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -29,6 +32,7 @@ const RowActions = ({ sideEffect }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [copiedText, copy] = useCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const { data: session } = useSession();
 
   const roles = Object.values(UserRole);
 
@@ -91,8 +95,7 @@ const RowActions = ({ sideEffect }: Props) => {
           title: {
             label: "Are you absolutely sure?",
           },
-          description:
-            "This action cannot be undone. This will permanently delete this side effect and remove it's data from our servers.",
+          description: `This action cannot be undone. This will permanently delete this ${sideEffectsTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
         }}
       >
         <div className="flex items-center justify-end">
@@ -126,21 +129,31 @@ const RowActions = ({ sideEffect }: Props) => {
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href={`/side-effect/${sideEffect.id}`}>
+            <Link href={`${sideEffectsTitle.href}/${sideEffect.id}`}>
               <AccountIcon />
               Go to side effect
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => setOpenDeleteDialog(true)}
-          >
-            <TrashIcon />
-            Delete
-          </DropdownMenuItem>
+          {session && session.user.role !== UserRole.USER && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href={`${sideEffectsTitle.href}/${sideEffect.id}/edit`}>
+                  <EditIcon />
+                  Edit {sideEffectsTitle.label.singular}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                <TrashIcon />
+                Delete
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
