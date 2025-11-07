@@ -3,9 +3,12 @@ import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { MESSAGES } from "@/constants/messages";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import TraitPresentation from "@/features/traits/components/trait-presentation";
 import { getTrait } from "@/features/traits/data/get-traits";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "better-auth";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 
@@ -51,6 +54,18 @@ const TraitPage = async ({ params }: Props) => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs
+        crumbs={breadCrumbsFn([
+          {
+            href: traitsTitle.href,
+            label: capitalizeFirstLetter(traitsTitle.label.plural),
+          },
+          {
+            href: `${traitsTitle.href}/${id}`,
+            label: trait.name,
+          },
+        ])}
+      />
       <PageTitle
         label={trait.name}
         backBtnHref={traitsTitle.href}

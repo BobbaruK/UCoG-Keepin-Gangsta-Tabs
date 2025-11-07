@@ -2,12 +2,16 @@ import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { MESSAGES } from "@/constants/messages";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import EditTraitForm from "@/features/traits/components/forms/edit-trait";
 import { getTrait } from "@/features/traits/data/get-traits";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "better-auth";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 
@@ -57,6 +61,20 @@ const TraitEditPage = async ({ params }: Props) => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs
+        crumbs={breadCrumbsFn([
+          {
+            href: traitsTitle.href,
+            label: capitalizeFirstLetter(
+              traitsTitle.label.plural.toLowerCase(),
+            ),
+          },
+          {
+            href: `${traitsTitle.href}/${id}`,
+            label: `Edit "${trait.name}"`,
+          },
+        ])}
+      />
       <PageTitle
         label={`Edit "${trait.name}"`}
         backBtnHref={`${traitsTitle.href}/${id}`}

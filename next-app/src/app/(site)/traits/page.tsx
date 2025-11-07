@@ -2,12 +2,23 @@ import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { loadSearchParams } from "@/components/search-params";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import { DataTableTransitionWrapper } from "@/features/traits/components/tables/data-table-transition-wrapper";
 import { getTraits } from "@/features/traits/data/get-traits";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import { SearchParams } from "nuqs/server";
+
+const BREADCRUMBS: IBreadcrumb[] = [
+  {
+    href: traitsTitle.href,
+    label: capitalizeFirstLetter(traitsTitle.label.plural),
+  },
+];
 
 interface Props {
   searchParams: Promise<SearchParams>;
@@ -66,6 +77,7 @@ const TraitsPage = async ({ searchParams }: Props) => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs crumbs={breadCrumbsFn(BREADCRUMBS)} />
       <PageTitle
         label={traitsTitle.label.plural}
         addBtnHref={`${traitsTitle.href}/add`}
