@@ -1,15 +1,7 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { Navbar } from "../navbar";
-import { NavbarNavLink } from "../navigation";
 import Link from "next/link";
 
 export const Footer = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  const defaultNavigationLinks: NavbarNavLink[] = [
+  const defaultNavigationLinks: { href: string; label: string }[] = [
     {
       href: "/server",
       label: "Server",

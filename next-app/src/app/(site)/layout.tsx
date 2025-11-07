@@ -15,7 +15,6 @@ export default function PublicLayout({ children }: Props) {
       <AppSidebar />
 
       <MainWrapper header={<Header />} footer={<Footer />}>
-        <SidebarTrigger />
         {children}
       </MainWrapper>
     </SidebarProvider>
