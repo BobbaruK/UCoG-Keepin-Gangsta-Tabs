@@ -37,6 +37,7 @@ import { ShieldIcon } from "@/components/icons/shield";
 import { ShieldBanIcon } from "@/components/icons/shield-ban";
 import { TabletIcon } from "@/components/icons/tablet";
 import { TerminalIcon } from "@/components/icons/terminal";
+import { TraitsIcon } from "@/components/icons/traits";
 import { TrashIcon } from "@/components/icons/trash";
 import { TVIcon } from "@/components/icons/tv";
 import { UnbanIcon } from "@/components/icons/unban";
@@ -44,6 +45,7 @@ import { UnlinkIcon } from "@/components/icons/unlink";
 import { UserIcon } from "@/components/icons/user";
 import { UsersIcon } from "@/components/icons/users";
 import { WatchIcon } from "@/components/icons/watch";
+import { WormIcon } from "@/components/icons/worm";
 import { PageStructure } from "@/components/page-structure";
 import { Card, CardContent } from "@/components/ui/card";
 import { Metadata } from "next";
@@ -240,6 +242,14 @@ const icons: {
   {
     name: "ArrowLeftIcon",
     icon: ArrowLeftIcon,
+  },
+  {
+    name: "WormIcon",
+    icon: WormIcon,
+  },
+  {
+    name: "TraitsIcon",
+    icon: TraitsIcon,
   },
 ];
 
