@@ -35,7 +35,6 @@ export default async function ProtectedLayout({ children }: Props) {
       <AppSidebar />
 
       <MainWrapper header={<Header />} footer={<Footer />}>
-        <SidebarTrigger />
         {children}
       </MainWrapper>
     </SidebarProvider>

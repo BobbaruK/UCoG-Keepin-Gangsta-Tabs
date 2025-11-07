@@ -1,13 +1,30 @@
 import { PageStructure } from "@/components/page-structure";
+import { PageTitle } from "@/components/page-title";
 import { loadSearchParams } from "@/components/search-params";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { usersTitle } from "@/constants/page-title/users";
 import { DataTableTransitionWrapper } from "@/core/admin/users/components/tables/data-table-transition-wrapper";
 import {
   getUsersBAuth,
   getUsersPrisma,
 } from "@/core/admin/users/data/get-users";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import { UserSession } from "@/types/session";
+import { capitalizeFirstLetter } from "better-auth";
 import { Metadata } from "next";
 import { SearchParams } from "nuqs/server";
+
+const BREADCRUMBS: IBreadcrumb[] = [
+  {
+    label: "Admin",
+  },
+  {
+    href: usersTitle.href,
+    label: capitalizeFirstLetter(usersTitle.label.plural),
+  },
+];
 
 export const metadata: Metadata = {
   title: "Users",
@@ -68,7 +85,11 @@ const UsersPage = async ({ searchParams }: Props) => {
 
   return (
     <PageStructure>
-      <h1 className="text-3xl font-bold">Users ({totalUsers})</h1>
+      <PageBreadcrumbs crumbs={breadCrumbsFn(BREADCRUMBS)} />
+      <PageTitle
+        label={usersTitle.label.plural}
+        addBtnHref={`${usersTitle.href}/add`}
+      />
 
       <DataTableTransitionWrapper
         data={users}
