@@ -13,9 +13,13 @@ import {
 } from "@/components/ui/sidebar";
 import { menuAdminItems, menuItems } from "@/constants/menu";
 import { MESSAGES } from "@/constants/messages";
+import { profileTitle } from "@/constants/page-title/profile";
+import { settingsTitle } from "@/constants/page-title/settings";
 import { stopImpersonatingUser } from "@/core/admin/users/actions/impersonate-user";
 import { signOut } from "@/core/auth/actions/sign-out";
+import { UserRole } from "@/generated/prisma";
 import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 import {
   Calendar,
   ChevronDown,
@@ -51,7 +55,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { UserRole } from "@/generated/prisma";
 
 const items = [
   {
@@ -248,16 +251,36 @@ export function AppSidebar() {
                   <>
                     <DropdownMenuItem asChild>
                       <Link
-                        href={"/settings"}
-                        className="flex cursor-pointer items-center justify-start gap-2 p-2"
+                        href={settingsTitle.href}
+                        className={cn(
+                          "flex cursor-pointer items-center justify-start gap-2 p-2",
+                          {
+                            "bg-accent-foreground": pathname.startsWith(
+                              settingsTitle.href,
+                            ),
+                            "text-accent": pathname.startsWith(
+                              settingsTitle.href,
+                            ),
+                          },
+                        )}
                       >
                         <CogIcon /> Settings
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link
-                        href={`/profile/${session.user.slug}`}
-                        className="flex cursor-pointer items-center justify-start gap-2 p-2"
+                        href={`${profileTitle.href}/${session.user.slug}`}
+                        className={cn(
+                          "flex cursor-pointer items-center justify-start gap-2 p-2",
+                          {
+                            "bg-accent-foreground": pathname.startsWith(
+                              profileTitle.href,
+                            ),
+                            "text-accent": pathname.startsWith(
+                              profileTitle.href,
+                            ),
+                          },
+                        )}
                       >
                         <UserIcon /> Profile
                       </Link>

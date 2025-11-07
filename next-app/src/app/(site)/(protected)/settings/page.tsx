@@ -2,11 +2,23 @@ import { CustomAlert } from "@/components/custom-alert";
 import { EnvelopeIcon } from "@/components/icons/envelope";
 import { PageStructure } from "@/components/page-structure";
 import { MESSAGES } from "@/constants/messages";
+import { settingsTitle } from "@/constants/page-title/settings";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import { getUser } from "@/core/user/data/get-user";
 import SettingsContent from "@/features/settings/components/settings-content";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "better-auth";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+
+const BREADCRUMBS: IBreadcrumb[] = [
+  {
+    href: settingsTitle.href,
+    label: capitalizeFirstLetter(settingsTitle.label.plural),
+  },
+];
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -55,6 +67,7 @@ const SettingsPage = async () => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs crumbs={breadCrumbsFn(BREADCRUMBS)} />
       {!user.emailVerified && (
         <CustomAlert
           title={"Warning!"}
