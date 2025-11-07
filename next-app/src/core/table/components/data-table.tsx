@@ -131,7 +131,7 @@ export function DataTable<TData, TValue>({
                   buttonLabel={`Columns`}
                   variant={"outline"}
                   className="ml-auto"
-                  skeletonClassName="ml-auto w-[90px]"
+                  skeletonClassName="ml-auto w-[90px] h-9"
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -179,7 +179,7 @@ export function DataTable<TData, TValue>({
                     return (
                       <TableHead
                         key={header.id}
-                        className="bg-primary text-primary-foreground"
+                        className="bg-secondary text-secondary-foreground"
                         style={{
                           ...getCommonPinningStyles<TData>(column),
                         }}

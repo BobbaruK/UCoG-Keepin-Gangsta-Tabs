@@ -44,7 +44,8 @@ export const SearchField = () => {
             skeletonClassName="size-9 min-w-9"
             onClick={() => {
               const el = searchElRef.current as HTMLInputElement;
-              debounced(null);
+              // debounced(null);
+              setSearchParams({ search: null });
               el.value = "";
               el.focus();
             }}
