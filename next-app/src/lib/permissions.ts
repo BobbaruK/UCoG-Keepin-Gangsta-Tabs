@@ -6,9 +6,12 @@ import {
   defaultStatements,
 } from "better-auth/plugins/admin/access";
 
+const crud = ["create", "read", "update", "delete"];
+
 const statement = {
   ...defaultStatements,
-  traits: ["create", "read", "update", "delete"],
+  traits: crud,
+  sideEffects: crud,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -18,15 +21,18 @@ export const roles = {
     ...userAc.statements,
     user: [...userAc.statements.user],
     traits: ["read"],
+    sideEffects: ["read"],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
     user: ["list", "create", "delete", "ban"],
     traits: [...statement.traits],
+    sideEffects: [...statement.sideEffects],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
     user: [...adminAc.statements.user],
     traits: [...statement.traits],
+    sideEffects: [...statement.sideEffects],
   }),
 };
