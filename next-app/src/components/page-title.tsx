@@ -5,13 +5,14 @@ import { CustomButton } from "./custom-button";
 import { AddIcon } from "./icons/add";
 import { ArrowLeftIcon } from "./icons/arrow-left";
 import { EditIcon } from "./icons/edit";
+import { Session } from "@/types/session";
 
 interface Props {
   label: string;
   addBtnHref?: string;
   editBtnHref?: string;
   backBtnHref?: string;
-  role?: UserRole;
+  session?: Session | null;
 }
 
 export const PageTitle = ({
@@ -19,14 +20,14 @@ export const PageTitle = ({
   addBtnHref,
   editBtnHref,
   backBtnHref,
-  role,
+  session,
 }: Props) => {
   return (
     <div className="border-secondary flex flex-wrap items-center justify-between gap-4 border-b pb-2">
       <h1 className="text-3xl font-bold">{label}</h1>
 
       <div className="flex flex-wrap items-center justify-end gap-4">
-        {addBtnHref && role !== UserRole.USER && (
+        {addBtnHref && session && session?.user.role !== UserRole.USER && (
           <CustomButton
             buttonLabel="Add"
             variant={"outline"}
@@ -38,7 +39,7 @@ export const PageTitle = ({
           />
         )}
 
-        {editBtnHref && role !== UserRole.USER && (
+        {editBtnHref && session && session?.user.role !== UserRole.USER && (
           <CustomButton
             buttonLabel="Edit"
             variant={"outline"}
