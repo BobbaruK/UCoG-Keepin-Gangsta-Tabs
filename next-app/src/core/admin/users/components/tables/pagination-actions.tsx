@@ -52,7 +52,10 @@ const PaginationActions = ({
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
-  const userIdBatches = chunkArray(dataSelected?.data || [], BATCH_ITEMS);
+  const usersData =
+    dataSelected.type === "users" && dataSelected.data ? dataSelected.data : [];
+
+  const userIdBatches = chunkArray(usersData, BATCH_ITEMS);
   const roles = Object.values(UserRole);
 
   const handleCopy = (text: string) => () => {
@@ -172,7 +175,7 @@ const PaginationActions = ({
       >
         <Suspense fallback={<BanUserFormSkeleton />}>
           <BanUserForm
-            users={dataSelected?.data || []}
+            users={usersData}
             isLoading={isLoading}
             startTransition={startTransition}
             setOpenBanDialog={setOpenBanDialog}
@@ -205,7 +208,7 @@ const PaginationActions = ({
         }}
       >
         <DeleteUser
-          users={dataSelected?.data || []}
+          users={usersData}
           isLoading={isLoading}
           startTransition={startTransition}
           setOpenDeleteDialog={setOpenDeleteDialog}
