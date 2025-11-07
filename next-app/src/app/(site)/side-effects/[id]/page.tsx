@@ -3,9 +3,13 @@ import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import SideEffectPresentation from "@/features/side-effects/components/side-effect-presentation";
 import { getSideEffect } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { headers } from "next/headers";
 
 interface Props {
@@ -40,6 +44,18 @@ const SideEffectPage = async ({ params }: Props) => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs
+        crumbs={breadCrumbsFn([
+          {
+            href: sideEffectsTitle.href,
+            label: capitalizeFirstLetter(sideEffectsTitle.label.plural),
+          },
+          {
+            href: `${sideEffectsTitle.href}/${id}`,
+            label: sideEffect.name,
+          },
+        ])}
+      />
       <PageTitle
         label={sideEffect.name}
         backBtnHref={sideEffectsTitle.href}

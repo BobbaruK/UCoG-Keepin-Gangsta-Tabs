@@ -2,10 +2,25 @@ import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import AddSideEffectForm from "@/features/side-effects/components/forms/add-side-effect";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+
+const BREADCRUMBS: IBreadcrumb[] = [
+  {
+    href: sideEffectsTitle.href,
+    label: capitalizeFirstLetter(sideEffectsTitle.label.plural),
+  },
+  {
+    href: `${sideEffectsTitle.href}/add`,
+    label: `Add ${sideEffectsTitle.label.singular.toLowerCase()}`,
+  },
+];
 
 export const metadata: Metadata = {
   title: "Add Side Effect",
@@ -20,6 +35,7 @@ const SideEffectsPage = async () => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs crumbs={breadCrumbsFn(BREADCRUMBS)} />
       <PageTitle
         label={`Add ${sideEffectsTitle.label.singular}`}
         backBtnHref={sideEffectsTitle.href}

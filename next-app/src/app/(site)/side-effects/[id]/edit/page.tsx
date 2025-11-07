@@ -4,9 +4,12 @@ import { PageTitle } from "@/components/page-title";
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import EditSideEffectForm from "@/features/side-effects/components/forms/edit-side-effect";
 import { getSideEffect } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "better-auth";
 import { headers } from "next/headers";
 
 interface Props {
@@ -43,6 +46,20 @@ const SideEffectEditPage = async ({ params }: Props) => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs
+        crumbs={breadCrumbsFn([
+          {
+            href: sideEffectsTitle.href,
+            label: capitalizeFirstLetter(
+              sideEffectsTitle.label.plural.toLowerCase(),
+            ),
+          },
+          {
+            href: `${sideEffectsTitle.href}/${id}`,
+            label: `Edit "${sideEffect.name}"`,
+          },
+        ])}
+      />
       <PageTitle
         label={`Edit "${sideEffect.name}"`}
         backBtnHref={`${sideEffectsTitle.href}/${id}`}

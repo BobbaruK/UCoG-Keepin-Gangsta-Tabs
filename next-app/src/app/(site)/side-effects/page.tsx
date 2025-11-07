@@ -2,12 +2,23 @@ import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { loadSearchParams } from "@/components/search-params";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
+import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import { DataTableTransitionWrapper } from "@/features/side-effects/components/tables/data-table-transition-wrapper";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import { SearchParams } from "nuqs/server";
+
+const BREADCRUMBS: IBreadcrumb[] = [
+  {
+    href: sideEffectsTitle.href,
+    label: capitalizeFirstLetter(sideEffectsTitle.label.plural),
+  },
+];
 
 interface Props {
   searchParams: Promise<SearchParams>;
@@ -61,6 +72,7 @@ const SideEffectsPage = async ({ searchParams }: Props) => {
 
   return (
     <PageStructure>
+      <PageBreadcrumbs crumbs={breadCrumbsFn(BREADCRUMBS)} />
       <PageTitle
         label={sideEffectsTitle.label.plural}
         addBtnHref={`${sideEffectsTitle.href}/add`}
