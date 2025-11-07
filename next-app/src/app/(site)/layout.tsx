@@ -8,7 +8,6 @@ interface Props {
 
 export default function PublicLayout({ children }: Props) {
   return (
-    // <div className="grid min-h-dvh grid-rows-[auto_1fr_auto]">
     <div className="flex min-h-dvh flex-col">
       <Header />
       <main>{children}</main>

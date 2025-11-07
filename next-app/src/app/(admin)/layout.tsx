@@ -1,3 +1,5 @@
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
 import { APP_NAME } from "@/constants/misc";
 import { DEFAULT_LOGIN_REDIRECT } from "@/constants/routes";
 import { UserRole } from "@/generated/prisma";
@@ -25,5 +27,11 @@ export default async function ProtectedLayout({ children }: Props) {
 
   if (session.user.role === UserRole.USER) redirect(DEFAULT_LOGIN_REDIRECT);
 
-  return children;
+  return (
+    <div className="flex min-h-dvh flex-col">
+      <Header />
+      <main>{children}</main>
+      <Footer />
+    </div>
+  );
 }
