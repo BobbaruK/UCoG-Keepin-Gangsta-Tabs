@@ -1,5 +1,8 @@
+import { AppSidebar } from "@/components/app-sidebar";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { MainWrapper } from "@/components/main-wrapper";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
 
 interface Props {
@@ -8,10 +11,13 @@ interface Props {
 
 export default function PublicLayout({ children }: Props) {
   return (
-    <div className="flex min-h-dvh flex-col">
-      <Header />
-      <main>{children}</main>
-      <Footer />
-    </div>
+    <SidebarProvider defaultOpen={true}>
+      <AppSidebar />
+
+      <MainWrapper header={<Header />} footer={<Footer />}>
+        <SidebarTrigger />
+        {children}
+      </MainWrapper>
+    </SidebarProvider>
   );
 }
