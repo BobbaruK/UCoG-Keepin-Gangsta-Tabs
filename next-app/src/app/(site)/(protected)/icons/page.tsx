@@ -23,10 +23,12 @@ import { GoogleIcon } from "@/components/icons/google";
 import { HomeIcon } from "@/components/icons/home";
 import { ImpersonateIcon } from "@/components/icons/impersonate";
 import { KeyIcon } from "@/components/icons/key";
+import { LawIcon } from "@/components/icons/law";
 import { LinkIcon } from "@/components/icons/link";
 import { LoginIcon } from "@/components/icons/login";
 import { LogoutIcon } from "@/components/icons/logout";
 import { MenuIcon } from "@/components/icons/menu";
+import { MinusIcon } from "@/components/icons/minus";
 import { MobileIcon } from "@/components/icons/mobile";
 import { MonitorIcon } from "@/components/icons/monitor";
 import { MoonIcon } from "@/components/icons/moon";
@@ -250,6 +252,14 @@ const icons: {
   {
     name: "TraitsIcon",
     icon: TraitsIcon,
+  },
+  {
+    name: "LawIcon",
+    icon: LawIcon,
+  },
+  {
+    name: "MinusIcon",
+    icon: MinusIcon,
   },
 ];
 
