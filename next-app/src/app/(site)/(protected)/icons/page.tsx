@@ -6,6 +6,7 @@ import { ArrowLeftIcon } from "@/components/icons/arrow-left";
 import { BanIcon } from "@/components/icons/ban";
 import { CalendarIcon } from "@/components/icons/calendar";
 import { CameraIcon } from "@/components/icons/camera";
+import { CarIcon } from "@/components/icons/car";
 import { ChevronDownIcon } from "@/components/icons/chevron-down";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
 import { ChevronRightIcon } from "@/components/icons/chevron-right";
@@ -265,6 +266,10 @@ const icons: {
   {
     name: "FlagIcon",
     icon: FlagIcon,
+  },
+  {
+    name: "CarIcon",
+    icon: CarIcon,
   },
 ];
 

@@ -3,6 +3,7 @@ import {
   cog_nationality,
   cog_side_effect,
   cog_trait,
+  cog_vehicle_type,
 } from "@/generated/prisma";
 import { UserSession } from "./session";
 
@@ -26,4 +27,8 @@ export type TableRowSelect =
   | {
       type: "nationalities";
       data: cog_nationality[] | null;
+    }
+  | {
+      type: "vehicle-types";
+      data: cog_vehicle_type[] | null;
     };

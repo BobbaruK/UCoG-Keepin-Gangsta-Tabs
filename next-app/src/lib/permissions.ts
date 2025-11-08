@@ -14,6 +14,7 @@ const statement = {
   sideEffects: crud,
   laws: crud,
   nationalities: crud,
+  vehicle_types: crud,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -26,6 +27,7 @@ export const roles = {
     traits: ["read"],
     laws: ["read"],
     nationalities: ["read"],
+    vehicle_types: ["read"],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
@@ -34,6 +36,7 @@ export const roles = {
     traits: [...statement.traits],
     laws: [...statement.laws],
     nationalities: [...statement.nationalities],
+    vehicle_types: [...statement.vehicle_types],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
@@ -42,5 +45,6 @@ export const roles = {
     traits: [...statement.traits],
     laws: [...statement.laws],
     nationalities: [...statement.nationalities],
+    vehicle_types: [...statement.vehicle_types],
   }),
 };
