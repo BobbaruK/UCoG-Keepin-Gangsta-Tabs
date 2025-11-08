@@ -2,12 +2,11 @@
 
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
-import { cog_trait } from "@/generated/prisma";
+import { columns } from "@/features/traits/components/tables/columns";
+import { Trait } from "@/features/traits/types/trait";
 import { TableRowSelect } from "@/types/table-row-select";
 import { useTransition } from "react";
 import PaginationActions from "./pagination-actions";
-import { traitsColumns } from "./traits-columns";
-import { Trait } from "../../types/trait";
 
 interface Props {
   data: Trait[];
@@ -42,7 +41,7 @@ export const DataTableTransitionWrapper = ({
       }
     >
       <DataTable
-        columns={traitsColumns({
+        columns={columns({
           isLoading,
           startTransition,
           visibleUsers: data,
@@ -52,12 +51,10 @@ export const DataTableTransitionWrapper = ({
           description: true,
           createdAt: false,
         }}
-        columnPinning={
-          {
-            left: ["select"],
-            right: ["actions"],
-          }
-        }
+        columnPinning={{
+          left: ["select"],
+          right: ["actions"],
+        }}
         twSkeletonHeightCell="h-[64px]"
       />
     </TableProvider>

@@ -1,14 +1,14 @@
 "use server";
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
-import db from "@/lib/prisma";
-import { catchError } from "@/lib/utils/catch-error-action";
-import z from "zod";
-import { AddTraitSchema } from "../schemas/add-trait";
-import { auth } from "@/lib/auth";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { UserRole } from "@/generated/prisma";
+import { auth } from "@/lib/auth";
+import db from "@/lib/prisma";
+import { catchError } from "@/lib/utils/catch-error-action";
 import { headers } from "next/headers";
+import z from "zod";
+import { AddTraitSchema } from "../schemas/add-trait";
 
 export const addTrait = async (
   values: z.infer<typeof AddTraitSchema>,

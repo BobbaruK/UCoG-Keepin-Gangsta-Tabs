@@ -1,15 +1,14 @@
-import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
-import { Trait } from "../types/trait";
+import { CustomAvatar } from "@/components/custom-avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CustomAvatar } from "@/components/custom-avatar";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
+import { Trait } from "../types/trait";
 
 interface Props {
   trait: Trait;
@@ -39,9 +38,17 @@ const TraitPresentation = ({ trait }: Props) => {
       {trait.sideEffect && (
         <CardFooter className="flex flex-col items-start">
           <p className="underline">Side effect</p>
-          <p>Name: {trait.sideEffect.name}</p>
           <p>Type: {capitalizeFirstLetter(trait.sideEffect.type)}</p>
-          <p>Value: {trait.sideEffect.value}</p>
+          <p>
+            Value:{" "}
+            <Badge
+              variant={
+                Math.sign(trait.sideEffect.value) === 1 ? "success" : "danger"
+              }
+            >
+              {trait.sideEffect.value}
+            </Badge>
+          </p>
         </CardFooter>
       )}
     </Card>

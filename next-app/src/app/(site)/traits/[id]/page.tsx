@@ -75,7 +75,7 @@ const TraitPage = async ({ params }: Props) => {
 
       <TraitPresentation trait={trait} />
 
-      <div>TODO: tables here</div>
+      <div>TODO: tables here - political_style, crew_member</div>
     </PageStructure>
   );
 };

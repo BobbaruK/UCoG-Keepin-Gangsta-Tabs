@@ -2,6 +2,7 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { Badge } from "@/components/ui/badge";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
@@ -13,9 +14,8 @@ import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import { Trait } from "../../types/trait";
 import RowActions from "./row-actions";
-import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 
-export const traitsColumns = ({
+export const columns = ({
   isLoading,
   startTransition,
   visibleUsers,

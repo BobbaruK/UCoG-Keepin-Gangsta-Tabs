@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { MESSAGES } from "@/constants/messages";
+import { traitsTitle } from "@/constants/page-title/traits";
+import { addTrait } from "@/features/traits/actions/add";
 import { cog_side_effect } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -35,9 +37,7 @@ import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { addTrait } from "../../actions/add-trait";
 import { AddTraitSchema } from "../../schemas/add-trait";
-import { traitsTitle } from "@/constants/page-title/traits";
 
 interface Props {
   sideEffects: cog_side_effect[] | undefined;
@@ -57,7 +57,9 @@ const AddTraitForm = ({ sideEffects }: Props) => {
   });
   const [comboxSideEffect, setComboxSideEffect] = useState(false); // TODO: move this state in a separate component
 
-  const { formId, inputId } = formInputId("add-side-effect-form");
+  const { formId, inputId } = formInputId(
+    `add-${traitsTitle.label.singular.toLowerCase()}-form`,
+  );
 
   const onSubmit = (values: z.infer<typeof AddTraitSchema>) => {
     startTransition(async () => {

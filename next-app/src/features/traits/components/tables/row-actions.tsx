@@ -3,6 +3,7 @@
 import { CustomButton } from "@/components/custom-button";
 import { AccountIcon } from "@/components/icons/account";
 import { CopyIcon } from "@/components/icons/copy";
+import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
@@ -14,15 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
+import { traitsTitle } from "@/constants/page-title/traits";
+import { deleteTrait } from "@/features/traits/actions/delete";
 import { cog_trait, UserRole } from "@/generated/prisma";
+import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
-import { deleteTrait } from "../../actions/delete-trait";
-import { useSession } from "@/lib/auth-client";
-import { traitsTitle } from "@/constants/page-title/traits";
-import { EditIcon } from "@/components/icons/edit";
 
 interface Props {
   trait: cog_trait;
@@ -129,7 +129,7 @@ const RowActions = ({ trait }: Props) => {
           <DropdownMenuItem asChild>
             <Link href={`${traitsTitle.href}/${trait.id}`}>
               <AccountIcon />
-              Go to trait
+              Go to {traitsTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>
 
@@ -139,7 +139,7 @@ const RowActions = ({ trait }: Props) => {
               <DropdownMenuItem asChild>
                 <Link href={`${traitsTitle.href}/${trait.id}/edit`}>
                   <EditIcon />
-                  Edit trait
+                  Edit {traitsTitle.label.singular.toLowerCase()}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -148,7 +148,7 @@ const RowActions = ({ trait }: Props) => {
                 onClick={() => setOpenDeleteDialog(true)}
               >
                 <TrashIcon />
-                Delete
+                Delete {traitsTitle.label.singular.toLowerCase()}
               </DropdownMenuItem>
             </>
           )}

@@ -28,6 +28,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { MESSAGES } from "@/constants/messages";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { deleteTrait } from "@/features/traits/actions/delete";
+import { editTrait } from "@/features/traits/actions/edit";
+import { AddTraitSchema } from "@/features/traits/schemas/add-trait";
 import { cog_side_effect, cog_trait } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -38,10 +41,6 @@ import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { deleteTrait } from "../../actions/delete-trait";
-import { editTrait } from "../../actions/edit-trait";
-import { AddTraitSchema } from "../../schemas/add-trait";
-import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 
 interface Props {
   trait: cog_trait;
@@ -305,7 +304,7 @@ const EditTraitForm = ({ trait, sideEffects }: Props) => {
               </div>
             </ResponsiveDialog>
             <CustomButton
-              buttonLabel={`Update ${sideEffectsTitle.label.singular.toLowerCase()}`}
+              buttonLabel={`Save ${traitsTitle.label.singular.toLowerCase()}`}
               type="submit"
               className="h-9 w-32"
               disabled={isPending}
