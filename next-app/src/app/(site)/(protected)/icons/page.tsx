@@ -16,6 +16,7 @@ import { DiscordIcon } from "@/components/icons/discord";
 import { EditIcon } from "@/components/icons/edit";
 import { EnvelopeIcon } from "@/components/icons/envelope";
 import { ErrorIcon } from "@/components/icons/error";
+import { FlagIcon } from "@/components/icons/flag";
 import { GamepadIcon } from "@/components/icons/gamepad";
 import { GithubIcon } from "@/components/icons/github";
 import { GogglesIcon } from "@/components/icons/goggles";
@@ -260,6 +261,10 @@ const icons: {
   {
     name: "MinusIcon",
     icon: MinusIcon,
+  },
+  {
+    name: "FlagIcon",
+    icon: FlagIcon,
   },
 ];
 
