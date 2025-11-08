@@ -122,6 +122,8 @@ model auth_two_factor {
 
 // COG APP
 
+//    Base Tables
+
 enum SideEffectType {
   MOVEMENT
   ACTION
@@ -172,4 +174,14 @@ model cog_law {
 
   sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id])
   cog_side_effectId String?
+}
+
+model cog_nationality {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String  @unique
+  description String?
+  flag        String?
 }

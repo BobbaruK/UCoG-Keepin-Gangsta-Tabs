@@ -1,4 +1,9 @@
-import { cog_law, cog_side_effect, cog_trait } from "@/generated/prisma";
+import {
+  cog_law,
+  cog_nationality,
+  cog_side_effect,
+  cog_trait,
+} from "@/generated/prisma";
 import { UserSession } from "./session";
 
 export type TableRowSelect =
@@ -17,4 +22,8 @@ export type TableRowSelect =
   | {
       type: "laws";
       data: cog_law[] | null;
+    }
+  | {
+      type: "nationalities";
+      data: cog_nationality[] | null;
     };

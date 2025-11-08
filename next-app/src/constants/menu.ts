@@ -1,18 +1,25 @@
+import { FlagIcon } from "@/components/icons/flag";
+import { LawIcon } from "@/components/icons/law";
 import { TraitsIcon } from "@/components/icons/traits";
 import { UsersIcon } from "@/components/icons/users";
 import { WormIcon } from "@/components/icons/worm";
 import { MenuAdminItem, MenuItem } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
+import { lawsTitle } from "./page-title/laws";
+import { nationalitiesTitle } from "./page-title/nationalities";
 import { sideEffectsTitle } from "./page-title/side-effects";
 import { traitsTitle } from "./page-title/traits";
-import { lawsTitle } from "./page-title/laws";
-import { LawIcon } from "@/components/icons/law";
 
 export const menuItems: MenuItem[] = [
   {
     title: "Dashboard",
     url: "/dashboard",
     icon: TbDashboard,
+  },
+  {
+    title: nationalitiesTitle.label.plural,
+    url: nationalitiesTitle.href,
+    icon: FlagIcon,
   },
   {
     title: lawsTitle.label.plural,
