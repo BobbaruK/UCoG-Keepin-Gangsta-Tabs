@@ -43,7 +43,7 @@ export const editSideEffect = async (
     body: {
       userId: dataSession.user.id,
       role: dataSession.user.role as UserRole,
-      permission: { sideEffects: ["create"] },
+      permission: { sideEffects: ["update"] },
     },
   });
 
