@@ -4,7 +4,6 @@ import { loadSearchParams } from "@/components/search-params";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import { DataTableTransitionWrapper } from "@/features/side-effects/components/tables/data-table-transition-wrapper";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
@@ -13,19 +12,12 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { SearchParams } from "nuqs/server";
 
-const BREADCRUMBS: IBreadcrumb[] = [
-  {
-    href: sideEffectsTitle.href,
-    label: capitalizeFirstLetter(sideEffectsTitle.label.plural),
-  },
-];
-
 interface Props {
   searchParams: Promise<SearchParams>;
 }
 
 export const metadata: Metadata = {
-  title: "Side Effects",
+  title: sideEffectsTitle.label.plural,
 };
 
 const SideEffectsPage = async ({ searchParams }: Props) => {
@@ -38,7 +30,6 @@ const SideEffectsPage = async ({ searchParams }: Props) => {
     sort,
     // filtering
     search,
-    searchBy,
     // Select
     selected,
   } = await loadSearchParams(searchParams);
@@ -72,7 +63,14 @@ const SideEffectsPage = async ({ searchParams }: Props) => {
 
   return (
     <PageStructure>
-      <PageBreadcrumbs crumbs={breadCrumbsFn(BREADCRUMBS)} />
+      <PageBreadcrumbs
+        crumbs={breadCrumbsFn([
+          {
+            href: sideEffectsTitle.href,
+            label: capitalizeFirstLetter(sideEffectsTitle.label.plural),
+          },
+        ])}
+      />
       <PageTitle
         label={sideEffectsTitle.label.plural}
         addBtnHref={`${sideEffectsTitle.href}/add`}

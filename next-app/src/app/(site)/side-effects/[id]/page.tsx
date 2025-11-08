@@ -5,17 +5,27 @@ import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { IBreadcrumb } from "@/core/breadcrumb/types/breadcrumb";
 import SideEffectPresentation from "@/features/side-effects/components/side-effect-presentation";
 import { getSideEffect } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
+import { Metadata } from "next";
 import { headers } from "next/headers";
 
 interface Props {
   params: Promise<{
     id: string;
   }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const id = (await params).id;
+
+  const sideEffect = await getSideEffect(id);
+
+  return {
+    title: sideEffect?.name,
+  };
 }
 
 const SideEffectPage = async ({ params }: Props) => {
@@ -64,6 +74,8 @@ const SideEffectPage = async ({ params }: Props) => {
       />
 
       <SideEffectPresentation sideEffect={sideEffect} />
+
+      <div>TODO: tables here - trait, law, captain</div>
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffect }, null, 2)}</pre>

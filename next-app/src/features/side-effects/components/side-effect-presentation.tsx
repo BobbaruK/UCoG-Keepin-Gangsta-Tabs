@@ -1,4 +1,4 @@
-import { CustomAvatar } from "@/components/custom-avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -26,8 +26,15 @@ const SideEffectPresentation = ({ sideEffect }: Props) => {
       </CardContent>
 
       <CardFooter className="flex flex-col items-start">
-        <p>Value: {sideEffect.value}</p>
         <p>Type: {capitalizeFirstLetter(sideEffect.type)}</p>
+        <p>
+          Value:{" "}
+          <Badge
+            variant={Math.sign(sideEffect.value) === 1 ? "success" : "danger"}
+          >
+            {sideEffect.value}
+          </Badge>
+        </p>
       </CardFooter>
     </Card>
   );

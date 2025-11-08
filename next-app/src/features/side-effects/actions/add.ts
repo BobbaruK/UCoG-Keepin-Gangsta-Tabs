@@ -1,17 +1,17 @@
 "use server";
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
-import db from "@/lib/prisma";
-import { catchError } from "@/lib/utils/catch-error-action";
-import z from "zod";
-import { SideEffectSchema } from "../schemas/side-effect";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { UserRole } from "@/generated/prisma";
+import { auth } from "@/lib/auth";
+import db from "@/lib/prisma";
+import { catchError } from "@/lib/utils/catch-error-action";
+import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
+import z from "zod";
+import { SideEffectSchema } from "../schemas/side-effect";
 
-export const editSideEffect = async (
-  id: string,
+export const addSideEffect = async (
   values: z.infer<typeof SideEffectSchema>,
 ): Promise<
   | {
@@ -57,15 +57,16 @@ export const editSideEffect = async (
   const { name, type, value, description } = validatedFields.data;
 
   try {
-    const sideEffect = await db.cog_side_effect.update({
-      where: { id },
+    const sideEffect = await db.cog_side_effect.create({
       data: {
         name,
         value,
         type,
-        description,
+        description: description || null,
       },
     });
+
+    revalidatePath(sideEffectsTitle.href);
 
     return {
       success: MESSAGES_FN({

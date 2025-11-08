@@ -1,5 +1,6 @@
 "use client";
 
+import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
 import {
   Field,
@@ -19,6 +20,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { editSideEffect } from "@/features/side-effects/actions/edit";
+import { SideEffectSchema } from "@/features/side-effects/schemas/side-effect";
+import { SideEffect } from "@/features/side-effects/types/side-effect";
 import { SideEffectType } from "@/generated/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -28,9 +32,6 @@ import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { editSideEffect } from "../../actions/edit-side-effect";
-import { SideEffectSchema } from "../../schemas/side-effect";
-import { SideEffect } from "../../types/side-effect";
 
 interface Props {
   sideEffect: SideEffect;
@@ -49,7 +50,9 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
     },
   });
 
-  const { formId, inputId } = formInputId("add-side-effect-form");
+  const { formId, inputId } = formInputId(
+    `edit-${sideEffectsTitle.label.singular.toLowerCase()}-form`,
+  );
   const sideEffectTypes = Object.values(SideEffectType);
 
   const onSubmit = (values: z.infer<typeof SideEffectSchema>) => {
@@ -162,16 +165,22 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={inputId(field.name)}>Value</FieldLabel>
-                <Input
-                  {...field}
-                  id={inputId(field.name)}
-                  aria-invalid={fieldState.invalid}
-                  placeholder="-1"
-                  autoComplete="off"
-                  type="number"
-                  disabled={isPending}
-                  {...form.register("value", { valueAsNumber: true })}
-                />
+                <div className="flex items-center gap-2">
+                  <Input
+                    {...field}
+                    id={inputId(field.name)}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="-1"
+                    autoComplete="off"
+                    type="number"
+                    disabled={isPending}
+                    {...form.register("value", { valueAsNumber: true })}
+                  />
+                  <Counter
+                    value={field.value}
+                    emitClick={(val) => form.setValue("value", val)}
+                  />
+                </div>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -180,7 +189,7 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
           />
 
           <CustomButton
-            buttonLabel={`Update ${sideEffectsTitle.label.singular.toLowerCase()}`}
+            buttonLabel={`Save ${sideEffectsTitle.label.singular.toLowerCase()}`}
             type="submit"
             className="ms-auto"
             disabled={isPending}

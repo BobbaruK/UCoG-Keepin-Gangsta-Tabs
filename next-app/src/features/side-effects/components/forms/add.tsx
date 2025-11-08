@@ -28,8 +28,9 @@ import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { addSideEffect } from "../../actions/add-side-effect";
-import { SideEffectSchema } from "../../schemas/side-effect";
+import { addSideEffect } from "@/features/side-effects/actions/add";
+import { SideEffectSchema } from "@/features/side-effects/schemas/side-effect";
+import Counter from "@/components/counter";
 
 const AddSideEffectForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -44,7 +45,9 @@ const AddSideEffectForm = () => {
     },
   });
 
-  const { formId, inputId } = formInputId("add-side-effect-form");
+  const { formId, inputId } = formInputId(
+    `add-${sideEffectsTitle.label.singular.toLowerCase()}-form`,
+  );
   const sideEffectTypes = Object.values(SideEffectType);
 
   const onSubmit = (values: z.infer<typeof SideEffectSchema>) => {
@@ -157,16 +160,22 @@ const AddSideEffectForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={inputId(field.name)}>Value</FieldLabel>
-                <Input
-                  {...field}
-                  id={inputId(field.name)}
-                  aria-invalid={fieldState.invalid}
-                  placeholder="-1"
-                  autoComplete="off"
-                  type="number"
-                  disabled={isPending}
-                  {...form.register("value", { valueAsNumber: true })}
-                />
+                <div className="flex items-center gap-2">
+                  <Input
+                    {...field}
+                    id={inputId(field.name)}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="-1"
+                    autoComplete="off"
+                    type="number"
+                    disabled={isPending}
+                    {...form.register("value", { valueAsNumber: true })}
+                  />
+                  <Counter
+                    value={field.value}
+                    emitClick={(val) => form.setValue("value", val)}
+                  />
+                </div>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}

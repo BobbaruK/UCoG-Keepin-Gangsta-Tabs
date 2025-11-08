@@ -14,7 +14,7 @@ import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
 
-export const sideEffectColumns = ({
+export const columns = ({
   isLoading,
   startTransition,
   visibleUsers,

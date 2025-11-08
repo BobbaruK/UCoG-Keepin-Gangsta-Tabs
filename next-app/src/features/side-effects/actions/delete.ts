@@ -37,7 +37,7 @@ export const deleteSideEffect = async (
     body: {
       userId: dataSession.user.id,
       role: dataSession.user.role as UserRole,
-      permission: { sideEffects: ["create"] },
+      permission: { sideEffects: ["delete"] },
     },
   });
 
@@ -53,7 +53,7 @@ export const deleteSideEffect = async (
       where: { id },
     });
 
-    revalidatePath("/side-effect");
+    revalidatePath(sideEffectsTitle.href);
 
     return {
       success: MESSAGES_FN({

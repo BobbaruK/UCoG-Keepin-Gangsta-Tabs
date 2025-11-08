@@ -16,13 +16,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { deleteSideEffect } from "@/features/side-effects/actions/delete";
 import { cog_side_effect, UserRole } from "@/generated/prisma";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
-import { deleteSideEffect } from "../../actions/delete-side-effect";
 
 interface Props {
   sideEffect: cog_side_effect;
@@ -33,8 +33,6 @@ const RowActions = ({ sideEffect }: Props) => {
   const [copiedText, copy] = useCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
-
-  const roles = Object.values(UserRole);
 
   const handleCopy = (text: string) => () => {
     if (!text) {
@@ -141,7 +139,7 @@ const RowActions = ({ sideEffect }: Props) => {
               <DropdownMenuItem asChild>
                 <Link href={`${sideEffectsTitle.href}/${sideEffect.id}/edit`}>
                   <EditIcon />
-                  Edit {sideEffectsTitle.label.singular}
+                  Edit {sideEffectsTitle.label.singular.toLowerCase()}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -150,7 +148,7 @@ const RowActions = ({ sideEffect }: Props) => {
                 onClick={() => setOpenDeleteDialog(true)}
               >
                 <TrashIcon />
-                Delete
+                Delete {sideEffectsTitle.label.singular.toLowerCase()}
               </DropdownMenuItem>
             </>
           )}

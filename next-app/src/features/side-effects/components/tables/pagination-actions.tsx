@@ -12,6 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
+import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { deleteSideEffect } from "@/features/side-effects/actions/delete";
 import { UserRole } from "@/generated/prisma";
 import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
@@ -20,8 +22,6 @@ import { TableRowSelect } from "@/types/table-row-select";
 import { TransitionStartFunction, useState } from "react";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
-import { deleteSideEffect } from "../../actions/delete-side-effect";
-import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 
 interface Props {
   dataSelected: TableRowSelect;
@@ -45,7 +45,6 @@ const PaginationActions = ({
       : [];
 
   const sideEffectIdBatches = chunkArray(sideEffectsData, BATCH_ITEMS);
-  // const roles = Object.values(UserRole);
 
   const handleCopy = (text: string) => () => {
     if (!text) {
@@ -161,7 +160,7 @@ const PaginationActions = ({
                 onClick={() => setOpenDeleteDialog(true)}
               >
                 <TrashIcon />
-                Delete
+                Delete {sideEffectsTitle.label.singular.toLowerCase()}(s)
               </DropdownMenuItem>
             </>
           )}
