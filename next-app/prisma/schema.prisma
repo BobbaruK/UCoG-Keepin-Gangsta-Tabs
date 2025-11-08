@@ -138,6 +138,7 @@ model cog_side_effect {
   value       Int
 
   cog_trait cog_trait[]
+  cog_laws  cog_law[]
 }
 
 model cog_trait {
@@ -148,6 +149,26 @@ model cog_trait {
   name        String  @unique
   description String?
   image       String?
+
+  sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id])
+  cog_side_effectId String?
+}
+
+enum LawType {
+  TEMPORARY
+  PERMANENT
+}
+
+model cog_law {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String  @unique
+  description String?
+  enact       Int
+  revoke      Int
+  type        LawType @default(PERMANENT)
 
   sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id])
   cog_side_effectId String?

@@ -12,6 +12,7 @@ const statement = {
   ...defaultStatements,
   traits: crud,
   sideEffects: crud,
+  laws: crud,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -20,19 +21,22 @@ export const roles = {
   [UserRole.USER]: ac.newRole({
     ...userAc.statements,
     user: [...userAc.statements.user],
-    traits: ["read"],
     sideEffects: ["read"],
+    traits: ["read"],
+    laws: ["read"],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
     user: ["list", "create", "delete", "ban"],
-    traits: [...statement.traits],
     sideEffects: [...statement.sideEffects],
+    traits: [...statement.traits],
+    laws: [...statement.laws],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
     user: [...adminAc.statements.user],
-    traits: [...statement.traits],
     sideEffects: [...statement.sideEffects],
+    traits: [...statement.traits],
+    laws: [...statement.laws],
   }),
 };
