@@ -1,6 +1,7 @@
 import {
   cog_law,
   cog_nationality,
+  cog_resource,
   cog_resource_type,
   cog_side_effect,
   cog_trait,
@@ -36,4 +37,8 @@ export type TableRowSelect =
   | {
       type: "resource-types";
       data: cog_resource_type[] | null;
+    }
+  | {
+      type: "resources";
+      data: cog_resource[] | null;
     };

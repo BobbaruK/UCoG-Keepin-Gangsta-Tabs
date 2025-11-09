@@ -1,5 +1,6 @@
 import { AnvilIcon } from "@/components/icons/anvil";
 import { CarIcon } from "@/components/icons/car";
+import { DrillIcon } from "@/components/icons/drill";
 import { FlagIcon } from "@/components/icons/flag";
 import { LawIcon } from "@/components/icons/law";
 import { TraitsIcon } from "@/components/icons/traits";
@@ -10,6 +11,7 @@ import { TbDashboard } from "react-icons/tb";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
 import { resourceTypesTitle } from "./page-title/resource-types";
+import { resourcesTitle } from "./page-title/resources";
 import { sideEffectsTitle } from "./page-title/side-effects";
 import { traitsTitle } from "./page-title/traits";
 import { vehicleTypesTitle } from "./page-title/vehicle-types";
@@ -19,6 +21,11 @@ export const menuItems: MenuItem[] = [
     title: "Dashboard",
     url: "/dashboard",
     icon: TbDashboard,
+  },
+  {
+    title: resourcesTitle.label.plural,
+    url: resourcesTitle.href,
+    icon: DrillIcon,
   },
   {
     title: resourceTypesTitle.label.plural,

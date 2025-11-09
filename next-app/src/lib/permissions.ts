@@ -16,6 +16,7 @@ const statement = {
   nationalities: crud,
   vehicle_types: crud,
   resource_types: crud,
+  resource: crud,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -30,6 +31,7 @@ export const roles = {
     nationalities: ["read"],
     vehicle_types: ["read"],
     resource_types: ["read"],
+    resource: ["read"],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
@@ -40,6 +42,7 @@ export const roles = {
     nationalities: [...statement.nationalities],
     vehicle_types: [...statement.vehicle_types],
     resource_types: [...statement.resource_types],
+    resource: [...statement.resource],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
@@ -50,5 +53,6 @@ export const roles = {
     nationalities: [...statement.nationalities],
     vehicle_types: [...statement.vehicle_types],
     resource_types: [...statement.resource_types],
+    resource: [...statement.resource],
   }),
 };

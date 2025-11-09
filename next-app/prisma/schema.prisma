@@ -195,11 +195,34 @@ model cog_vehicle_type {
   capacity Int
 }
 
+enum ResourceCategory {
+  INGREDIENTS
+  ALCOHOLS
+  WEAPONS
+  MATERIALS
+  OTHERS
+}
+
+model cog_resource {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String           @unique
+  image    String?
+  category ResourceCategory @default(INGREDIENTS)
+  price    Int
+
+  resource_type       cog_resource_type @relation(fields: [cog_resource_typeId], references: [id])
+  cog_resource_typeId String
+}
+
 model cog_resource_type {
   id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name     String @unique
-  capacity Int
+  name         String         @unique
+  capacity     Int
+  cogResources cog_resource[]
 }
