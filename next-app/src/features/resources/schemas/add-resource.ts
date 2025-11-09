@@ -1,5 +1,6 @@
 import { MAX_USERNAME, MIN_USERNAME } from "@/constants/misc";
 import { ResourceCategory } from "@/generated/prisma";
+import { NONNEGATIVE_NUMBER } from "@/schemas/form/number";
 import { z } from "zod";
 
 export const AddResourceSchema = z.object({
@@ -19,8 +20,6 @@ export const AddResourceSchema = z.object({
     ResourceCategory.OTHERS,
     ResourceCategory.WEAPONS,
   ]),
-  price: z
-    .number()
-    .nonnegative({ error: "Price must be a non negative number." }),
+  price: NONNEGATIVE_NUMBER("Price"),
   type: z.string(),
 });

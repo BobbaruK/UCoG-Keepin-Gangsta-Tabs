@@ -53,7 +53,10 @@ export const addResourceType = async (
       }).RESOURCE_CREATE_UNAUTHORIZED,
     };
 
-  const { name, capacity } = validatedFields.data;
+  const { name, capacity: ca } = validatedFields.data;
+
+  // If capacity number is in the negative will be set to 0 (zero)
+  const capacity = Math.sign(ca) === -1 ? 0 : ca;
 
   try {
     const resourceType = await db.cog_resource_type.create({

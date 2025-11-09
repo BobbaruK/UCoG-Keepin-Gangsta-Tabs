@@ -86,7 +86,7 @@ const AddResourceTypeForm = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={inputId(field.name)}>Value</FieldLabel>
+                <FieldLabel htmlFor={inputId(field.name)}>Capacity</FieldLabel>
                 <div className="flex items-center gap-2">
                   <Input
                     {...field}
@@ -95,7 +95,8 @@ const AddResourceTypeForm = () => {
                     placeholder="10"
                     autoComplete="off"
                     type="number"
-                    disabled={isPending}
+                    disabled={true}
+                    className="opacity-100!"
                     {...form.register("capacity", { valueAsNumber: true })}
                   />
                   <Counter

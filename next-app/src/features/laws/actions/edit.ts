@@ -54,8 +54,18 @@ export const editLaw = async (
       }).RESOURCE_CREATE_UNAUTHORIZED,
     };
 
-  const { name, description, enact, revoke, type, sideEffect } =
-    validatedFields.data;
+  const {
+    name,
+    description,
+    enact: en,
+    revoke: re,
+    type,
+    sideEffect,
+  } = validatedFields.data;
+
+  // If enact and revoke numbers are in the negative will be 0 (zero)
+  const enact = Math.sign(en) === -1 ? 0 : en;
+  const revoke = Math.sign(re) === -1 ? 0 : re;
 
   try {
     const law = await db.cog_law.update({

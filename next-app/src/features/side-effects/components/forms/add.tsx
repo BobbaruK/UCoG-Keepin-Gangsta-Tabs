@@ -1,5 +1,6 @@
 "use client";
 
+import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
 import {
   Field,
@@ -19,6 +20,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { addSideEffect } from "@/features/side-effects/actions/add";
+import { SideEffectSchema } from "@/features/side-effects/schemas/side-effect";
 import { SideEffectType } from "@/generated/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -28,9 +31,6 @@ import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { addSideEffect } from "@/features/side-effects/actions/add";
-import { SideEffectSchema } from "@/features/side-effects/schemas/side-effect";
-import Counter from "@/components/counter";
 
 const AddSideEffectForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -41,7 +41,7 @@ const AddSideEffectForm = () => {
       name: "",
       type: SideEffectType.ACTION,
       description: "",
-      value: 0, // TODO: if delete number gives error; cannot input negative numbers
+      value: 0,
     },
   });
 
@@ -168,11 +168,13 @@ const AddSideEffectForm = () => {
                     placeholder="-1"
                     autoComplete="off"
                     type="number"
-                    disabled={isPending}
+                    disabled={true}
+                    className="opacity-100!"
                     {...form.register("value", { valueAsNumber: true })}
                   />
                   <Counter
                     value={field.value}
+                    allowNegative
                     emitClick={(val) => form.setValue("value", val)}
                   />
                 </div>

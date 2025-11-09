@@ -1,4 +1,5 @@
 import { MAX_USERNAME, MIN_USERNAME } from "@/constants/misc";
+import { NONNEGATIVE_NUMBER } from "@/schemas/form/number";
 import { z } from "zod";
 
 export const AddVehicleTypeSchema = z.object({
@@ -10,5 +11,5 @@ export const AddVehicleTypeSchema = z.object({
     .max(MAX_USERNAME, {
       message: `Name must have ${MAX_USERNAME} or fewer characters.`,
     }),
-  capacity: z.number(),
+  capacity: NONNEGATIVE_NUMBER("Capacity"),
 });

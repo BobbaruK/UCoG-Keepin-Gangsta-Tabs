@@ -46,7 +46,7 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
       name: sideEffect.name,
       type: sideEffect.type,
       description: sideEffect.description || "",
-      value: sideEffect.value, // TODO: if delete number gives error; cannot input negative numbers
+      value: sideEffect.value,
     },
   });
 
@@ -173,11 +173,13 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
                     placeholder="-1"
                     autoComplete="off"
                     type="number"
-                    disabled={isPending}
+                    disabled={true}
+                    className="opacity-100!"
                     {...form.register("value", { valueAsNumber: true })}
                   />
                   <Counter
                     value={field.value}
+                    allowNegative
                     emitClick={(val) => form.setValue("value", val)}
                   />
                 </div>

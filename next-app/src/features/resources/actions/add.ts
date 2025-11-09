@@ -53,7 +53,10 @@ export const addResource = async (
       }).RESOURCE_CREATE_UNAUTHORIZED,
     };
 
-  const { name, image, category, price, type } = validatedFields.data;
+  const { name, image, category, price: pri, type } = validatedFields.data;
+
+  // If price number is in the negative will be set to 0 (zero)
+  const price = Math.sign(pri) === -1 ? 0 : pri;
 
   try {
     const resource = await db.cog_resource.create({

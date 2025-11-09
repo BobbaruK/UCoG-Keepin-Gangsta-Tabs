@@ -224,8 +224,9 @@ const EditLawForm = ({ law, sideEffects }: Props) => {
                     placeholder="12"
                     autoComplete="off"
                     type="number"
+                    disabled={true}
+                    className="opacity-100!"
                     {...form.register("enact", { valueAsNumber: true })}
-                    disabled={isPending}
                   />
                   <Counter
                     value={field.value}
@@ -253,8 +254,9 @@ const EditLawForm = ({ law, sideEffects }: Props) => {
                     placeholder="12"
                     autoComplete="off"
                     type="number"
+                    disabled={true}
+                    className="opacity-100!"
                     {...form.register("revoke", { valueAsNumber: true })}
-                    disabled={isPending}
                   />
                   <Counter
                     value={field.value}

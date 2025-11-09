@@ -54,7 +54,9 @@ export const editResourceType = async (
       }).RESOURCE_CREATE_UNAUTHORIZED,
     };
 
-  const { name, capacity } = validatedFields.data;
+  const { name, capacity: ca } = validatedFields.data;
+
+  const capacity = Math.sign(ca) === -1 ? 0 : ca;
 
   try {
     const resourceType = await db.cog_resource_type.update({
