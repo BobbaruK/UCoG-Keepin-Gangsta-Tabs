@@ -7,9 +7,10 @@ import { MinusIcon } from "./icons/minus";
 interface Props {
   value: number;
   emitClick: (value: number) => void;
+  isPending?: boolean;
 }
 
-const Counter = ({ value, emitClick }: Props) => {
+const Counter = ({ value, emitClick, isPending }: Props) => {
   const handleDecrease = (e: React.MouseEvent<HTMLButtonElement>) => {
     let output = value;
 
@@ -52,6 +53,7 @@ const Counter = ({ value, emitClick }: Props) => {
         iconPlacement="left"
         size={"icon"}
         skeletonClassName="size-9"
+        disabled={isPending}
       />
       <CustomButton
         type="button"
@@ -61,6 +63,7 @@ const Counter = ({ value, emitClick }: Props) => {
         iconPlacement="left"
         size={"icon"}
         skeletonClassName="size-9"
+        disabled={isPending}
       />
     </div>
   );
