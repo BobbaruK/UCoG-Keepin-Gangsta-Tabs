@@ -21,6 +21,7 @@ import { MESSAGES } from "@/constants/messages";
 import { DEFAULT_LOGIN_REDIRECT } from "@/constants/routes";
 import { verifyTotp } from "@/core/auth/actions/verify-totp";
 import { OTP } from "@/core/auth/schemas/otp";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +30,6 @@ import React, { useEffect, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import QRCode from "react-qr-code";
 import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
 import z from "zod";
 
 interface Props {
@@ -48,7 +48,7 @@ const OTPVerificationForm = ({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [copiedText, copy] = useCopyToClipboard();
+  const { handleCopy } = useCustomCopyToClipboard();
 
   const form = useForm<z.infer<typeof OTP>>({
     resolver: zodResolver(OTP),
@@ -86,25 +86,6 @@ const OTPVerificationForm = ({
           toast.error(MESSAGES.SOMETHING_WRONG);
         });
     });
-  };
-
-  const handleCopy = (text: string | null) => () => {
-    if (!text) {
-      toast.error("Nothing to copy");
-      return;
-    }
-
-    copy(text)
-      .then(() => {
-        toast.success("Copied", {
-          description: <div className="line-clamp-1">{copiedText || text}</div>,
-        });
-      })
-      .catch((error) => {
-        if (error instanceof Error) console.error(error.message);
-
-        toast.error("Failed to copy!");
-      });
   };
 
   useEffect(() => {

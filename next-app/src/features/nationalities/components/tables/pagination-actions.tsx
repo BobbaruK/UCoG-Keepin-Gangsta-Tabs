@@ -14,13 +14,13 @@ import {
 import { BATCH_ITEMS } from "@/constants/misc";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { UserRole } from "@/generated/prisma";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { TableRowSelect } from "@/types/table-row-select";
 import { TransitionStartFunction, useState } from "react";
 import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
 import { deleteNationality } from "../../actions/delete";
 
 interface Props {
@@ -35,7 +35,7 @@ const PaginationActions = ({
   startTransition,
 }: Props) => {
   const [{}, setSearchParams] = useSearchParams(startTransition);
-  const [copiedText, copy] = useCopyToClipboard();
+  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
@@ -45,25 +45,6 @@ const PaginationActions = ({
       : [];
 
   const lawIdBatches = chunkArray(nationalitiesData, BATCH_ITEMS);
-
-  const handleCopy = (text: string) => () => {
-    if (!text) {
-      toast.error("Nothing to copy");
-      return;
-    }
-
-    copy(text)
-      .then(() => {
-        toast.success("Copied", {
-          description: <div className="line-clamp-1">{copiedText || text}</div>,
-        });
-      })
-      .catch((error) => {
-        if (error instanceof Error) console.error(error.message);
-
-        toast.error("Failed to copy!");
-      });
-  };
 
   const handleDeleteLaws = () => {
     setOpenDeleteDialog(false);

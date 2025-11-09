@@ -14,30 +14,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { useSettingsContext } from "@/features/settings/providers/settings";
-import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 
 const TwoFactorBackupCodes = () => {
   const { backupCodes, openBackupCodesDialog, setOpenBackupCodesDialog } =
     useSettingsContext();
-  const [copiedText, copy] = useCopyToClipboard();
-
-  const handleCopy = (text: string) => () => {
-    if (!text) {
-      toast.error("Nothing to copy");
-      return;
-    }
-
-    copy(text)
-      .then(() => {
-        toast.success("Copied backup codes to the clipboard.");
-      })
-      .catch((error) => {
-        if (error instanceof Error) console.error(error.message);
-
-        toast.error("Failed to copy!");
-      });
-  };
+  const { handleCopy } = useCustomCopyToClipboard();
 
   return (
     <AlertDialog

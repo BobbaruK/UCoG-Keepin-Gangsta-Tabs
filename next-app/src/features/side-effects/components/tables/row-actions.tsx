@@ -18,11 +18,11 @@ import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { deleteSideEffect } from "@/features/side-effects/actions/delete";
 import { cog_side_effect, UserRole } from "@/generated/prisma";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
 
 interface Props {
   sideEffect: cog_side_effect;
@@ -30,28 +30,9 @@ interface Props {
 
 const RowActions = ({ sideEffect }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const [copiedText, copy] = useCopyToClipboard();
+  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
-
-  const handleCopy = (text: string) => () => {
-    if (!text) {
-      toast.error("Nothing to copy");
-      return;
-    }
-
-    copy(text)
-      .then(() => {
-        toast.success("Copied side effect ID.", {
-          description: text,
-        });
-      })
-      .catch((error) => {
-        if (error instanceof Error) console.error(error.message);
-
-        toast.error("Failed to copy!");
-      });
-  };
 
   const handleDelete = () => {
     startTransition(async () => {

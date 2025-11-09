@@ -32,6 +32,7 @@ import { setUserRole } from "@/core/admin/users/actions/set-user-role";
 import DeleteUser from "@/core/admin/users/components/delete-user";
 import { BanUserFormSkeleton } from "@/core/admin/users/components/forms/ban-user";
 import { UserRole } from "@/generated/prisma";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { UserSession } from "@/types/session";
@@ -39,7 +40,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { lazy, Suspense, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
 const BanUserForm = lazy(
   () => import("@/core/admin/users/components/forms/ban-user"),
 );
@@ -52,7 +52,7 @@ const RowActions = ({ user }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { refetch } = useSession();
-  const [copiedText, copy] = useCopyToClipboard();
+  const { handleCopy } = useCustomCopyToClipboard();
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [userRoleState, setUserRoleState] = useState(user.role as string);
@@ -114,25 +114,6 @@ const RowActions = ({ user }: Props) => {
           toast.error(MESSAGES.SOMETHING_WRONG);
         });
     });
-  };
-
-  const handleCopy = (text: string) => () => {
-    if (!text) {
-      toast.error("Nothing to copy");
-      return;
-    }
-
-    copy(text)
-      .then(() => {
-        toast.success("Copied user ID.", {
-          description: text,
-        });
-      })
-      .catch((error) => {
-        if (error instanceof Error) console.error(error.message);
-
-        toast.error("Failed to copy!");
-      });
   };
 
   const handleChangeUserRole = (newRole: UserRole) => {

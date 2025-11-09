@@ -17,11 +17,11 @@ import {
 import { MESSAGES } from "@/constants/messages";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { cog_vehicle_type, UserRole } from "@/generated/prisma";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
 import { deleteVehicleType } from "../../actions/delete";
 
 interface Props {
@@ -30,31 +30,9 @@ interface Props {
 
 const RowActions = ({ vehicleType }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const [copiedText, copy] = useCopyToClipboard();
+  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
-
-  const handleCopy = (text: string) => () => {
-    if (!text) {
-      toast.error("Nothing to copy");
-      return;
-    }
-
-    copy(text)
-      .then(() => {
-        toast.success(
-          `Copied ${vehicleTypesTitle.label.singular.toLowerCase()} ID.`,
-          {
-            description: text,
-          },
-        );
-      })
-      .catch((error) => {
-        if (error instanceof Error) console.error(error.message);
-
-        toast.error("Failed to copy!");
-      });
-  };
 
   const handleDelete = () => {
     startTransition(async () => {

@@ -27,12 +27,12 @@ import DeleteUser from "@/core/admin/users/components/delete-user";
 import { BanUserFormSkeleton } from "@/core/admin/users/components/forms/ban-user";
 import { RoleIcon as RoleIconComp } from "@/core/auth/components/role-icon";
 import { UserRole } from "@/generated/prisma";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { TableRowSelect } from "@/types/table-row-select";
 import { lazy, Suspense, TransitionStartFunction, useState } from "react";
 import { toast } from "sonner";
-import { useCopyToClipboard } from "usehooks-ts";
 const BanUserForm = lazy(
   () => import("@/core/admin/users/components/forms/ban-user"),
 );
@@ -48,34 +48,15 @@ const PaginationActions = ({
   isLoading,
   startTransition,
 }: Props) => {
-  const [copiedText, copy] = useCopyToClipboard();
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const { handleCopy } = useCustomCopyToClipboard();
 
   const usersData =
     dataSelected.type === "users" && dataSelected.data ? dataSelected.data : [];
 
   const userIdBatches = chunkArray(usersData, BATCH_ITEMS);
   const roles = Object.values(UserRole);
-
-  const handleCopy = (text: string) => () => {
-    if (!text) {
-      toast.error("Nothing to copy");
-      return;
-    }
-
-    copy(text)
-      .then(() => {
-        toast.success("Copied", {
-          description: <div className="line-clamp-1">{copiedText || text}</div>,
-        });
-      })
-      .catch((error) => {
-        if (error instanceof Error) console.error(error.message);
-
-        toast.error("Failed to copy!");
-      });
-  };
 
   const handleRevokeUserSessions = () => {
     startTransition(async () => {
