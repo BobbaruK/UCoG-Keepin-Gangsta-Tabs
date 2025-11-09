@@ -1,9 +1,9 @@
 import { UserRole } from "@/generated/prisma";
 import { createAccessControl } from "better-auth/plugins/access";
 import {
-  userAc,
   adminAc,
   defaultStatements,
+  userAc,
 } from "better-auth/plugins/admin/access";
 
 const crud = ["create", "read", "update", "delete"] as const;
@@ -15,6 +15,7 @@ const statement = {
   laws: crud,
   nationalities: crud,
   vehicle_types: crud,
+  resource_types: crud,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -28,6 +29,7 @@ export const roles = {
     laws: ["read"],
     nationalities: ["read"],
     vehicle_types: ["read"],
+    resource_types: ["read"],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
@@ -37,6 +39,7 @@ export const roles = {
     laws: [...statement.laws],
     nationalities: [...statement.nationalities],
     vehicle_types: [...statement.vehicle_types],
+    resource_types: [...statement.resource_types],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
@@ -46,5 +49,6 @@ export const roles = {
     laws: [...statement.laws],
     nationalities: [...statement.nationalities],
     vehicle_types: [...statement.vehicle_types],
+    resource_types: [...statement.resource_types],
   }),
 };

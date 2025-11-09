@@ -1,3 +1,4 @@
+import { AnvilIcon } from "@/components/icons/anvil";
 import { CarIcon } from "@/components/icons/car";
 import { FlagIcon } from "@/components/icons/flag";
 import { LawIcon } from "@/components/icons/law";
@@ -8,6 +9,7 @@ import { MenuAdminItem, MenuItem } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
+import { resourceTypesTitle } from "./page-title/resource-types";
 import { sideEffectsTitle } from "./page-title/side-effects";
 import { traitsTitle } from "./page-title/traits";
 import { vehicleTypesTitle } from "./page-title/vehicle-types";
@@ -17,6 +19,11 @@ export const menuItems: MenuItem[] = [
     title: "Dashboard",
     url: "/dashboard",
     icon: TbDashboard,
+  },
+  {
+    title: resourceTypesTitle.label.plural,
+    url: resourceTypesTitle.href,
+    icon: AnvilIcon,
   },
   {
     title: vehicleTypesTitle.label.plural,

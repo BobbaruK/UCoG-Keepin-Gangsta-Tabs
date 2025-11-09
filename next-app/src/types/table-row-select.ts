@@ -1,6 +1,7 @@
 import {
   cog_law,
   cog_nationality,
+  cog_resource_type,
   cog_side_effect,
   cog_trait,
   cog_vehicle_type,
@@ -31,4 +32,8 @@ export type TableRowSelect =
   | {
       type: "vehicle-types";
       data: cog_vehicle_type[] | null;
+    }
+  | {
+      type: "resource-types";
+      data: cog_resource_type[] | null;
     };

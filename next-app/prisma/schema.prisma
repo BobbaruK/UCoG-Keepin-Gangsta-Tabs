@@ -194,3 +194,12 @@ model cog_vehicle_type {
   name     String @unique
   capacity Int
 }
+
+model cog_resource_type {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String @unique
+  capacity Int
+}
