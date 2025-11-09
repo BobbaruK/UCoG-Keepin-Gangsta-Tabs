@@ -1,11 +1,11 @@
 "use client";
 
 import { CustomButton } from "@/components/custom-button";
-import { AccountIcon } from "@/components/icons/account";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
+import { WormIcon } from "@/components/icons/worm";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
   DropdownMenu,
@@ -128,7 +128,7 @@ const RowActions = ({ sideEffect }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${sideEffectsTitle.href}/${sideEffect.id}`}>
-              <AccountIcon />
+              <WormIcon />
               Go to side effect
             </Link>
           </DropdownMenuItem>
