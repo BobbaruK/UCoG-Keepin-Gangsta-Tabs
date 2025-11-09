@@ -15,6 +15,7 @@ import { ChevronUpIcon } from "@/components/icons/chevron-up";
 import { CogIcon } from "@/components/icons/cog";
 import { CopyIcon } from "@/components/icons/copy";
 import { DiscordIcon } from "@/components/icons/discord";
+import { DrillIcon } from "@/components/icons/drill";
 import { EditIcon } from "@/components/icons/edit";
 import { EnvelopeIcon } from "@/components/icons/envelope";
 import { ErrorIcon } from "@/components/icons/error";
@@ -275,6 +276,10 @@ const icons: {
   {
     name: "AnvilIcon",
     icon: AnvilIcon,
+  },
+  {
+    name: "DrillIcon",
+    icon: DrillIcon,
   },
 ];
 
