@@ -2,6 +2,7 @@ import { AccountIcon } from "@/components/icons/account";
 import { AddIcon } from "@/components/icons/add";
 import { AdminIcon } from "@/components/icons/admin";
 import { AirplayIcon } from "@/components/icons/airplay";
+import { AnvilIcon } from "@/components/icons/anvil";
 import { ArrowLeftIcon } from "@/components/icons/arrow-left";
 import { BanIcon } from "@/components/icons/ban";
 import { CalendarIcon } from "@/components/icons/calendar";
@@ -270,6 +271,10 @@ const icons: {
   {
     name: "CarIcon",
     icon: CarIcon,
+  },
+  {
+    name: "AnvilIcon",
+    icon: AnvilIcon,
   },
 ];
 
