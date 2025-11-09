@@ -1,10 +1,10 @@
 "use client";
 
 import { CustomButton } from "@/components/custom-button";
-import { AccountIcon } from "@/components/icons/account";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
+import { TraitsIcon } from "@/components/icons/traits";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -128,7 +128,7 @@ const RowActions = ({ trait }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${traitsTitle.href}/${trait.id}`}>
-              <AccountIcon />
+              <TraitsIcon />
               Go to {traitsTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>
