@@ -1,7 +1,7 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Law } from "../types/law";
+import { Law, lawInclude } from "../types/law";
 
 export const getLaws = async ({
   where,
@@ -13,7 +13,7 @@ export const getLaws = async ({
   perPage?: number;
   pageNumber?: number;
   orderBy?: Prisma.cog_lawOrderByWithRelationInput;
-}) => {
+} = {}) => {
   const pageSize = perPage || PAGINATION_DEFAULT;
   const skip = pageNumber ? pageNumber * pageSize : 0;
 
@@ -24,16 +24,7 @@ export const getLaws = async ({
         ...(where ? { where } : {}),
         skip,
         take: perPage && Math.sign(perPage) === 1 ? pageSize : undefined,
-        include: {
-          sideEffect: {
-            select: {
-              id: true,
-              name: true,
-              type: true,
-              value: true,
-            },
-          },
-        },
+        include: lawInclude,
       }),
       db.cog_law.count(),
     ]);
@@ -54,16 +45,7 @@ export const getLaw = async (id: string) => {
       where: {
         id,
       },
-      include: {
-        sideEffect: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
-            value: true,
-          },
-        },
-      },
+      include: lawInclude,
     });
 
     return law;

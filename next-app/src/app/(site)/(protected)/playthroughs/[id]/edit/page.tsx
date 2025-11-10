@@ -53,7 +53,7 @@ const EditLawPage = async ({ params }: Props) => {
       </PageStructure>
     );
 
-  const laws = await getLaws({});
+  const laws = await getLaws();
 
   return (
     <PageStructure>

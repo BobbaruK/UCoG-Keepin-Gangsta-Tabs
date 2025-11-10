@@ -21,7 +21,7 @@ const AddPlaythroughPage = async () => {
     headers: await headers(),
   });
 
-  const laws = await getLaws({});
+  const laws = await getLaws();
 
   return (
     <PageStructure>
