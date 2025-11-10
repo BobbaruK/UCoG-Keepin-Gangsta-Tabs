@@ -63,12 +63,18 @@ export const MESSAGES_FN = ({
     RESOURCE_EDIT_UNAUTHORIZED: resource
       ? `You are not authorized to update ${resource}.`
       : `You are not authorized to update this resource.`,
+    RESOURCE_EDIT_UNAUTHORIZED_OTHER: resource
+      ? `You are not authorized to update other users ${resource}.`
+      : `You are not authorized to update other users resources.`,
     RESOURCE_DELETE_SUCCESS: resource
       ? `You have successfully deleted ${resource}${resourceName ? `: ${resourceName}.` : "."}`
       : `You have successfully deleted this resource`,
     RESOURCE_DELETE_UNAUTHORIZED: resource
       ? `You are not authorized to delete ${resource}.`
       : `You are not authorized to delete this resource.`,
+    RESOURCE_DELETE_UNAUTHORIZED_OTHER: resource
+      ? `You are not authorized to delete other users ${resource}.`
+      : `You are not authorized to delete other users resources.`,
     RESOURCE_NOT_EXISTS: `Resource does note exists.`,
   };
 };

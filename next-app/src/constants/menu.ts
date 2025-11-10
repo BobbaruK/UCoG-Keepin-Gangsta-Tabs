@@ -1,5 +1,6 @@
 import { AnvilIcon } from "@/components/icons/anvil";
 import { CarIcon } from "@/components/icons/car";
+import { CastleIcon } from "@/components/icons/castle";
 import { DrillIcon } from "@/components/icons/drill";
 import { FlagIcon } from "@/components/icons/flag";
 import { LawIcon } from "@/components/icons/law";
@@ -10,6 +11,7 @@ import { MenuAdminItem, MenuItem } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
+import { playthroughTitle } from "./page-title/playtrough";
 import { resourceTypesTitle } from "./page-title/resource-types";
 import { resourcesTitle } from "./page-title/resources";
 import { sideEffectsTitle } from "./page-title/side-effects";
@@ -22,6 +24,14 @@ export const menuItems: MenuItem[] = [
     url: "/dashboard",
     icon: TbDashboard,
   },
+  {
+    title: playthroughTitle.label.plural,
+    url: playthroughTitle.href,
+    icon: CastleIcon,
+  },
+];
+
+export const menuBasicTables: MenuItem[] = [
   {
     title: resourcesTitle.label.plural,
     url: resourcesTitle.href,

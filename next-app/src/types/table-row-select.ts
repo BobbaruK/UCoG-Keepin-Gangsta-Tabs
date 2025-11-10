@@ -1,6 +1,7 @@
 import {
   cog_law,
   cog_nationality,
+  cog_playthrough,
   cog_resource,
   cog_resource_type,
   cog_side_effect,
@@ -9,7 +10,9 @@ import {
 } from "@/generated/prisma";
 import { UserSession } from "./session";
 
-export type TableRowSelect =
+// TODO: update all this to generics
+
+export type TableRowSelect<T> =
   | {
       type: "users";
       data: UserSession[] | null;
@@ -41,4 +44,8 @@ export type TableRowSelect =
   | {
       type: "resources";
       data: cog_resource[] | null;
+    }
+  | {
+      type: "playthrough";
+      data: T[] | null;
     };

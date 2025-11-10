@@ -1,24 +1,28 @@
 "use client";
 
 import { UserRole } from "@/generated/prisma";
+import { Session } from "@/types/session";
 import { CustomButton } from "./custom-button";
 import { AddIcon } from "./icons/add";
 import { ArrowLeftIcon } from "./icons/arrow-left";
 import { EditIcon } from "./icons/edit";
-import { Session } from "@/types/session";
 
 interface Props {
   label: string;
   addBtnHref?: string;
+  forceAddButton?: boolean;
   editBtnHref?: string;
+  forceEditButton?: boolean;
   backBtnHref?: string;
-  session?: Session | null;
+  session?: Session | null; // TODO: remove session from all instances
 }
 
 export const PageTitle = ({
   label,
   addBtnHref,
+  forceAddButton,
   editBtnHref,
+  forceEditButton,
   backBtnHref,
   session,
 }: Props) => {
@@ -27,7 +31,8 @@ export const PageTitle = ({
       <h1 className="text-3xl font-bold">{label}</h1>
 
       <div className="flex flex-wrap items-center justify-end gap-4">
-        {addBtnHref && session && session?.user.role !== UserRole.USER && (
+        {((addBtnHref && session && session?.user.role !== UserRole.USER) ||
+          (forceAddButton && session)) && (
           <CustomButton
             buttonLabel="Add"
             variant={"outline"}
@@ -39,7 +44,8 @@ export const PageTitle = ({
           />
         )}
 
-        {editBtnHref && session && session?.user.role !== UserRole.USER && (
+        {((editBtnHref && session && session?.user.role !== UserRole.USER) ||
+          (forceEditButton && session)) && (
           <CustomButton
             buttonLabel="Edit"
             variant={"outline"}

@@ -46,9 +46,10 @@ model auth_user {
   lastLoginMethod  String?
   lastLoginAt      DateTime  @default(now())
 
-  sessions   auth_session[]
-  accounts   auth_account[]
-  twofactors auth_two_factor[]
+  sessions        auth_session[]
+  accounts        auth_account[]
+  twofactors      auth_two_factor[]
+  cogPlaythroughs cog_playthrough[]
 
   @@index([email, slug])
   @@map("user")
@@ -174,6 +175,8 @@ model cog_law {
 
   sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id])
   cog_side_effectId String?
+
+  playthroughs cog_playthrough[]
 }
 
 model cog_nationality {
@@ -225,4 +228,28 @@ model cog_resource_type {
   name         String         @unique
   capacity     Int
   cogResources cog_resource[]
+}
+
+// Main Table
+
+model cog_playthrough {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name                   String
+  seed                   String?
+  passenger_rail_station Boolean
+  freight_rail_station   Boolean
+  is_public                 Boolean @default(false)
+
+  // police_officers
+  laws        cog_law[]
+  // crew_members
+  // buildings
+  // gambling_buildings
+  // auto_routes
+  // wards
+  user        auth_user @relation(fields: [auth_userId], references: [id])
+  auth_userId String
 }

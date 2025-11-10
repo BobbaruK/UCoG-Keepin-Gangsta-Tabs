@@ -6,17 +6,18 @@ import {
   userAc,
 } from "better-auth/plugins/admin/access";
 
-const crud = ["create", "read", "update", "delete"] as const;
+const CRUD = ["create", "read", "update", "delete"] as const;
 
 const statement = {
   ...defaultStatements,
-  traits: crud,
-  sideEffects: crud,
-  laws: crud,
-  nationalities: crud,
-  vehicle_types: crud,
-  resource_types: crud,
-  resource: crud,
+  traits: CRUD,
+  sideEffects: CRUD,
+  laws: CRUD,
+  nationalities: CRUD,
+  vehicle_types: CRUD,
+  resource_types: CRUD,
+  resource: CRUD,
+  playthrough: CRUD,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -32,6 +33,7 @@ export const roles = {
     vehicle_types: ["read"],
     resource_types: ["read"],
     resource: ["read"],
+    playthrough: [...statement.playthrough],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
@@ -43,6 +45,7 @@ export const roles = {
     vehicle_types: [...statement.vehicle_types],
     resource_types: [...statement.resource_types],
     resource: [...statement.resource],
+    playthrough: [...statement.playthrough],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
@@ -54,5 +57,6 @@ export const roles = {
     vehicle_types: [...statement.vehicle_types],
     resource_types: [...statement.resource_types],
     resource: [...statement.resource],
+    playthrough: [...statement.playthrough],
   }),
 };
