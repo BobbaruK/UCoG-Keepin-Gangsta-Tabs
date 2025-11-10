@@ -1,5 +1,3 @@
-import { Prisma } from "@/generated/prisma";
+import { cog_side_effect } from "@/generated/prisma";
 
-export type SideEffect = Prisma.cog_side_effectGetPayload<{
-  include: {};
-}>;
+export type SideEffect = cog_side_effect;
