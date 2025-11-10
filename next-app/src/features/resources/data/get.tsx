@@ -1,7 +1,7 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Resource } from "../types/resource";
+import { Resource, resourceInclude } from "../types/resource";
 
 export const getResources = async ({
   where,
@@ -13,7 +13,7 @@ export const getResources = async ({
   perPage?: number;
   pageNumber?: number;
   orderBy?: Prisma.cog_resourceOrderByWithRelationInput;
-}) => {
+} = {}) => {
   const pageSize = perPage || PAGINATION_DEFAULT;
   const skip = pageNumber ? pageNumber * pageSize : 0;
 
@@ -24,15 +24,7 @@ export const getResources = async ({
         ...(where ? { where } : {}),
         skip,
         take: perPage && Math.sign(perPage) === 1 ? pageSize : undefined,
-        include: {
-          resource_type: {
-            select: {
-              id: true,
-              name: true,
-              capacity: true,
-            },
-          },
-        },
+        include: resourceInclude,
       }),
       db.cog_resource.count(),
     ]);
@@ -53,15 +45,7 @@ export const getResource = async (id: string) => {
       where: {
         id,
       },
-      include: {
-        resource_type: {
-          select: {
-            id: true,
-            name: true,
-            capacity: true,
-          },
-        },
-      },
+      include: resourceInclude,
     });
 
     return resourceType;

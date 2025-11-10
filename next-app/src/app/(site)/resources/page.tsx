@@ -5,7 +5,7 @@ import { resourcesTitle } from "@/constants/page-title/resources";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { DataTableTransitionWrapper } from "@/features/resources/components/tables/data-table-transition-wrapper";
-import { getResources } from "@/features/resources/data/get-resource";
+import { getResources } from "@/features/resources/data/get";
 import { Prisma } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
