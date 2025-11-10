@@ -6,7 +6,7 @@ import { resourcesTitle } from "@/constants/page-title/resources";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import ResourcePresentation from "@/features/resources/components/resource-presentation";
-import { getResource } from "@/features/resources/data/get-resource";
+import { getResource } from "@/features/resources/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
 import type { Metadata } from "next";

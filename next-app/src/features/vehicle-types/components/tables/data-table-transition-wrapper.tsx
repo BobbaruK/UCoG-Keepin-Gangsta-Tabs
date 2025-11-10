@@ -2,7 +2,6 @@
 
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
-import { TableRowSelect } from "@/types/table-row-select";
 import { useTransition } from "react";
 import { VehicleType } from "../../types/vehicle-type";
 import { columns } from "./columns";
@@ -21,24 +20,13 @@ export const DataTableTransitionWrapper = ({
 }: Props) => {
   const [isLoading, startTransition] = useTransition();
 
-  const selected: TableRowSelect = {
-    type: "vehicle-types",
-    data: dataSelected || null,
-  };
-
   return (
     <TableProvider
       isLoading={isLoading}
       startTransition={startTransition}
       dataCount={dataCount || 0}
-      dataSelected={selected}
-      paginationActions={
-        <PaginationActions
-          dataSelected={selected}
-          isLoading={isLoading}
-          startTransition={startTransition}
-        />
-      }
+      dataSelected={dataSelected || []}
+      paginationActions={<PaginationActions />}
     >
       <DataTable
         columns={columns({

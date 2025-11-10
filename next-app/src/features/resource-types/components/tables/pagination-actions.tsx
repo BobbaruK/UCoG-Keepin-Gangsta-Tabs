@@ -13,38 +13,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
+import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
-import { TableRowSelect } from "@/types/table-row-select";
-import { TransitionStartFunction, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { deleteResourceType } from "../../actions/delete";
+import { ResourceType } from "../../types/resource-type";
 
-interface Props {
-  dataSelected: TableRowSelect;
-  isLoading: boolean;
-  startTransition: TransitionStartFunction;
-}
-
-const PaginationActions = ({
-  dataSelected,
-  isLoading,
-  startTransition,
-}: Props) => {
+const PaginationActions = () => {
+  const { isLoading, startTransition, dataSelected } =
+    useTableContext<ResourceType>();
   const [{}, setSearchParams] = useSearchParams(startTransition);
   const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
-  const resourceTypeData =
-    dataSelected.type === "resource-types" && dataSelected.data
-      ? dataSelected.data
-      : [];
-
-  const resourceTypeIdBatches = chunkArray(resourceTypeData, BATCH_ITEMS);
+  const resourceTypeIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
 
   const handleDeleteLaws = () => {
     setOpenDeleteDialog(false);
@@ -127,7 +115,7 @@ const PaginationActions = ({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={handleCopy(
-              dataSelected?.data?.map((user) => user.id).join("\n") || "",
+              dataSelected.map((resource) => resource.id).join("\n") || "",
             )}
           >
             <CopyIcon />

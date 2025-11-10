@@ -16,16 +16,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
-import { cog_resource_type, UserRole } from "@/generated/prisma";
+import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteResourceType } from "../../actions/delete";
+import { ResourceType } from "../../types/resource-type";
 
 interface Props {
-  resourceType: cog_resource_type;
+  resourceType: ResourceType;
 }
 
 const RowActions = ({ resourceType }: Props) => {

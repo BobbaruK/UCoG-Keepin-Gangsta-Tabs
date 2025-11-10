@@ -26,36 +26,26 @@ import { setUserRole } from "@/core/admin/users/actions/set-user-role";
 import DeleteUser from "@/core/admin/users/components/delete-user";
 import { BanUserFormSkeleton } from "@/core/admin/users/components/forms/ban-user";
 import { RoleIcon as RoleIconComp } from "@/core/auth/components/role-icon";
+import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { chunkArray } from "@/lib/utils/chunk-array";
-import { TableRowSelect } from "@/types/table-row-select";
-import { lazy, Suspense, TransitionStartFunction, useState } from "react";
+import { UserSession } from "@/types/session";
+import { lazy, Suspense, useState } from "react";
 import { toast } from "sonner";
 const BanUserForm = lazy(
   () => import("@/core/admin/users/components/forms/ban-user"),
 );
 
-interface Props {
-  dataSelected: TableRowSelect;
-  isLoading: boolean;
-  startTransition: TransitionStartFunction;
-}
-
-const PaginationActions = ({
-  dataSelected,
-  isLoading,
-  startTransition,
-}: Props) => {
+const PaginationActions = () => {
+  const { isLoading, startTransition, dataSelected } =
+    useTableContext<UserSession>();
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { handleCopy } = useCustomCopyToClipboard();
 
-  const usersData =
-    dataSelected.type === "users" && dataSelected.data ? dataSelected.data : [];
-
-  const userIdBatches = chunkArray(usersData, BATCH_ITEMS);
+  const userIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
   const roles = Object.values(UserRole);
 
   const handleRevokeUserSessions = () => {
@@ -156,7 +146,7 @@ const PaginationActions = ({
       >
         <Suspense fallback={<BanUserFormSkeleton />}>
           <BanUserForm
-            users={usersData}
+            users={dataSelected}
             isLoading={isLoading}
             startTransition={startTransition}
             setOpenBanDialog={setOpenBanDialog}
@@ -189,7 +179,7 @@ const PaginationActions = ({
         }}
       >
         <DeleteUser
-          users={usersData}
+          users={dataSelected}
           isLoading={isLoading}
           startTransition={startTransition}
           setOpenDeleteDialog={setOpenDeleteDialog}
@@ -210,7 +200,7 @@ const PaginationActions = ({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={handleCopy(
-              dataSelected?.data?.map((user) => user.id).join("\n") || "",
+              dataSelected.map((user) => user.id).join("\n") || "",
             )}
           >
             <CopyIcon />

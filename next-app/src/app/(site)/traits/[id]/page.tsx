@@ -6,7 +6,7 @@ import { traitsTitle } from "@/constants/page-title/traits";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import TraitPresentation from "@/features/traits/components/trait-presentation";
-import { getTrait } from "@/features/traits/data/get-traits";
+import { getTrait } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
 import type { Metadata } from "next";

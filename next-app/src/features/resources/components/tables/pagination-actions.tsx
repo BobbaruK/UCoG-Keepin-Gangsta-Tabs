@@ -13,38 +13,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { resourcesTitle } from "@/constants/page-title/resources";
+import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
-import { TableRowSelect } from "@/types/table-row-select";
-import { TransitionStartFunction, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { deleteResource } from "../../actions/delete";
+import { Resource } from "../../types/resource";
 
-interface Props {
-  dataSelected: TableRowSelect;
-  isLoading: boolean;
-  startTransition: TransitionStartFunction;
-}
-
-const PaginationActions = ({
-  dataSelected,
-  isLoading,
-  startTransition,
-}: Props) => {
+const PaginationActions = () => {
+  const { isLoading, startTransition, dataSelected } =
+    useTableContext<Resource>();
   const [{}, setSearchParams] = useSearchParams(startTransition);
   const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
-  const resourcesData =
-    dataSelected.type === "resources" && dataSelected.data
-      ? dataSelected.data
-      : [];
-
-  const resourceIdBatches = chunkArray(resourcesData, BATCH_ITEMS);
+  const resourceIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
 
   const handleDeleteLaws = () => {
     setOpenDeleteDialog(false);
@@ -127,7 +115,7 @@ const PaginationActions = ({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={handleCopy(
-              dataSelected?.data?.map((user) => user.id).join("\n") || "",
+              dataSelected.map((user) => user.id).join("\n") || "",
             )}
           >
             <CopyIcon />

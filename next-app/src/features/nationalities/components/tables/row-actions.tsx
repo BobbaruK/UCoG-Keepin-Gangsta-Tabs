@@ -16,16 +16,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
-import { cog_nationality, UserRole } from "@/generated/prisma";
+import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteNationality } from "../../actions/delete";
+import { Nationality } from "../../types/nationality";
 
 interface Props {
-  nationality: cog_nationality;
+  nationality: Nationality;
 }
 
 const RowActions = ({ nationality }: Props) => {

@@ -13,38 +13,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { useTableContext } from "@/core/table/providers/table-provider";
 import { deleteTrait } from "@/features/traits/actions/delete";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
-import { TableRowSelect } from "@/types/table-row-select";
-import { TransitionStartFunction, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { Trait } from "../../types/trait";
 
-interface Props {
-  dataSelected: TableRowSelect;
-  isLoading: boolean;
-  startTransition: TransitionStartFunction;
-}
-
-const PaginationActions = ({
-  dataSelected,
-  isLoading,
-  startTransition,
-}: Props) => {
+const PaginationActions = () => {
+  const { isLoading, startTransition, dataSelected } = useTableContext<Trait>();
   const [{}, setSearchParams] = useSearchParams(startTransition);
   const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
-  const traitsData =
-    dataSelected.type === "traits" && dataSelected.data
-      ? dataSelected.data
-      : [];
-
-  const traitIdBatches = chunkArray(traitsData, BATCH_ITEMS);
+  const traitIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
 
   const handleDeleteTraits = () => {
     setOpenDeleteDialog(false);
@@ -127,7 +114,7 @@ const PaginationActions = ({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={handleCopy(
-              dataSelected?.data?.map((user) => user.id).join("\n") || "",
+              dataSelected.map((user) => user.id).join("\n") || "",
             )}
           >
             <CopyIcon />

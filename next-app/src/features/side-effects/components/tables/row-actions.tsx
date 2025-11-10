@@ -17,15 +17,16 @@ import {
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { deleteSideEffect } from "@/features/side-effects/actions/delete";
-import { cog_side_effect, UserRole } from "@/generated/prisma";
+import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { SideEffect } from "../../types/side-effect";
 
 interface Props {
-  sideEffect: cog_side_effect;
+  sideEffect: SideEffect;
 }
 
 const RowActions = ({ sideEffect }: Props) => {

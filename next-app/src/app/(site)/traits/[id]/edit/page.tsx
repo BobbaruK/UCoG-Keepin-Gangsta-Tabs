@@ -8,7 +8,7 @@ import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import EditTraitForm from "@/features/traits/components/forms/edit";
-import { getTrait } from "@/features/traits/data/get-traits";
+import { getTrait } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
 import { Metadata } from "next";

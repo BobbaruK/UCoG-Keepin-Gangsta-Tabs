@@ -16,16 +16,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
-import { cog_law, UserRole } from "@/generated/prisma";
+import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteLaw } from "../../actions/delete";
+import { Law } from "../../types/law";
 
 interface Props {
-  law: cog_law;
+  law: Law;
 }
 
 const RowActions = ({ law }: Props) => {

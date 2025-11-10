@@ -13,39 +13,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
-import { UserRole } from "@/generated/prisma";
+import { useTableContext } from "@/core/table/providers/table-provider";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
-import { TableRowSelect } from "@/types/table-row-select";
-import { TransitionStartFunction, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { deletePlaythrough } from "../../actions/delete";
 import { Playthrough } from "../../types/playthrough";
 
-interface Props {
-  dataSelected: TableRowSelect<Playthrough>;
-  isLoading: boolean;
-  startTransition: TransitionStartFunction;
-}
-
-const PaginationActions = ({
-  dataSelected,
-  isLoading,
-  startTransition,
-}: Props) => {
+const PaginationActions = () => {
+  const { isLoading, startTransition, dataSelected } =
+    useTableContext<Playthrough>();
   const [{}, setSearchParams] = useSearchParams(startTransition);
   const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
-  const playthroughsData =
-    dataSelected.type === "playthrough" && dataSelected.data
-      ? dataSelected.data
-      : [];
-
-  const playthroughIdBatches = chunkArray(playthroughsData, BATCH_ITEMS);
+  const playthroughIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
 
   const handleDeleteLaws = () => {
     setOpenDeleteDialog(false);
@@ -128,7 +114,7 @@ const PaginationActions = ({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={handleCopy(
-              dataSelected?.data?.map((user) => user.id).join("\n") || "",
+              dataSelected.map((user) => user.id).join("\n") || "",
             )}
           >
             <CopyIcon />

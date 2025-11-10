@@ -1,6 +1,6 @@
 import { Prisma } from "@/generated/prisma";
 
-export const playthroughInclude: Prisma.cog_playthroughInclude = {
+export const playthroughInclude = {
   laws: {
     select: {
       id: true,
@@ -24,7 +24,7 @@ export const playthroughInclude: Prisma.cog_playthroughInclude = {
       banned: true,
     },
   },
-};
+} satisfies Prisma.cog_playthroughInclude;
 
 export type Playthrough = Prisma.cog_playthroughGetPayload<{
   include: typeof playthroughInclude;

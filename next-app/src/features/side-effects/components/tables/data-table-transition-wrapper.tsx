@@ -4,7 +4,6 @@ import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { columns } from "@/features/side-effects/components/tables/columns";
 import { cog_side_effect } from "@/generated/prisma";
-import { TableRowSelect } from "@/types/table-row-select";
 import { useTransition } from "react";
 import PaginationActions from "./pagination-actions";
 
@@ -21,24 +20,13 @@ export const DataTableTransitionWrapper = ({
 }: Props) => {
   const [isLoading, startTransition] = useTransition();
 
-  const selected: TableRowSelect = {
-    type: "side-effects",
-    data: dataSelected || null,
-  };
-
   return (
     <TableProvider
       isLoading={isLoading}
       startTransition={startTransition}
       dataCount={dataCount || 0}
-      dataSelected={selected}
-      paginationActions={
-        <PaginationActions
-          dataSelected={selected}
-          isLoading={isLoading}
-          startTransition={startTransition}
-        />
-      }
+      dataSelected={dataSelected || []}
+      paginationActions={<PaginationActions />}
     >
       <DataTable
         columns={columns({

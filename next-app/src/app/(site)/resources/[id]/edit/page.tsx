@@ -8,7 +8,7 @@ import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getResourceTypes } from "@/features/resource-types/data/get-resource-types";
 import EditResourceForm from "@/features/resources/components/form/edit";
-import { getResource } from "@/features/resources/data/get-resource";
+import { getResource } from "@/features/resources/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
 import { Metadata } from "next";

@@ -1,8 +1,7 @@
-import { TableRowSelect } from "@/types/table-row-select";
 import React, { ReactNode, TransitionStartFunction, useContext } from "react";
 
-type TableContextType = {
-  dataSelected: TableRowSelect;
+type TableContextType<T> = {
+  dataSelected: T[];
   dataCount: number;
   showSearchSwitch?: boolean;
   paginationActions: ReactNode;
@@ -10,19 +9,19 @@ type TableContextType = {
   startTransition: TransitionStartFunction;
 };
 
-const TableContext = React.createContext<TableContextType>({
-  dataSelected: {} as TableRowSelect,
+const TableContext = React.createContext<TableContextType<any>>({
+  dataSelected: [],
   dataCount: 0,
   paginationActions: null,
   isLoading: false,
   startTransition: () => {},
 });
 
-export const useTableContext = () => {
-  return useContext(TableContext);
+export const useTableContext = <T,>() => {
+  return useContext<TableContextType<T>>(TableContext);
 };
 
-interface Props extends TableContextType {
+interface Props<T> extends TableContextType<T> {
   children: React.ReactNode;
 }
 
@@ -34,7 +33,7 @@ const TableProvider = ({
   paginationActions,
   isLoading,
   startTransition,
-}: Props) => {
+}: Props<unknown>) => {
   return (
     <TableContext.Provider
       value={{

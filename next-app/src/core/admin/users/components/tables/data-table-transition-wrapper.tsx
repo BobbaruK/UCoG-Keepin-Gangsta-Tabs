@@ -4,7 +4,6 @@ import { userColumns } from "@/core/admin/users/components/tables/users-columns"
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { UserSession } from "@/types/session";
-import { TableRowSelect } from "@/types/table-row-select";
 import { useTransition } from "react";
 import PaginationActions from "./pagination-actions";
 
@@ -21,24 +20,13 @@ export const DataTableTransitionWrapper = ({
 }: Props) => {
   const [isLoading, startTransition] = useTransition();
 
-  const selected: TableRowSelect = {
-    type: "users",
-    data: dataSelected || null,
-  };
-
   return (
     <TableProvider
       isLoading={isLoading}
       startTransition={startTransition}
       dataCount={dataCount || 0}
-      dataSelected={selected}
-      paginationActions={
-        <PaginationActions
-          dataSelected={selected}
-          isLoading={isLoading}
-          startTransition={startTransition}
-        />
-      }
+      dataSelected={dataSelected || []}
+      paginationActions={<PaginationActions />}
       showSearchSwitch
     >
       <DataTable
