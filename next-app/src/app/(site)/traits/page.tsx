@@ -5,7 +5,7 @@ import { traitsTitle } from "@/constants/page-title/traits";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { DataTableTransitionWrapper } from "@/features/traits/components/tables/data-table-transition-wrapper";
-import { getTraits } from "@/features/traits/data/get-traits";
+import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";

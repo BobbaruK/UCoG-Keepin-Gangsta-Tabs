@@ -1,7 +1,7 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Trait } from "../types/trait";
+import { Trait, traitInclude } from "../types/trait";
 
 export const getTraits = async ({
   where,
@@ -13,7 +13,7 @@ export const getTraits = async ({
   perPage?: number;
   pageNumber?: number;
   orderBy?: Prisma.cog_traitOrderByWithRelationInput;
-}) => {
+} = {}) => {
   const pageSize = perPage || PAGINATION_DEFAULT;
   const skip = pageNumber ? pageNumber * pageSize : 0;
 
@@ -24,16 +24,7 @@ export const getTraits = async ({
         ...(where ? { where } : {}),
         skip,
         take: perPage && Math.sign(perPage) === 1 ? pageSize : undefined,
-        include: {
-          sideEffect: {
-            select: {
-              id: true,
-              name: true,
-              type: true,
-              value: true,
-            },
-          },
-        },
+        include: traitInclude,
       }),
       db.cog_trait.count(),
     ]);
@@ -54,16 +45,7 @@ export const getTrait = async (id: string) => {
       where: {
         id,
       },
-      include: {
-        sideEffect: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
-            value: true,
-          },
-        },
-      },
+      include: traitInclude,
     });
 
     return trait;
