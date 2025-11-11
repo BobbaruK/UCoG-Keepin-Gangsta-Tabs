@@ -22,6 +22,7 @@ const eslintConfig = defineConfig([
           mode: "full",
           type: "shared",
           pattern: [
+            "src/actions/**/*",
             "src/components/**/*",
             "src/constants/**/*",
             "src/hooks/**/*",
