@@ -42,6 +42,7 @@ import { OwnerIcon } from "@/components/icons/owner";
 import { RolesIcon } from "@/components/icons/roles";
 import { ShieldIcon } from "@/components/icons/shield";
 import { ShieldBanIcon } from "@/components/icons/shield-ban";
+import { SirenIcon } from "@/components/icons/siren";
 import { TabletIcon } from "@/components/icons/tablet";
 import { TerminalIcon } from "@/components/icons/terminal";
 import { TraitsIcon } from "@/components/icons/traits";
@@ -285,6 +286,10 @@ const icons: {
   {
     name: "CastleIcon",
     icon: CastleIcon,
+  },
+  {
+    name: "SirenIcon",
+    icon: SirenIcon,
   },
 ];
 
