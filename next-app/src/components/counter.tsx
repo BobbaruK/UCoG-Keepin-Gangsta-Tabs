@@ -11,6 +11,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   allowNegative?: boolean;
   emitClick: (value: number) => void;
   isPending?: boolean;
+  minValue?: number;
 }
 
 const Counter = ({
@@ -18,6 +19,7 @@ const Counter = ({
   allowNegative = false,
   emitClick,
   isPending,
+  minValue = 0,
   ...restProps
 }: Props) => {
   const handleDecrease = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,7 +35,7 @@ const Counter = ({
       output -= 1;
     }
 
-    emitClick(allowNegative ? output : output < 0 ? 0 : output);
+    emitClick(allowNegative ? output : output < minValue ? minValue : output);
   };
 
   const handleIncrease = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,12 +62,12 @@ const Counter = ({
       <CustomButton
         type="button"
         buttonLabel="Reset"
-        onClick={() => emitClick(0)}
+        onClick={() => emitClick(minValue)}
         icon={ResetIcon}
         iconPlacement="left"
         size={"icon"}
         skeletonClassName="size-9"
-        disabled={isPending || value === 0}
+        disabled={isPending || value === minValue}
       />
 
       <CustomButton

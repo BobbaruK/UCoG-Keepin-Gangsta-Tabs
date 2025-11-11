@@ -7,3 +7,5 @@ export interface MenuItem {
 }
 
 export type MenuAdminItem = MenuItem;
+
+export type PlaythroughMenuItem = MenuItem;

@@ -18,6 +18,7 @@ const statement = {
   resource_types: CRUD,
   resource: CRUD,
   playthrough: CRUD,
+  police_officers: CRUD,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -34,6 +35,7 @@ export const roles = {
     resource_types: ["read"],
     resource: ["read"],
     playthrough: [...statement.playthrough],
+    police_officers: [...statement.police_officers],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
@@ -46,6 +48,7 @@ export const roles = {
     resource_types: [...statement.resource_types],
     resource: [...statement.resource],
     playthrough: [...statement.playthrough],
+    police_officers: [...statement.police_officers],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
@@ -58,5 +61,6 @@ export const roles = {
     resource_types: [...statement.resource_types],
     resource: [...statement.resource],
     playthrough: [...statement.playthrough],
+    police_officers: [...statement.police_officers],
   }),
 };

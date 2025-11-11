@@ -5,6 +5,7 @@ import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import PlaythroughMenu from "@/features/playtroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playtroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playtroughs/data/get";
 import { auth } from "@/lib/auth";
@@ -77,6 +78,12 @@ const LawPage = async ({ params }: Props) => {
       <PlaythroughPresentation playthrough={playthrough} />
 
       <div>TODO: tables here - playthrough</div>
+
+      <PlaythroughMenu playthroughId={playthrough.id} />
+
+      <div>
+        <pre>{JSON.stringify(playthrough, null, 2)}</pre>
+      </div>
     </PageStructure>
   );
 };

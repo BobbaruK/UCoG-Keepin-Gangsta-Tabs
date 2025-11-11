@@ -4,14 +4,21 @@ import { CastleIcon } from "@/components/icons/castle";
 import { DrillIcon } from "@/components/icons/drill";
 import { FlagIcon } from "@/components/icons/flag";
 import { LawIcon } from "@/components/icons/law";
+import { SirenIcon } from "@/components/icons/siren";
 import { TraitsIcon } from "@/components/icons/traits";
 import { UsersIcon } from "@/components/icons/users";
 import { WormIcon } from "@/components/icons/worm";
-import { MenuAdminItem, MenuItem } from "@/types/menu-items";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
+import {
+  MenuAdminItem,
+  MenuItem,
+  PlaythroughMenuItem,
+} from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
 import { playthroughTitle } from "./page-title/playtrough";
+import { policeOfficersTitle } from "./page-title/police-officers";
 import { resourceTypesTitle } from "./page-title/resource-types";
 import { resourcesTitle } from "./page-title/resources";
 import { sideEffectsTitle } from "./page-title/side-effects";
@@ -74,5 +81,42 @@ export const menuAdminItems: MenuAdminItem[] = [
     title: "Users",
     url: "/users",
     icon: UsersIcon,
+  },
+];
+
+export const playthroughMenu = (
+  playthroughId: string,
+): PlaythroughMenuItem[] => [
+  {
+    title: "Crew",
+    url: `${playthroughTitle.href}/${playthroughId}/crew`,
+    icon: SirenIcon,
+  },
+  {
+    title: "Auto routes",
+    url: `${playthroughTitle.href}/${playthroughId}/auto-routes`,
+    icon: SirenIcon,
+  },
+  {
+    title: "Buildings",
+    url: `${playthroughTitle.href}/${playthroughId}/buildings`,
+    icon: SirenIcon,
+  },
+  {
+    title: "Gambling",
+    url: `${playthroughTitle.href}/${playthroughId}/gambling`,
+    icon: SirenIcon,
+  },
+  {
+    title: capitalizeFirstLetter(
+      policeOfficersTitle.label.plural.toLowerCase(),
+    ),
+    url: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
+    icon: SirenIcon,
+  },
+  {
+    title: "Elections",
+    url: `${playthroughTitle.href}/${playthroughId}/elections`,
+    icon: SirenIcon,
   },
 ];

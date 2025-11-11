@@ -22,3 +22,13 @@ export const dateFormatter = ({
 
   return formatted;
 };
+
+export const turnToDate = (turn: number) => {
+  const date = new Date("1 June 1920");
+
+  const actualTurn = turn - 1; // Reduce by 1 because turn 0 here is turn 1 in game
+  const turnInDays = actualTurn * 7;
+  date.setDate(date.getDate() + turnInDays);
+
+  return date;
+};
