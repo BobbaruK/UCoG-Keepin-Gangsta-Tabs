@@ -80,6 +80,7 @@ export const editPlaythrough = async (
     isPublic,
     passengerRailStation,
     freightRailStation,
+    respectForTheLaw,
     laws,
   } = validatedFields.data;
 
@@ -94,6 +95,7 @@ export const editPlaythrough = async (
         is_public: isPublic,
         passenger_rail_station: passengerRailStation,
         freight_rail_station: freightRailStation,
+        respect_for_the_law: respectForTheLaw,
         laws: {
           set: laws.map((law) => ({ id: law })),
         },

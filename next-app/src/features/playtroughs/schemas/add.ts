@@ -14,5 +14,6 @@ export const AddPlaythroughSchema = z.object({
   isPublic: z.boolean(),
   passengerRailStation: z.boolean(),
   freightRailStation: z.boolean(),
+  respectForTheLaw: z.boolean(),
   laws: z.array(z.string()),
 });

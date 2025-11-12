@@ -28,6 +28,9 @@ export const turnToDate = (turn: number) => {
 
   const actualTurn = turn - 1; // Reduce by 1 because turn 0 here is turn 1 in game
   const turnInDays = actualTurn * 7;
+
+  console.log(turn * 7);
+
   date.setDate(date.getDate() + turnInDays);
 
   return date;

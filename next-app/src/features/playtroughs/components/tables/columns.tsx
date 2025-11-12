@@ -258,6 +258,41 @@ export const columns = ({
       );
     },
   },
+  // Respect for the law
+  {
+    ...columnId({ id: "respectForTheLaw" }),
+    meta: {
+      label: "Respect for the law",
+    },
+    accessorFn: (originalRow) => originalRow.respect_for_the_law,
+    enableHiding: true,
+    enableSorting: false,
+    enablePinning: false,
+    // size: 110,
+    // minSize: 105,
+    // maxSize: 150,
+    header: ({ column }) => {
+      return (
+        <THeadDropdown
+          id="respectForTheLaw"
+          label={"Respect for the law"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      );
+    },
+
+    cell: ({ row }) => {
+      const respectForTheLaw = row.original.respect_for_the_law;
+
+      return (
+        <Badge variant={respectForTheLaw ? "success" : "danger"}>
+          {respectForTheLaw ? "Yes" : "No"}
+        </Badge>
+      );
+    },
+  },
   // Laws
   {
     ...columnId({ id: "laws" }),

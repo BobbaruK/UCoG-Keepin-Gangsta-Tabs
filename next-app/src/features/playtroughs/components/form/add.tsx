@@ -4,14 +4,17 @@ import { CustomButton } from "@/components/custom-button";
 import {
   Field,
   FieldContent,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
+import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
 import { cog_law } from "@/generated/prisma";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -23,8 +26,6 @@ import { toast } from "sonner";
 import z from "zod";
 import { addPlaythrough } from "../../actions/add";
 import { AddPlaythroughSchema } from "../../schemas/add";
-import { MultiSelect } from "@/components/ui/multi-select";
-import { lawsTitle } from "@/constants/page-title/laws";
 
 interface Props {
   laws: cog_law[] | undefined;
@@ -41,6 +42,7 @@ const AddPlaythroughForm = ({ laws }: Props) => {
       isPublic: false,
       freightRailStation: false,
       passengerRailStation: false,
+      respectForTheLaw: false,
       laws: [],
     },
   });
@@ -181,6 +183,39 @@ const AddPlaythroughForm = ({ laws }: Props) => {
                   <FieldLabel htmlFor={inputId(field.name)}>
                     Freight rail station
                   </FieldLabel>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </FieldContent>
+
+                <Switch
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  name={field.name}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="respectForTheLaw"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                orientation={"horizontal"}
+              >
+                <FieldContent>
+                  <FieldLabel htmlFor={inputId(field.name)}>
+                    Respect for the law
+                  </FieldLabel>
+                  <FieldDescription>
+                    Reduces bribery cost for local cops by 10%, increases the
+                    effective duration of each bribe by 60 days and reduces the
+                    likelihood of a police raid.
+                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}

@@ -154,6 +154,7 @@ const PolicePage = async ({ params, searchParams }: Props) => {
         data={policeOfficers?.data || []}
         dataCount={policeOfficers?.count || 0}
         dataSelected={selectedPoliceOfficers?.data || []}
+        respectForTheLaw={playthrough.respect_for_the_law}
       />
 
       <div>

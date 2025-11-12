@@ -149,20 +149,6 @@ export const MAGIC_LINK_TOKEN_EXPIRES = 60 * 5;
 /* -------------------------------------------------------------------------- */
 
 /**
- * Application name that will show in places like google login
- *
- * @constant
- */
-export const APP_NAME = "UCoG: Keepin' Gangsta Tabs";
-
-/**
- * Cookies will be set with this prefix
- *
- * @constant
- */
-export const COOKIE_PREFIX = "ucog-kgt";
-
-/**
  * Default debounce delay (in milliseconds) for input handlers or requests.
  *
  * @constant
@@ -179,3 +165,48 @@ export const DEBOUNCE_DEFAULT = 500; // (milliseconds)
  * @default 2 // items
  */
 export const BATCH_ITEMS = 2; // (items)
+
+/* -------------------------------------------------------------------------- */
+/*                                APP SETTINGS                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Application name that will show in places like google login
+ *
+ * @constant
+ */
+export const APP_NAME = "UCoG: Keepin' Gangsta Tabs";
+
+/**
+ * Cookies will be set with this prefix
+ *
+ * @constant
+ */
+export const COOKIE_PREFIX = "ucog-kgt";
+
+/**
+ * Duration of the police bribe (turns)
+ *
+ * 35.71428571428571 turns - 35 rounded down
+ *
+ * @constant
+ */
+export const POLICE_BRIBE_DURATION = 35.71428571428571;
+
+/**
+ * Duration of the police bribe from a political contact (turns)
+ *
+ * 52.14285714285714 turns - 52 rounded down
+ *
+ * @constant
+ */
+export const POLICE_BRIBE_DURATION_POLITICAL = 52.14285714285714;
+
+/**
+ * Duration of the police bribe from a political contact (turns)
+ *
+ * 8.571428571428571 turns - 8 rounded down
+ *
+ * @constant
+ */
+export const POLICE_BRIBE_DURATION_RESPECT_LAW = 8.571428571428571;

@@ -11,12 +11,14 @@ interface Props {
   data: PoliceOfficer[];
   dataCount: number | null;
   dataSelected?: PoliceOfficer[];
+  respectForTheLaw?: boolean;
 }
 
 export const DataTableTransitionWrapper = ({
   data,
   dataCount,
   dataSelected,
+  respectForTheLaw = false,
 }: Props) => {
   const [isLoading, startTransition] = useTransition();
 
@@ -33,6 +35,7 @@ export const DataTableTransitionWrapper = ({
           isLoading,
           startTransition,
           visibleUsers: data,
+          respectForTheLaw,
         })}
         data={data}
         columnVisibilityObj={{

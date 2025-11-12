@@ -240,9 +240,10 @@ model cog_playthrough {
 
   name                   String
   seed                   String?
-  passenger_rail_station Boolean
-  freight_rail_station   Boolean
-  is_public              Boolean
+  passenger_rail_station Boolean @default(false)
+  freight_rail_station   Boolean @default(false)
+  respect_for_the_law    Boolean @default(false)
+  is_public              Boolean @default(false)
 
   police_officers cog_police_officer[]
   laws            cog_law[]
@@ -251,7 +252,7 @@ model cog_playthrough {
   // gambling_buildings
   // auto_routes
   // wards
-  user            auth_user            @relation(fields: [auth_userId], references: [id])
+  user            auth_user            @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
   auth_userId     String
 }
 
@@ -264,12 +265,12 @@ model cog_police_officer {
 
   name                        String
   bribed_turn                 Int
-  has_rival_hooligan_relative Boolean
-  political_contact_used      Boolean
-  can_call_in_a_raid          Boolean
+  has_rival_hooligan_relative Boolean @default(false)
+  political_contact_used      Boolean @default(false)
+  can_call_in_a_raid          Boolean @default(false)
 
-  cogPlaythrough    cog_playthrough? @relation(fields: [cog_playthroughId], references: [id])
+  cogPlaythrough    cog_playthrough? @relation(fields: [cog_playthroughId], references: [id], onDelete: Cascade)
   cog_playthroughId String?
-  user              auth_user        @relation(fields: [auth_userId], references: [id])
+  user              auth_user        @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
   auth_userId       String
 }

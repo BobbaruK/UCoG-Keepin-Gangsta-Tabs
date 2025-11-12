@@ -12,15 +12,22 @@ import { TransitionStartFunction } from "react";
 import { PoliceOfficer } from "../../types/police-officer";
 import RowActions from "./row-actions";
 import { Badge } from "@/components/ui/badge";
+import {
+  POLICE_BRIBE_DURATION,
+  POLICE_BRIBE_DURATION_POLITICAL,
+} from "@/constants/misc";
+import { bribeDuration } from "../../utils/bribe";
 
 export const columns = ({
   isLoading,
   startTransition,
   visibleUsers,
+  respectForTheLaw = false,
 }: {
   isLoading: boolean;
   startTransition: TransitionStartFunction;
   visibleUsers: PoliceOfficer[];
+  respectForTheLaw?: boolean;
 }): ColumnDef<PoliceOfficer>[] => [
   // Select
   {
@@ -160,8 +167,11 @@ export const columns = ({
     cell: ({ row }) => {
       const officer = row.original;
       const bribedTurn = officer.bribed_turn;
-      const bribeExpires =
-        bribedTurn + (officer.political_contact_used ? 52 : 35);
+      const bribeExpires = bribeDuration({
+        bribedTurn,
+        politicalContact: officer.political_contact_used,
+        respectForTheLaw,
+      });
 
       return (
         <div className="flex items-center gap-2">

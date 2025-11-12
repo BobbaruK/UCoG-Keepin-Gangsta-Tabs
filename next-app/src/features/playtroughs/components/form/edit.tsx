@@ -4,6 +4,7 @@ import { CustomButton } from "@/components/custom-button";
 import {
   Field,
   FieldContent,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -43,6 +44,7 @@ const EditPlaythroughForm = ({ playthrough, laws }: Props) => {
       isPublic: playthrough.is_public,
       freightRailStation: playthrough.freight_rail_station,
       passengerRailStation: playthrough.passenger_rail_station,
+      respectForTheLaw: playthrough.respect_for_the_law,
       laws: playthrough.laws.map((law) => law.id),
     },
   });
@@ -183,6 +185,39 @@ const EditPlaythroughForm = ({ playthrough, laws }: Props) => {
                   <FieldLabel htmlFor={inputId(field.name)}>
                     Freight rail station
                   </FieldLabel>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </FieldContent>
+
+                <Switch
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  name={field.name}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="respectForTheLaw"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                orientation={"horizontal"}
+              >
+                <FieldContent>
+                  <FieldLabel htmlFor={inputId(field.name)}>
+                    Respect for the law
+                  </FieldLabel>
+                  <FieldDescription>
+                    Reduces bribery cost for local cops by 10%, increases the
+                    effective duration of each bribe by 60 days and reduces the
+                    likelihood of a police raid.
+                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
