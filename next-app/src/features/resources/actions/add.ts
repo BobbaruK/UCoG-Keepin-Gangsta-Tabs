@@ -42,7 +42,7 @@ export const addResource = async (
     body: {
       userId: dataSession.user.id,
       role: dataSession.user.role as UserRole,
-      permission: { resource: ["create"] },
+      permission: { resources: ["create"] },
     },
   });
 

@@ -5,6 +5,7 @@ import { DrillIcon } from "@/components/icons/drill";
 import { FlagIcon } from "@/components/icons/flag";
 import { LawIcon } from "@/components/icons/law";
 import { SirenIcon } from "@/components/icons/siren";
+import { StarIcon } from "@/components/icons/star";
 import { TraitsIcon } from "@/components/icons/traits";
 import { UsersIcon } from "@/components/icons/users";
 import { WormIcon } from "@/components/icons/worm";
@@ -15,6 +16,7 @@ import {
   PlaythroughMenuItem,
 } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
+import { captainRolesTitle } from "./page-title/captain-roles";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
 import { playthroughTitle } from "./page-title/playtrough";
@@ -39,6 +41,11 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const menuBasicTables: MenuItem[] = [
+  {
+    title: captainRolesTitle.label.plural,
+    url: captainRolesTitle.href,
+    icon: StarIcon,
+  },
   {
     title: resourcesTitle.label.plural,
     url: resourcesTitle.href,

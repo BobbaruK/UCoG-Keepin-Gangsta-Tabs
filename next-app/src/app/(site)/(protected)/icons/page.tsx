@@ -43,6 +43,7 @@ import { RolesIcon } from "@/components/icons/roles";
 import { ShieldIcon } from "@/components/icons/shield";
 import { ShieldBanIcon } from "@/components/icons/shield-ban";
 import { SirenIcon } from "@/components/icons/siren";
+import { StarIcon } from "@/components/icons/star";
 import { TabletIcon } from "@/components/icons/tablet";
 import { TerminalIcon } from "@/components/icons/terminal";
 import { TraitsIcon } from "@/components/icons/traits";
@@ -290,6 +291,10 @@ const icons: {
   {
     name: "SirenIcon",
     icon: SirenIcon,
+  },
+  {
+    name: "StarIcon",
+    icon: StarIcon,
   },
 ];
 

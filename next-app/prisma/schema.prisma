@@ -141,8 +141,9 @@ model cog_side_effect {
   type        SideEffectType @default(MOVEMENT)
   value       Int
 
-  cog_trait cog_trait[]
-  cog_laws  cog_law[]
+  cog_trait         cog_trait[]
+  cog_laws          cog_law[]
+  cog_captain_roles cog_captain_role[]
 }
 
 model cog_trait {
@@ -229,6 +230,19 @@ model cog_resource_type {
   name         String         @unique
   capacity     Int
   cogResources cog_resource[]
+}
+
+model cog_captain_role {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String  @unique
+  image       String?
+  description String?
+
+  sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id], onDelete: SetDefault)
+  cog_side_effectId String?
 }
 
 // Main Table
