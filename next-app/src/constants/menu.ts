@@ -26,6 +26,8 @@ import { resourcesTitle } from "./page-title/resources";
 import { sideEffectsTitle } from "./page-title/side-effects";
 import { traitsTitle } from "./page-title/traits";
 import { vehicleTypesTitle } from "./page-title/vehicle-types";
+import { crewMembersTitle } from "./page-title/crew-members";
+import { CrewIcon } from "@/components/icons/crew";
 
 export const menuItems: MenuItem[] = [
   {
@@ -95,9 +97,9 @@ export const playthroughMenu = (
   playthroughId: string,
 ): PlaythroughMenuItem[] => [
   {
-    title: "Crew",
-    url: `${playthroughTitle.href}/${playthroughId}/crew`,
-    icon: SirenIcon,
+    title: "Crew members",
+    url: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
+    icon: CrewIcon,
   },
   {
     title: "Auto routes",

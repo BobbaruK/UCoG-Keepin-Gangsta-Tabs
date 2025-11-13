@@ -1,22 +1,16 @@
 "use client";
 
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { Badge } from "@/components/ui/badge";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import { PoliceOfficer } from "../../types/police-officer";
-import RowActions from "./row-actions";
-import { Badge } from "@/components/ui/badge";
-import {
-  POLICE_BRIBE_DURATION,
-  POLICE_BRIBE_DURATION_POLITICAL,
-} from "@/constants/misc";
 import { bribeDuration } from "../../utils/bribe";
+import RowActions from "./row-actions";
 
 export const columns = ({
   isLoading,

@@ -46,11 +46,13 @@ model auth_user {
   lastLoginMethod  String?
   lastLoginAt      DateTime  @default(now())
 
-  sessions          auth_session[]
-  accounts          auth_account[]
-  twofactors        auth_two_factor[]
+  sessions   auth_session[]
+  accounts   auth_account[]
+  twofactors auth_two_factor[]
+
   cogPlaythroughs   cog_playthrough[]
   cogPoliceOfficers cog_police_officer[]
+  cogCrewMembers    cog_crew_member[]
 
   @@index([email, slug])
   @@map("user")
@@ -155,8 +157,9 @@ model cog_trait {
   description String?
   image       String?
 
-  sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id])
+  sideEffect        cog_side_effect?  @relation(fields: [cog_side_effectId], references: [id])
   cog_side_effectId String?
+  cogCrewMember     cog_crew_member[]
 }
 
 enum LawType {
@@ -186,9 +189,10 @@ model cog_nationality {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name        String  @unique
-  description String?
-  flag        String?
+  name         String            @unique
+  description  String?
+  flag         String?
+  crew_members cog_crew_member[]
 }
 
 model cog_vehicle_type {
@@ -243,6 +247,8 @@ model cog_captain_role {
 
   sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id], onDelete: SetDefault)
   cog_side_effectId String?
+
+  crew_members cog_crew_member[]
 }
 
 // Main Table
@@ -259,9 +265,10 @@ model cog_playthrough {
   respect_for_the_law    Boolean @default(false)
   is_public              Boolean @default(false)
 
+  laws cog_law[]
+
   police_officers cog_police_officer[]
-  laws            cog_law[]
-  // crew_members
+  crew_members    cog_crew_member[]
   // buildings
   // gambling_buildings
   // auto_routes
@@ -287,4 +294,51 @@ model cog_police_officer {
   cog_playthroughId String?
   user              auth_user        @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
   auth_userId       String
+}
+
+// Crew
+
+model cog_crew_member {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  first_name           String
+  last_name            String
+  full_name            String
+  alias                String
+  is_boss              Boolean @default(false)
+  is_dead              Boolean @default(false)
+  turn_recruited       Int
+  // base leveling
+  driver               Int
+  opportunist          Int
+  brawler              Int
+  // driver leveling
+  door_dash            Int
+  alley_ace            Int
+  // gambling leveling
+  house_manager        Int
+  mechanically_minded  Int
+  pit_boss             Int
+  // booze production leveling
+  production_manager   Int
+  booze_manufacture    Int
+  booze_upgrade        Int
+  methodical_organizer Int
+  // speakeasy
+  counter_chin_wagger  Int
+  speakeasy_manager    Int
+
+  captain            cog_captain_role? @relation(fields: [cog_captain_roleId], references: [id])
+  cog_captain_roleId String?
+  nationality        cog_nationality   @relation(fields: [cog_nationalityId], references: [id])
+  cog_nationalityId  String
+  traits             cog_trait[]
+  playthrough        cog_playthrough   @relation(fields: [cog_playthroughId], references: [id])
+  cog_playthroughId  String
+  user               auth_user         @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
+  auth_userId        String
+
+  @@index([full_name])
 }

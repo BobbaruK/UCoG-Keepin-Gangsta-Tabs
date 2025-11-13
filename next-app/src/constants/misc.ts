@@ -187,16 +187,12 @@ export const COOKIE_PREFIX = "ucog-kgt";
 /**
  * Duration of the police bribe (turns)
  *
- * 35.71428571428571 turns - 35 rounded down
- *
  * @constant
  */
 export const POLICE_BRIBE_DURATION = 35.71428571428571;
 
 /**
  * Duration of the police bribe from a political contact (turns)
- *
- * 52.14285714285714 turns - 52 rounded down
  *
  * @constant
  */
@@ -205,8 +201,20 @@ export const POLICE_BRIBE_DURATION_POLITICAL = 52.14285714285714;
 /**
  * Duration of the police bribe from a political contact (turns)
  *
- * 8.571428571428571 turns - 8 rounded down
- *
  * @constant
  */
 export const POLICE_BRIBE_DURATION_RESPECT_LAW = 8.571428571428571;
+
+/**
+ * Action points at the start of the game
+ *
+ * @constant
+ */
+export const BASE_ACTION_POINTS = 3;
+
+/**
+ * Movement points at the start of the game
+ *
+ * @constant
+ */
+export const BASE_MOVEMENT_POINTS = 10;

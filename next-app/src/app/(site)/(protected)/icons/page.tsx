@@ -5,6 +5,7 @@ import { AirplayIcon } from "@/components/icons/airplay";
 import { AnvilIcon } from "@/components/icons/anvil";
 import { ArrowLeftIcon } from "@/components/icons/arrow-left";
 import { BanIcon } from "@/components/icons/ban";
+import { BossIcon } from "@/components/icons/boss";
 import { CalendarIcon } from "@/components/icons/calendar";
 import { CameraIcon } from "@/components/icons/camera";
 import { CarIcon } from "@/components/icons/car";
@@ -15,6 +16,7 @@ import { ChevronRightIcon } from "@/components/icons/chevron-right";
 import { ChevronUpIcon } from "@/components/icons/chevron-up";
 import { CogIcon } from "@/components/icons/cog";
 import { CopyIcon } from "@/components/icons/copy";
+import { CrewIcon } from "@/components/icons/crew";
 import { DiscordIcon } from "@/components/icons/discord";
 import { DrillIcon } from "@/components/icons/drill";
 import { EditIcon } from "@/components/icons/edit";
@@ -43,6 +45,7 @@ import { RolesIcon } from "@/components/icons/roles";
 import { ShieldIcon } from "@/components/icons/shield";
 import { ShieldBanIcon } from "@/components/icons/shield-ban";
 import { SirenIcon } from "@/components/icons/siren";
+import { SkullIcon } from "@/components/icons/skull";
 import { StarIcon } from "@/components/icons/star";
 import { TabletIcon } from "@/components/icons/tablet";
 import { TerminalIcon } from "@/components/icons/terminal";
@@ -295,6 +298,18 @@ const icons: {
   {
     name: "StarIcon",
     icon: StarIcon,
+  },
+  {
+    name: "CrewIcon",
+    icon: CrewIcon,
+  },
+  {
+    name: "BossIcon",
+    icon: BossIcon,
+  },
+  {
+    name: "SkullIcon",
+    icon: SkullIcon,
   },
 ];
 
