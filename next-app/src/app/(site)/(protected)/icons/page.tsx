@@ -31,6 +31,7 @@ import { HomeIcon } from "@/components/icons/home";
 import { ImpersonateIcon } from "@/components/icons/impersonate";
 import { KeyIcon } from "@/components/icons/key";
 import { LawIcon } from "@/components/icons/law";
+import { LevelIcon } from "@/components/icons/level";
 import { LinkIcon } from "@/components/icons/link";
 import { LoginIcon } from "@/components/icons/login";
 import { LogoutIcon } from "@/components/icons/logout";
@@ -310,6 +311,10 @@ const icons: {
   {
     name: "SkullIcon",
     icon: SkullIcon,
+  },
+  {
+    name: "LevelIcon",
+    icon: LevelIcon,
   },
 ];
 

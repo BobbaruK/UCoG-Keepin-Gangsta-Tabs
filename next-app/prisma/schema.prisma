@@ -251,6 +251,25 @@ model cog_captain_role {
   crew_members cog_crew_member[]
 }
 
+enum CrewLevelType {
+  DRIVER
+  GAMBLING
+  GENERAL
+  PRODUCTION
+  SPEAKEASY
+}
+
+model cog_crew_level {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type        CrewLevelType @default(DRIVER)
+  name        String        @unique
+  max_level   Int
+  description String?
+}
+
 // Main Table
 
 model cog_playthrough {

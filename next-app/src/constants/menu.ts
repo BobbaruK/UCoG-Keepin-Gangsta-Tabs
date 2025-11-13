@@ -1,6 +1,7 @@
 import { AnvilIcon } from "@/components/icons/anvil";
 import { CarIcon } from "@/components/icons/car";
 import { CastleIcon } from "@/components/icons/castle";
+import { CrewIcon } from "@/components/icons/crew";
 import { DrillIcon } from "@/components/icons/drill";
 import { FlagIcon } from "@/components/icons/flag";
 import { LawIcon } from "@/components/icons/law";
@@ -17,6 +18,8 @@ import {
 } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
 import { captainRolesTitle } from "./page-title/captain-roles";
+import { crewLevelsTitle } from "./page-title/crew-levels";
+import { crewMembersTitle } from "./page-title/crew-members";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
 import { playthroughTitle } from "./page-title/playtrough";
@@ -26,8 +29,7 @@ import { resourcesTitle } from "./page-title/resources";
 import { sideEffectsTitle } from "./page-title/side-effects";
 import { traitsTitle } from "./page-title/traits";
 import { vehicleTypesTitle } from "./page-title/vehicle-types";
-import { crewMembersTitle } from "./page-title/crew-members";
-import { CrewIcon } from "@/components/icons/crew";
+import { LevelIcon } from "@/components/icons/level";
 
 export const menuItems: MenuItem[] = [
   {
@@ -43,6 +45,11 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const menuBasicTables: MenuItem[] = [
+  {
+    title: crewLevelsTitle.label.plural,
+    url: crewLevelsTitle.href,
+    icon: LevelIcon,
+  },
   {
     title: captainRolesTitle.label.plural,
     url: captainRolesTitle.href,

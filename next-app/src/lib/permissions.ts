@@ -17,9 +17,10 @@ const statement = {
   vehicle_types: CRUD,
   resource_types: CRUD,
   resources: CRUD,
+  captain_roles: CRUD,
+  crew_levels: CRUD,
   playthrough: CRUD,
   police_officers: CRUD,
-  captain_roles: CRUD,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -36,6 +37,7 @@ export const roles = {
     resource_types: ["read"],
     resources: ["read"],
     captain_roles: ["read"],
+    crew_levels: ["read"],
     playthrough: [...statement.playthrough],
     police_officers: [...statement.police_officers],
   }),
@@ -50,6 +52,7 @@ export const roles = {
     resource_types: [...statement.resource_types],
     resources: [...statement.resources],
     captain_roles: [...statement.captain_roles],
+    crew_levels: [...statement.crew_levels],
     playthrough: [...statement.playthrough],
     police_officers: [...statement.police_officers],
   }),
@@ -64,6 +67,7 @@ export const roles = {
     resource_types: [...statement.resource_types],
     resources: [...statement.resources],
     captain_roles: [...statement.captain_roles],
+    crew_levels: [...statement.crew_levels],
     playthrough: [...statement.playthrough],
     police_officers: [...statement.police_officers],
   }),
