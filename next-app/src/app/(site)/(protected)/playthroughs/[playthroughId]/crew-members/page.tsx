@@ -23,7 +23,7 @@ import { SearchParams } from "nuqs/server";
 
 interface Props {
   params: Promise<{
-    id: string;
+    playthroughId: string;
   }>;
   searchParams: Promise<SearchParams>;
 }
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 const CrewMembersPage = async ({ params, searchParams }: Props) => {
-  const id = (await params).id;
+  const id = (await params).playthroughId;
   const session = await auth.api.getSession({
     headers: await headers(),
   });

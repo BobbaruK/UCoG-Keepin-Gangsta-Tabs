@@ -20,7 +20,7 @@ import { SearchParams } from "nuqs/server";
 
 interface Props {
   params: Promise<{
-    id: string;
+    playthroughId: string;
   }>;
   searchParams: Promise<SearchParams>;
 }
@@ -43,7 +43,7 @@ const PolicePage = async ({ params, searchParams }: Props) => {
     selected,
   } = await loadSearchParams(searchParams);
 
-  const id = (await params).id;
+  const id = (await params).playthroughId;
   const session = await auth.api.getSession({
     headers: await headers(),
   });

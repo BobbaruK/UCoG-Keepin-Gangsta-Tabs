@@ -1,16 +1,11 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { getCaptainRoles } from "@/features/captain-roles/data/get";
-import AddMemberMultiStep from "@/features/crew-members/components/add-member-multistep";
-import { getCrewLevels } from "@/features/crew-members/data/get-levels";
-import { getNationalities } from "@/features/nationalities/data/get-nationalities";
-import PlaythroughMenu from "@/features/playtroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playtroughs/data/get";
-import { getTraits } from "@/features/traits/data/get";
+import AddPoliceOfficerForm from "@/features/police-officers/components/form/add";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -18,26 +13,22 @@ import { headers } from "next/headers";
 
 interface Props {
   params: Promise<{
-    id: string;
+    playthroughId: string;
   }>;
 }
 
 export const metadata: Metadata = {
-  title: `Add ${crewMembersTitle.label.singular}`,
+  title: `Add ${policeOfficersTitle.label.singular}`,
 };
 
 const AddPoliceOfficerPage = async ({ params }: Props) => {
-  const playthroughId = (await params).id;
+  const playthroughId = (await params).playthroughId;
 
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   const playthrough = await getPlaythrough(playthroughId);
-  const roles = await getCaptainRoles();
-  const nationalities = await getNationalities();
-  const traits = await getTraits();
-  const levels = await getCrewLevels();
 
   return (
     <PageStructure>
@@ -52,32 +43,24 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
             label: playthrough?.name || "",
           },
           {
-            href: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
+            href: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
             label: capitalizeFirstLetter(
-              crewMembersTitle.label.plural.toLowerCase(),
+              policeOfficersTitle.label.plural.toLowerCase(),
             ),
           },
           {
-            href: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
-            label: `Add ${crewMembersTitle.label.singular.toLowerCase()}`,
+            href: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
+            label: `Add ${policeOfficersTitle.label.plural.toLowerCase()}`,
           },
         ])}
       />
       <PageTitle
-        label={`Add ${crewMembersTitle.label.singular.toLowerCase()}`}
-        backBtnHref={`${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`}
+        label={`Add ${policeOfficersTitle.label.singular.toLowerCase()}`}
+        backBtnHref={`${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`}
         session={session}
       />
 
-      <PlaythroughMenu playthroughId={playthroughId} />
-
-      <AddMemberMultiStep
-        playthroughId={playthroughId}
-        roles={roles?.data}
-        nationalities={nationalities?.data}
-        traits={traits?.data}
-        levels={levels?.data}
-      />
+      <AddPoliceOfficerForm playthroughId={playthroughId} />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

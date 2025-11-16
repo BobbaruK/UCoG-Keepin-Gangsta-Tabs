@@ -5,32 +5,32 @@ import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { getLaws } from "@/features/laws/data/get-laws";
-import EditPlaythroughForm from "@/features/playtroughs/components/form/edit";
+import PlaythroughMenu from "@/features/playtroughs/components/playthrough-menu-wrapper";
+import PlaythroughPresentation from "@/features/playtroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playtroughs/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 
 interface Props {
   params: Promise<{
-    id: string;
+    playthroughId: string;
   }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = (await params).id;
+  const id = (await params).playthroughId;
 
   const playthrough = await getPlaythrough(id);
 
   return {
-    title: `Edit ${playthrough?.name}`,
+    title: playthrough?.name,
   };
 }
 
-const EditLawPage = async ({ params }: Props) => {
-  const id = (await params).id;
+const LawPage = async ({ params }: Props) => {
+  const id = (await params).playthroughId;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -42,7 +42,7 @@ const EditLawPage = async ({ params }: Props) => {
       <PageStructure>
         <PageTitle
           label={"unknown"}
-          backBtnHref={`/${playthroughTitle.href}`}
+          backBtnHref={playthroughTitle.href}
           session={session}
         />
         <CustomAlert
@@ -53,37 +53,39 @@ const EditLawPage = async ({ params }: Props) => {
       </PageStructure>
     );
 
-  const laws = await getLaws();
-
   return (
     <PageStructure>
       <PageBreadcrumbs
         crumbs={breadCrumbsFn([
           {
             href: playthroughTitle.href,
-            label: capitalizeFirstLetter(
-              playthroughTitle.label.plural.toLowerCase(),
-            ),
+            label: capitalizeFirstLetter(playthroughTitle.label.plural),
           },
           {
             href: `${playthroughTitle.href}/${id}`,
-            label: `Edit "${playthrough.name}"`,
+            label: playthrough.name,
           },
         ])}
       />
       <PageTitle
-        label={`Edit "${playthrough.name}"`}
-        backBtnHref={`${playthroughTitle.href}/${id}`}
+        label={playthrough.name}
+        backBtnHref={playthroughTitle.href}
+        editBtnHref={`${playthroughTitle.href}/${id}/edit`}
+        forceEditButton
         session={session}
       />
 
-      <EditPlaythroughForm playthrough={playthrough} laws={laws?.data} />
+      <PlaythroughPresentation playthrough={playthrough} />
 
-      {/* <div>
-        <pre>{JSON.stringify({ trait }, null, 2)}</pre>
-      </div> */}
+      <div>TODO: tables here - playthrough</div>
+
+      <PlaythroughMenu playthroughId={playthrough.id} />
+
+      <div>
+        <pre>{JSON.stringify(playthrough, null, 2)}</pre>
+      </div>
     </PageStructure>
   );
 };
 
-export default EditLawPage;
+export default LawPage;
