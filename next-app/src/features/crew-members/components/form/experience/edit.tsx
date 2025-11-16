@@ -32,7 +32,6 @@ import { toast } from "sonner";
 import { experienceSchema } from "../../../schemas/experience";
 import { CrewLevel } from "../../../types/level";
 import Levels from "../experience/levels";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Props {
   member: CrewMember;
@@ -90,15 +89,14 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
       onSubmit={form.handleSubmit(onSubmit)}
       className="space-y-6"
     >
-      <ScrollArea className="h-72 pe-4">
-        <FieldSet className="gap-4">
-          <FieldLegend variant="label">Experience</FieldLegend>
-          <FieldDescription>Add experience</FieldDescription>
-          <FieldGroup className="gap-4">
-            {fields.map((field, index) => (
-              <div key={field.id} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  {/* <Controller
+      <FieldSet className="gap-4">
+        <FieldLegend variant="label">Experience</FieldLegend>
+        <FieldDescription>Add experience</FieldDescription>
+        <FieldGroup className="gap-4">
+          {fields.map((field, index) => (
+            <div key={field.id} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                {/* <Controller
                     name={`experiences.${index}.memberId`}
                     control={form.control}
                     render={({ field: controllerField, fieldState }) => (
@@ -137,112 +135,111 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
                     )}
                   /> */}
 
-                  <Controller
-                    name={`experiences.${index}.levelId`}
-                    control={form.control}
-                    render={({ field: controllerField, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={inputId(controllerField.name)}>
-                          {capitalizeFirstLetter(
-                            crewLevelsTitle.label.singular.toLowerCase(),
-                          )}
-                        </FieldLabel>
-
-                        <Levels
-                          memberId={member.id}
-                          levels={levels}
-                          controllerField={controllerField}
-                          fieldState={fieldState}
-                          getValues={form.getValues}
-                          setValue={form.setValue}
-                          index={index}
-                          updateExperience={(index, obj) => update(index, obj)}
-                          fields={fields}
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
+                <Controller
+                  name={`experiences.${index}.levelId`}
+                  control={form.control}
+                  render={({ field: controllerField, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={inputId(controllerField.name)}>
+                        {capitalizeFirstLetter(
+                          crewLevelsTitle.label.singular.toLowerCase(),
                         )}
-                      </Field>
-                    )}
-                  />
+                      </FieldLabel>
 
-                  <Controller
-                    name={`experiences.${index}.value`}
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={inputId(field.name)}>
-                          Recruited turn
-                        </FieldLabel>
-
-                        <div className="flex items-center gap-2">
-                          <Input
-                            {...field}
-                            id={inputId(field.name)}
-                            aria-invalid={fieldState.invalid}
-                            placeholder="12"
-                            autoComplete="off"
-                            type="number"
-                            disabled={true}
-                            className={"opacity-100!"}
-                            {...form.register(`experiences.${index}.value`, {
-                              valueAsNumber: true,
-                            })}
-                          />
-                          <Counter
-                            value={field.value}
-                            emitClick={(val) =>
-                              form.setValue(`experiences.${index}.value`, val)
-                            }
-                            minValue={1}
-                            maxValue={
-                              levels?.find(
-                                (level) => level.id === fields[index].levelId,
-                              )?.max_level
-                            }
-                          />
-                        </div>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                </div>
-
-                <CustomButton
-                  type="button"
-                  buttonLabel="Remove"
-                  icon={TrashIcon}
-                  iconPlacement="left"
-                  variant={"destructive"}
-                  size={"sm"}
-                  className="ms-auto"
-                  onClick={() => remove(index)}
+                      <Levels
+                        memberId={member.id}
+                        levels={levels}
+                        controllerField={controllerField}
+                        fieldState={fieldState}
+                        getValues={form.getValues}
+                        setValue={form.setValue}
+                        index={index}
+                        updateExperience={(index, obj) => update(index, obj)}
+                        fields={fields}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
                 />
-                <Separator />
-              </div>
-            ))}
 
-            <CustomButton
-              buttonLabel="Add experience"
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                append({
-                  memberId: member.id,
-                  levelId: "",
-                  value: 1,
-                })
-              }
-            />
-          </FieldGroup>
-          {form.formState.errors.experiences?.root && (
-            <FieldError errors={[form.formState.errors.experiences.root]} />
-          )}
-        </FieldSet>
-      </ScrollArea>
+                <Controller
+                  name={`experiences.${index}.value`}
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={inputId(field.name)}>
+                        Recruited turn
+                      </FieldLabel>
+
+                      <div className="flex items-center gap-2">
+                        <Input
+                          {...field}
+                          id={inputId(field.name)}
+                          aria-invalid={fieldState.invalid}
+                          placeholder="12"
+                          autoComplete="off"
+                          type="number"
+                          disabled={true}
+                          className={"opacity-100!"}
+                          {...form.register(`experiences.${index}.value`, {
+                            valueAsNumber: true,
+                          })}
+                        />
+                        <Counter
+                          value={field.value}
+                          emitClick={(val) =>
+                            form.setValue(`experiences.${index}.value`, val)
+                          }
+                          minValue={1}
+                          maxValue={
+                            levels?.find(
+                              (level) => level.id === fields[index].levelId,
+                            )?.max_level
+                          }
+                        />
+                      </div>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+
+              <CustomButton
+                type="button"
+                buttonLabel="Remove"
+                icon={TrashIcon}
+                iconPlacement="left"
+                variant={"destructive"}
+                size={"sm"}
+                className="ms-auto"
+                onClick={() => remove(index)}
+              />
+              <Separator />
+            </div>
+          ))}
+
+          <CustomButton
+            buttonLabel="Add experience"
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              append({
+                memberId: member.id,
+                levelId: "",
+                value: 1,
+              })
+            }
+          />
+        </FieldGroup>
+        {form.formState.errors.experiences?.root && (
+          <FieldError errors={[form.formState.errors.experiences.root]} />
+        )}
+      </FieldSet>
       <div className="flex items-center gap-4">
         <CustomButton
           buttonLabel="Reset"
@@ -255,7 +252,7 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
           buttonLabel="Save experience"
           type="submit"
           form={formId}
-          disabled={isPending || !form.getValues("experiences").length}
+          disabled={isPending}
         />
         <CustomButton buttonLabel="Skip" linkHref={crewMembersPath} />
       </div>

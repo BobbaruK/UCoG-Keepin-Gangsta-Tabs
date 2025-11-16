@@ -1,40 +1,41 @@
 "use client";
 
 import { CustomButton } from "@/components/custom-button";
+import { CopyIcon } from "@/components/icons/copy";
+import { CrewIcon } from "@/components/icons/crew";
 import { EditIcon } from "@/components/icons/edit";
+import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
-import { Suspense, useState, useTransition } from "react";
+import { UserRole } from "@/generated/prisma";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
+import { useSession } from "@/lib/auth-client";
+import Link from "next/link";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteCrewMember } from "../../actions/member/delete";
-import { CaptainRole } from "../../types/captain-role";
 import { CrewMember } from "../../types/crew-member";
-import { CrewLevel } from "../../types/level";
-import { Nationality } from "../../types/nationality";
-import { Trait } from "../../types/traits";
-import EditMemberMultiStep from "../edit-member-multistep";
+import { playthroughTitle } from "@/constants/page-title/playtrough";
 // const EditPoliceOfficerForm = lazy(() => import("../form/edit"));
 
 interface Props {
   crewMember: CrewMember;
-  roles: CaptainRole[] | undefined;
-  nationalities: Nationality[] | undefined;
-  traits: Trait[] | undefined;
-  levels: CrewLevel[] | undefined;
 }
 
-const RowActions = ({
-  crewMember,
-  roles,
-  nationalities,
-  traits,
-  levels,
-}: Props) => {
+const RowActions = ({ crewMember }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [openEditCrewMember, setOpenEditCrewMember] = useState(false);
+  const { handleCopy } = useCustomCopyToClipboard();
+  const { data: session } = useSession();
 
   const handleDelete = () => {
     startTransition(async () => {
@@ -55,45 +56,7 @@ const RowActions = ({
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <ResponsiveDialog
-        open={openEditCrewMember}
-        setOpen={setOpenEditCrewMember}
-        trigger={{
-          type: "element",
-          element: (
-            <CustomButton
-              buttonLabel="Edit"
-              variant={"outline"}
-              icon={EditIcon}
-              iconPlacement="left"
-              size={"icon"}
-              className="size-8"
-              disabled={isPending}
-              skeletonClassName="size-8"
-            />
-          ),
-          hidden: false,
-        }}
-        header={{
-          title: {
-            label: `Edit ${crewMembersTitle.label.singular.toLowerCase()}`,
-          },
-        }}
-      >
-        <Suspense fallback={<p>Loading</p>}>
-          <EditMemberMultiStep
-            crewMember={crewMember}
-            playthroughId={crewMember.playthrough.id}
-            roles={roles}
-            nationalities={nationalities}
-            traits={traits}
-            levels={levels}
-            editCrewMemberDialog={() => setOpenEditCrewMember(false)}
-          />
-        </Suspense>
-      </ResponsiveDialog>
-
+    <>
       <ResponsiveDialog
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
@@ -103,16 +66,12 @@ const RowActions = ({
             <CustomButton
               buttonLabel="Delete"
               variant={"destructive"}
-              icon={TrashIcon}
-              iconPlacement="left"
-              size={"icon"}
-              className="size-8"
+              className="w-full"
               disabled={isPending}
               onClick={() => setOpenDeleteDialog(true)}
-              skeletonClassName="size-8"
             />
           ),
-          hidden: false,
+          hidden: true,
         }}
         header={{
           title: {
@@ -121,19 +80,67 @@ const RowActions = ({
           description: `This action cannot be undone. This will permanently delete this ${crewMembersTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
         }}
       >
-        <div className="flex items-center justify-end">
-          <CustomButton
-            buttonLabel="Delete"
-            variant={"destructive"}
-            icon={TrashIcon}
-            iconPlacement="left"
-            hideLabelOnMobile={false}
-            className="ms-auto max-sm:w-full"
-            onClick={handleDelete}
-          />
-        </div>
+        <CustomButton
+          buttonLabel="Delete"
+          variant={"destructive"}
+          icon={TrashIcon}
+          iconPlacement="left"
+          hideLabelOnMobile={false}
+          className="ms-auto max-sm:w-full"
+          onClick={handleDelete}
+        />
       </ResponsiveDialog>
-    </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild disabled={isPending}>
+          <CustomButton
+            buttonLabel="More"
+            size={"icon"}
+            icon={MoreIcon}
+            iconPlacement="left"
+            variant={"outline"}
+            className="size-8"
+            skeletonClassName="size-8"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={handleCopy(crewMember.id)}>
+            <CopyIcon /> Copy ID
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href={`${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}/${crewMember.id}`}
+            >
+              <CrewIcon />
+              Go to {crewMembersTitle.label.singular.toLowerCase()}
+            </Link>
+          </DropdownMenuItem>
+
+          {session && session.user.role !== UserRole.USER && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}/${crewMember.id}/edit`}
+                >
+                  <EditIcon />
+                  Edit {crewMembersTitle.label.singular.toLowerCase()}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                <TrashIcon />
+                Delete {crewMembersTitle.label.singular.toLowerCase()}
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 };
 

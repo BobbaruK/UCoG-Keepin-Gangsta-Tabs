@@ -1,9 +1,18 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
 import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
   Field,
   FieldContent,
@@ -25,6 +34,7 @@ import { MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
+import { playthroughTitle } from "@/constants/page-title/playtrough";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -36,23 +46,12 @@ import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { editCrewMember } from "../../actions/member/edit";
 import { AddCrewMemberSchema } from "../../schemas/add";
 import { CaptainRole } from "../../types/captain-role";
 import { CrewMember } from "../../types/crew-member";
 import { Nationality } from "../../types/nationality";
 import { Trait } from "../../types/traits";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { editCrewMember } from "../../actions/member/edit";
-import { revPath } from "@/actions/revalidate";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Props {
   crewMember: CrewMember;
@@ -60,7 +59,7 @@ interface Props {
   roles: CaptainRole[] | undefined;
   nationalities: Nationality[] | undefined;
   traits: Trait[] | undefined;
-  editCrewMemberDialog: () => void;
+  nextTab: () => void;
 }
 
 const EditCrewMemberForm = ({
@@ -69,7 +68,7 @@ const EditCrewMemberForm = ({
   roles = [],
   nationalities = [],
   traits = [],
-  editCrewMemberDialog,
+  nextTab,
 }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -108,16 +107,17 @@ const EditCrewMemberForm = ({
           if (data.success) {
             toast.success(data.success);
 
-            editCrewMemberDialog();
-
             setTimeout(() => {
               revPath(
                 `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
               );
             }, 250);
+
             // router.push(
             //   `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}/${crewMember.id}`,
             // );
+
+            nextTab();
           }
         })
         .catch(() => {
@@ -132,414 +132,407 @@ const EditCrewMemberForm = ({
       onSubmit={form.handleSubmit(onSubmit)}
       className="space-y-6"
     >
-      <ScrollArea className="h-72 pe-4">
-        <FieldSet>
-          <FieldGroup>
-            <Controller
-              name="first_name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    First name
-                  </FieldLabel>
+      <FieldSet>
+        <FieldGroup>
+          <Controller
+            name="first_name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  First name
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Ada"
+                  autoComplete="off"
+                  type="text"
+                  disabled={isPending}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="last_name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>Last name</FieldLabel>
+                <Input
+                  {...field}
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Cristea"
+                  autoComplete="off"
+                  type="text"
+                  disabled={isPending}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="alias"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>Alias</FieldLabel>
+                <Input
+                  {...field}
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Bottles"
+                  autoComplete="off"
+                  type="text"
+                  disabled={isPending}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="turn_recruited"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  Recruited turn
+                </FieldLabel>
+                <div className="flex items-center gap-2">
                   <Input
                     {...field}
                     id={inputId(field.name)}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Ada"
+                    placeholder="12"
                     autoComplete="off"
-                    type="text"
-                    disabled={isPending}
+                    type="number"
+                    disabled={true}
+                    className="opacity-100!"
+                    {...form.register("turn_recruited", {
+                      valueAsNumber: true,
+                    })}
                   />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="last_name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    Last name
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id={inputId(field.name)}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Cristea"
-                    autoComplete="off"
-                    type="text"
-                    disabled={isPending}
+                  <Counter
+                    value={field.value}
+                    emitClick={(val) => form.setValue("turn_recruited", val)}
+                    minValue={1}
                   />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
+                </div>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
 
-            <Controller
-              name="alias"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={inputId(field.name)}>Alias</FieldLabel>
-                  <Input
-                    {...field}
-                    id={inputId(field.name)}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Bottles"
-                    autoComplete="off"
-                    type="text"
-                    disabled={isPending}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+          <Controller
+            name="captain_role"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  {capitalizeFirstLetter(
+                    captainRolesTitle.label.singular.toLowerCase(),
                   )}
-                </Field>
-              )}
-            />
+                </FieldLabel>
 
-            <Controller
-              name="turn_recruited"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    Recruited turn
-                  </FieldLabel>
-                  <div className="flex items-center gap-2">
-                    <Input
+                <Popover
+                  open={comboxCaptainRole}
+                  onOpenChange={setComboxCaptainRole}
+                >
+                  <PopoverTrigger asChild>
+                    <Button
                       {...field}
                       id={inputId(field.name)}
                       aria-invalid={fieldState.invalid}
-                      placeholder="12"
-                      autoComplete="off"
-                      type="number"
-                      disabled={true}
-                      className="opacity-100!"
-                      {...form.register("turn_recruited", {
-                        valueAsNumber: true,
-                      })}
-                    />
-                    <Counter
-                      value={field.value}
-                      emitClick={(val) => form.setValue("turn_recruited", val)}
-                      minValue={1}
-                    />
-                  </div>
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={comboxCaptainRole}
+                      className="w-[200px] justify-between"
+                    >
+                      {form.getValues("captain_role")
+                        ? roles.find(
+                            (role) =>
+                              role.id === form.getValues("captain_role"),
+                          )?.name
+                        : `Select ${captainRolesTitle.label.singular.toLowerCase()}...`}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0" align="start">
+                    <Command>
+                      <CommandInput
+                        placeholder={`Search ${captainRolesTitle.label.singular.toLowerCase()}...`}
+                        className="h-9"
+                      />
+                      <CommandList>
+                        <CommandEmpty>
+                          No {captainRolesTitle.label.singular.toLowerCase()}{" "}
+                          found.
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {roles.map((role) => (
+                            <CommandItem
+                              key={role.id}
+                              value={role.name}
+                              onSelect={(currentValue) => {
+                                const role = roles.find(
+                                  (role) => role.name === currentValue,
+                                );
+
+                                form.setValue(
+                                  "captain_role",
+                                  role &&
+                                    role?.id === form.getValues("captain_role")
+                                    ? ""
+                                    : role?.id,
+                                );
+                                setComboxCaptainRole(false);
+                              }}
+                            >
+                              {" "}
+                              <CustomAvatar
+                                image={role.image}
+                                className="size-6 rounded-md border-none"
+                                fit="contain"
+                              />
+                              {role.name}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  form.getValues("captain_role") === role.id
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="isDead"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                orientation={"horizontal"}
+              >
+                <FieldContent>
+                  <FieldLabel htmlFor={inputId(field.name)}>Is dead</FieldLabel>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
-                </Field>
-              )}
-            />
+                </FieldContent>
 
-            <Controller
-              name="captain_role"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    {capitalizeFirstLetter(
-                      captainRolesTitle.label.singular.toLowerCase(),
-                    )}
-                  </FieldLabel>
+                <Switch
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  name={field.name}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </Field>
+            )}
+          />
 
-                  <Popover
-                    open={comboxCaptainRole}
-                    onOpenChange={setComboxCaptainRole}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        {...field}
-                        id={inputId(field.name)}
-                        aria-invalid={fieldState.invalid}
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={comboxCaptainRole}
-                        className="w-[200px] justify-between"
-                      >
-                        {form.getValues("captain_role")
-                          ? roles.find(
-                              (role) =>
-                                role.id === form.getValues("captain_role"),
-                            )?.name
-                          : `Select ${captainRolesTitle.label.singular.toLowerCase()}...`}
-                        <ChevronsUpDown className="opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="p-0" align="start">
-                      <Command>
-                        <CommandInput
-                          placeholder={`Search ${captainRolesTitle.label.singular.toLowerCase()}...`}
-                          className="h-9"
-                        />
-                        <CommandList>
-                          <CommandEmpty>
-                            No {captainRolesTitle.label.singular.toLowerCase()}{" "}
-                            found.
-                          </CommandEmpty>
-                          <CommandGroup>
-                            {roles.map((role) => (
-                              <CommandItem
-                                key={role.id}
-                                value={role.name}
-                                onSelect={(currentValue) => {
-                                  const role = roles.find(
-                                    (role) => role.name === currentValue,
-                                  );
-
-                                  form.setValue(
-                                    "captain_role",
-                                    role &&
-                                      role?.id ===
-                                        form.getValues("captain_role")
-                                      ? ""
-                                      : role?.id,
-                                  );
-                                  setComboxCaptainRole(false);
-                                }}
-                              >
-                                {" "}
-                                <CustomAvatar
-                                  image={role.image}
-                                  className="size-6 rounded-md border-none"
-                                  fit="contain"
-                                />
-                                {role.name}
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    form.getValues("captain_role") === role.id
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+          <Controller
+            name="nationality"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  {capitalizeFirstLetter(
+                    nationalitiesTitle.label.singular.toLowerCase(),
                   )}
-                </Field>
-              )}
-            />
+                </FieldLabel>
 
-            <Controller
-              name="isDead"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  orientation={"horizontal"}
+                <Popover
+                  open={comboxNationality}
+                  onOpenChange={setComboxNationality}
                 >
-                  <FieldContent>
-                    <FieldLabel htmlFor={inputId(field.name)}>
-                      Is dead
-                    </FieldLabel>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </FieldContent>
-
-                  <Switch
-                    id={inputId(field.name)}
-                    aria-invalid={fieldState.invalid}
-                    name={field.name}
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="nationality"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    {capitalizeFirstLetter(
-                      nationalitiesTitle.label.singular.toLowerCase(),
-                    )}
-                  </FieldLabel>
-
-                  <Popover
-                    open={comboxNationality}
-                    onOpenChange={setComboxNationality}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        {...field}
-                        id={inputId(field.name)}
-                        aria-invalid={fieldState.invalid}
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={comboxCaptainRole}
-                        className="w-[200px] justify-between"
-                      >
-                        {form.getValues("nationality") ? (
-                          <span className="flex items-center gap-2">
-                            <CustomAvatar
-                              image={
-                                nationalities.find(
-                                  (role) =>
-                                    role.id === form.getValues("nationality"),
-                                )?.flag
-                              }
-                              className="size-6 rounded-md border-none"
-                              fit="contain"
-                            />
-                            {
+                  <PopoverTrigger asChild>
+                    <Button
+                      {...field}
+                      id={inputId(field.name)}
+                      aria-invalid={fieldState.invalid}
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={comboxCaptainRole}
+                      className="w-[200px] justify-between"
+                    >
+                      {form.getValues("nationality") ? (
+                        <span className="flex items-center gap-2">
+                          <CustomAvatar
+                            image={
                               nationalities.find(
                                 (role) =>
                                   role.id === form.getValues("nationality"),
-                              )?.name
+                              )?.flag
                             }
-                          </span>
-                        ) : (
-                          `Select ${nationalitiesTitle.label.singular.toLowerCase()}...`
-                        )}
-                        <ChevronsUpDown className="opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="p-0" align="start">
-                      <Command>
-                        <CommandInput
-                          placeholder={`Search ${nationalitiesTitle.label.singular.toLowerCase()}...`}
-                          className="h-9"
-                        />
-                        <CommandList>
-                          <CommandEmpty>
-                            No {nationalitiesTitle.label.singular.toLowerCase()}{" "}
-                            found.
-                          </CommandEmpty>
-                          <CommandGroup>
-                            {nationalities.map((nationality) => (
-                              <CommandItem
-                                key={nationality.id}
-                                value={nationality.name}
-                                onSelect={(currentValue) => {
-                                  const nationality = nationalities.find(
-                                    (nationality) =>
-                                      nationality.name === currentValue,
-                                  );
-
-                                  if (nationality) {
-                                    form.setValue(
-                                      "nationality",
-                                      nationality.id ===
-                                        form.getValues("nationality")
-                                        ? ""
-                                        : nationality.id || "",
-                                    );
-
-                                    setComboxNationality(false);
-                                    form.clearErrors("nationality");
-                                  }
-                                }}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <CustomAvatar
-                                    image={nationality.flag}
-                                    className="size-6 rounded-md border-none"
-                                    fit="contain"
-                                  />
-                                  {nationality.name}
-                                </div>
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    form.getValues("nationality") ===
-                                      nationality.id
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="traits"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={inputId(field.name)}>Traits</FieldLabel>
-
-                  <MultiSelect
-                    id={inputId(field.name)}
-                    aria-invalid={fieldState.invalid}
-                    options={
-                      traits.map((trait) => ({
-                        value: trait.id,
-                        label: trait.name,
-                        // disabled: true,
-                        image: (
-                          <CustomAvatar
-                            image={trait.image}
                             className="size-6 rounded-md border-none"
                             fit="contain"
                           />
-                        ),
-                        // icon: React.createElement(CustomAvatar, {}),
-                      })) || []
-                    }
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                    placeholder={`Choose ${traitsTitle.label.plural.toLowerCase()}...`}
-                    hideSelectAll
-                    variant={"secondary"}
-                    disabled={isPending}
-                    className="h-9 min-h-9"
-                    singleLine
-                    animationConfig={{
-                      badgeAnimation: "slide",
-                      optionHoverAnimation: "none",
-                      popoverAnimation: "none",
-                    }}
-                    responsive={{
-                      mobile: {
-                        maxCount: 0,
-                      },
-                      tablet: {
-                        compactMode: true,
-                        maxCount: 1,
-                      },
-                    }}
-                  />
+                          {
+                            nationalities.find(
+                              (role) =>
+                                role.id === form.getValues("nationality"),
+                            )?.name
+                          }
+                        </span>
+                      ) : (
+                        `Select ${nationalitiesTitle.label.singular.toLowerCase()}...`
+                      )}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0" align="start">
+                    <Command>
+                      <CommandInput
+                        placeholder={`Search ${nationalitiesTitle.label.singular.toLowerCase()}...`}
+                        className="h-9"
+                      />
+                      <CommandList>
+                        <CommandEmpty>
+                          No {nationalitiesTitle.label.singular.toLowerCase()}{" "}
+                          found.
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {nationalities.map((nationality) => (
+                            <CommandItem
+                              key={nationality.id}
+                              value={nationality.name}
+                              onSelect={(currentValue) => {
+                                const nationality = nationalities.find(
+                                  (nationality) =>
+                                    nationality.name === currentValue,
+                                );
 
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
-        </FieldSet>
-      </ScrollArea>
+                                if (nationality) {
+                                  form.setValue(
+                                    "nationality",
+                                    nationality.id ===
+                                      form.getValues("nationality")
+                                      ? ""
+                                      : nationality.id || "",
+                                  );
+
+                                  setComboxNationality(false);
+                                  form.clearErrors("nationality");
+                                }
+                              }}
+                            >
+                              <div className="flex items-center gap-2">
+                                <CustomAvatar
+                                  image={nationality.flag}
+                                  className="size-6 rounded-md border-none"
+                                  fit="contain"
+                                />
+                                {nationality.name}
+                              </div>
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  form.getValues("nationality") ===
+                                    nationality.id
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="traits"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>Traits</FieldLabel>
+
+                <MultiSelect
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  options={
+                    traits.map((trait) => ({
+                      value: trait.id,
+                      label: trait.name,
+                      // disabled: true,
+                      image: (
+                        <CustomAvatar
+                          image={trait.image}
+                          className="size-6 rounded-md border-none"
+                          fit="contain"
+                        />
+                      ),
+                      // icon: React.createElement(CustomAvatar, {}),
+                    })) || []
+                  }
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                  placeholder={`Choose ${traitsTitle.label.plural.toLowerCase()}...`}
+                  hideSelectAll
+                  variant={"secondary"}
+                  disabled={isPending}
+                  className="h-9 min-h-9"
+                  singleLine
+                  animationConfig={{
+                    badgeAnimation: "slide",
+                    optionHoverAnimation: "none",
+                    popoverAnimation: "none",
+                  }}
+                  responsive={{
+                    mobile: {
+                      maxCount: 0,
+                    },
+                    tablet: {
+                      compactMode: true,
+                      maxCount: 1,
+                    },
+                  }}
+                />
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
+      </FieldSet>
       <CustomButton
         buttonLabel={`Save ${crewMembersTitle.label.singular.toLowerCase()}`}
         type="submit"

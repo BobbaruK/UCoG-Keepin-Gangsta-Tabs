@@ -636,14 +636,8 @@ export const columns = ({
     ),
     enablePinning: true,
     cell: ({ row }) => (
-      <div className="grid place-items-center p-2">
-        <RowActions
-          crewMember={row.original}
-          roles={roles}
-          nationalities={nationalities}
-          traits={traits}
-          levels={levels}
-        />
+      <div className="p-2">
+        <RowActions crewMember={row.original} />
       </div>
     ),
   },

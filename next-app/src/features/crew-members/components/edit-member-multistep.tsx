@@ -20,7 +20,6 @@ interface Props {
   nationalities: Nationality[] | undefined;
   traits: Trait[] | undefined;
   levels: CrewLevel[] | undefined;
-  editCrewMemberDialog: () => void;
 }
 
 const EditMemberMultiStep = ({
@@ -30,7 +29,6 @@ const EditMemberMultiStep = ({
   nationalities = [],
   traits = [],
   levels = [],
-  editCrewMemberDialog,
 }: Props) => {
   const [tabSelected, setTabSelected] = useState<AllTabs>("edit");
   const [crewMemberId, setCrewMemberId] = useState("");
@@ -52,7 +50,9 @@ const EditMemberMultiStep = ({
             roles={roles}
             nationalities={nationalities}
             traits={traits}
-            editCrewMemberDialog={editCrewMemberDialog}
+            nextTab={() => {
+              setTabSelected("experience");
+            }}
           />
         </TabsContent>
         <TabsContent value="experience">

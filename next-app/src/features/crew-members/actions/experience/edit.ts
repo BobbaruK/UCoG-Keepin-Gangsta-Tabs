@@ -59,32 +59,13 @@ export const editExperiences = async ({
       }).RESOURCE_CREATE_UNAUTHORIZED,
     };
 
-  // const existingExperiences = await db.cog_crew_experience.findMany({
-  //   where: {
-  //     cog_crew_memberId: memberId,
-  //   },
-  // });
-
-  // const existingExperiencesMapped = existingExperiences.map((experience) => ({
-  //   levelId: experience.cog_crew_levelId,
-  //   memberId,
-  //   value: experience.value,
-  // }));
-
-  // const mergedExperiences = formExperience.concat(existingExperiencesMapped);
-
-  // const diffExperiences = existingExperiencesMapped.filter((experience) =>
-  //   formExperience.includes({ ...experience }),
-  // );
-
-  // console.log({
-  //   // existingExperiences,
-  //   existingExperiencesMapped,
-  //   formExperience,
-  //   diffExperiences,
-  // });
-
   try {
+    await db.cog_crew_experience.deleteMany({
+      where: {
+        cog_crew_memberId: memberId,
+      },
+    });
+
     await db.cog_crew_experience.createMany({
       data: [
         ...formExperience.map((experience) => ({
