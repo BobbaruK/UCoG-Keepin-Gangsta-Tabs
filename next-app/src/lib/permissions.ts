@@ -20,6 +20,8 @@ const statement = {
   captain_roles: CRUD,
   crew_levels: CRUD,
   playthrough: CRUD,
+  crew_member: CRUD,
+  crew_experience: CRUD,
   police_officers: CRUD,
 } as const;
 
@@ -39,6 +41,8 @@ export const roles = {
     captain_roles: ["read"],
     crew_levels: ["read"],
     playthrough: [...statement.playthrough],
+    crew_member: [...statement.crew_member],
+    crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
   }),
   [UserRole.ADMIN]: ac.newRole({
@@ -54,6 +58,8 @@ export const roles = {
     captain_roles: [...statement.captain_roles],
     crew_levels: [...statement.crew_levels],
     playthrough: [...statement.playthrough],
+    crew_member: [...statement.crew_member],
+    crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
   }),
   [UserRole.OWNER]: ac.newRole({
@@ -69,6 +75,8 @@ export const roles = {
     captain_roles: [...statement.captain_roles],
     crew_levels: [...statement.crew_levels],
     playthrough: [...statement.playthrough],
+    crew_member: [...statement.crew_member],
+    crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
   }),
 };

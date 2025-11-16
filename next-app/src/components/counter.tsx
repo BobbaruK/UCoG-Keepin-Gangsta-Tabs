@@ -12,6 +12,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   emitClick: (value: number) => void;
   isPending?: boolean;
   minValue?: number;
+  maxValue?: number;
 }
 
 const Counter = ({
@@ -20,6 +21,7 @@ const Counter = ({
   emitClick,
   isPending,
   minValue = 0,
+  maxValue,
   ...restProps
 }: Props) => {
   const handleDecrease = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -51,7 +53,7 @@ const Counter = ({
       output += 1;
     }
 
-    emitClick(output);
+    emitClick(maxValue && output > maxValue ? maxValue : output);
   };
 
   return (

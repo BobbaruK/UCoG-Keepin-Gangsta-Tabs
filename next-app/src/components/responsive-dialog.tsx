@@ -54,7 +54,7 @@ function ResponsiveDialog({ open, setOpen, trigger, header, children }: Props) {
         <DialogTrigger asChild hidden={trigger.hidden}>
           {trigger.type === "element" && trigger.element}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[525px]">
           <DialogHeader>
             <DialogTitle>{header.title.label}</DialogTitle>
             <DialogDescription>{header.description}</DialogDescription>

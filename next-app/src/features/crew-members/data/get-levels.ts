@@ -1,52 +1,36 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Nationality } from "../types/nationality";
+import { CrewLevel } from "../types/level";
 
-export const getNationalities = async ({
+export const getCrewLevels = async ({
   where,
   perPage,
   pageNumber,
   orderBy,
 }: {
-  where?: Prisma.cog_nationalityWhereInput;
+  where?: Prisma.cog_crew_levelWhereInput;
   perPage?: number;
   pageNumber?: number;
-  orderBy?: Prisma.cog_nationalityOrderByWithRelationInput;
+  orderBy?: Prisma.cog_crew_levelOrderByWithRelationInput;
 } = {}) => {
   const pageSize = perPage || PAGINATION_DEFAULT;
   const skip = pageNumber ? pageNumber * pageSize : 0;
 
   try {
     const [data, count] = await db.$transaction([
-      db.cog_nationality.findMany({
+      db.cog_crew_level.findMany({
         ...(orderBy ? { orderBy } : {}),
         ...(where ? { where } : {}),
         skip,
         take: perPage && Math.sign(perPage) === 1 ? pageSize : undefined,
       }),
-      db.cog_nationality.count(),
+      db.cog_crew_level.count({ ...(where ? { where } : {}) }),
     ]);
 
-    const nationalities = data as Nationality[];
+    const crewLevels = data as CrewLevel[];
 
-    return { data: nationalities, count };
-  } catch (error) {
-    console.error("Something went wrong: ", JSON.stringify(error));
-
-    return null;
-  }
-};
-
-export const getNationality = async (id: string) => {
-  try {
-    const law = await db.cog_nationality.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    return law;
+    return { data: crewLevels, count };
   } catch (error) {
     console.error("Something went wrong: ", JSON.stringify(error));
 

@@ -76,6 +76,8 @@ export const MESSAGES_FN = ({
       ? `You are not authorized to delete other users ${resource}.`
       : `You are not authorized to delete other users resources.`,
     RESOURCE_NOT_EXISTS: `Resource does note exists.`,
+
+    TRAITS_TOO_MANY: "Too many traits.",
   };
 };
 

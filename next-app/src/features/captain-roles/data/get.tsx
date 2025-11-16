@@ -1,7 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { CaptainRole, captainRoleInclude } from "../types/roles";
+import { captainRoleInclude } from "@/lib/utils/db/captain-role-include";
+import { CaptainRole } from "../types/roles";
 
 export const getCaptainRoles = async ({
   where,

@@ -19,6 +19,8 @@ import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
+import { toast } from "sonner";
+import { deleteCrewMember } from "../../actions/member/delete";
 import { CrewMember } from "../../types/crew-member";
 
 const PaginationActions = () => {
@@ -34,30 +36,30 @@ const PaginationActions = () => {
   const handleDelete = () => {
     setOpenDeleteDialog(false);
 
-    // startTransition(async () => {
-    //   for (const batch of playthroughIdBatches) {
-    //     const results = (await Promise.allSettled(
-    //       batch.map((policeOfficer) => deletePoliceOfficer(policeOfficer)),
-    //     )) as {
-    //       status: string;
-    //       value: {
-    //         error?: string;
-    //         success?: string;
-    //       };
-    //     }[];
+    startTransition(async () => {
+      for (const batch of playthroughIdBatches) {
+        const results = (await Promise.allSettled(
+          batch.map((crewMember) => deleteCrewMember(crewMember.id)),
+        )) as {
+          status: string;
+          value: {
+            error?: string;
+            success?: string;
+          };
+        }[];
 
-    //     for (const result of results) {
-    //       if (result.value.error) toast.error(result.value.error);
-    //       if (result.value.success) toast.success(result.value.success);
-    //     }
+        for (const result of results) {
+          if (result.value.error) toast.error(result.value.error);
+          if (result.value.success) toast.success(result.value.success);
+        }
 
-    //     await new Promise((r) => setTimeout(r, 200));
-    //   }
+        await new Promise((r) => setTimeout(r, 200));
+      }
 
-    //   setSearchParams({
-    //     selected: [],
-    //   });
-    // });
+      setSearchParams({
+        selected: [],
+      });
+    });
   };
 
   return (

@@ -22,15 +22,32 @@ import { CrewMember } from "../../types/crew-member";
 import Points from "./movement-points";
 import RowActions from "./row-actions";
 import { SkullIcon } from "lucide-react";
+import { CrewLevelType } from "@/generated/prisma";
+import { nationalitiesTitle } from "@/constants/page-title/nationalities";
+import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { setFullName } from "../../utils/full-name";
+import { CaptainRole } from "../../types/captain-role";
+import { Nationality } from "../../types/nationality";
+import { Trait } from "../../types/traits";
+import { CrewLevel } from "../../types/level";
 
 export const columns = ({
   isLoading,
   startTransition,
   visibleUsers,
+  roles,
+  nationalities,
+  traits,
+  levels,
 }: {
   isLoading: boolean;
   startTransition: TransitionStartFunction;
   visibleUsers: CrewMember[];
+  roles: CaptainRole[] | undefined;
+  nationalities: Nationality[] | undefined;
+  traits: Trait[] | undefined;
+  levels: CrewLevel[] | undefined;
 }): ColumnDef<CrewMember>[] => [
   // Select
   {
@@ -68,11 +85,11 @@ export const columns = ({
   },
   // Full name
   {
-    ...columnId({ id: "firstName" }),
+    ...columnId({ id: "full_name" }),
     meta: {
       label: "Full name",
     },
-    accessorFn: (originalRow) => originalRow.first_name.toLowerCase(),
+    accessorFn: (originalRow) => originalRow.full_name.toLowerCase(),
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
@@ -82,7 +99,7 @@ export const columns = ({
     header: ({ column }) => {
       return (
         <THeadDropdown
-          id="firstName"
+          id="full_name"
           label={"Full name"}
           isLoading={isLoading}
           startTransition={startTransition}
@@ -93,20 +110,46 @@ export const columns = ({
 
     cell: ({ row }) => {
       const member = row.original;
+      const memberId = member.id;
       const firstName = member.first_name;
       const lastName = member.last_name;
       const alias = member.alias;
-      const fullName = `${firstName} "${alias}" ${lastName}`;
+      const fullName = setFullName({
+        firstName,
+        lastName,
+        alias,
+      }).outputFE;
       const isBoss = member.is_boss;
+
+      const nationality = member.nationality;
+      const nationalityId = nationality.id;
+      const nationalityName = nationality.name;
+      const nationalityFlag = nationality.flag;
 
       const traits = member.traits;
       const captain = member.captain;
 
       return (
         <div className="flex flex-col gap-2 px-2">
-          <div className="mt-auto">
-            <ul className="flex items-center justify-end gap-2">
-              <li className="me-auto flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`${nationalitiesTitle.href}/${nationalityId}`}>
+                    <CustomAvatar
+                      className="size-6 rounded-md border-none"
+                      image={nationalityFlag}
+                      fit="contain"
+                    />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{nationalityName}</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            {(isBoss || captain) && (
+              <>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div>
@@ -124,7 +167,7 @@ export const columns = ({
                   </TooltipTrigger>
                   <TooltipContent>
                     {isBoss && <p>BOSS</p>}
-                    {captain && <p>{captain.name}</p>}
+                    {captain && <p>Role: {captain.name}</p>}
                   </TooltipContent>
                 </Tooltip>
 
@@ -138,32 +181,41 @@ export const columns = ({
                     </TooltipContent>
                   </Tooltip>
                 )}
-              </li>
-            </ul>
+              </>
+            )}
           </div>
-          <div className="my-auto flex items-center gap-2">{fullName}</div>
-          <div className="mt-auto">
-            <ul className="flex items-center justify-end gap-2">
-              {traits.map((trait) => (
-                <li key={trait.id}>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Link href={`${traitsTitle.href}/${trait.id}`}>
-                        <CustomAvatar
-                          image={trait.image}
-                          className="size-6 rounded-md border-none"
-                          fit="contain"
-                        />
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{trait.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </li>
-              ))}
-            </ul>
+          <div className="my-auto flex items-center gap-2">
+            <Link
+              href={`${playthroughTitle.href}/${member.playthrough.id + crewMembersTitle.href}/${memberId}`}
+            >
+              {fullName}
+            </Link>
           </div>
+          {traits.length > 0 && (
+            <div className="flex items-center gap-2">
+              {/* <span className="text-muted-foreground">Traits: </span> */}
+              <ul className="flex items-center justify-end gap-2">
+                {traits.map((trait) => (
+                  <li key={trait.id}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Link href={`${traitsTitle.href}/${trait.id}`}>
+                          <CustomAvatar
+                            image={trait.image}
+                            className="size-6 rounded-md border-none"
+                            fit="contain"
+                          />
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Trait: {trait.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       );
     },
@@ -208,106 +260,13 @@ export const columns = ({
       </div>
     ),
   },
-  // Driver
-  {
-    ...columnId({ id: "driver" }),
-    meta: {
-      label: "Driver",
-    },
-    accessorFn: (originalRow) => originalRow.driver,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 100,
-    minSize: 100,
-    maxSize: 100,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="driver"
-          label={"Driver"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.driver || "N/A"}</Badge>
-      </div>
-    ),
-  },
-  // Opportunist
-  {
-    ...columnId({ id: "opportunist" }),
-    meta: {
-      label: "Opportunist",
-    },
-    accessorFn: (originalRow) => originalRow.opportunist,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 140,
-    minSize: 140,
-    maxSize: 140,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="opportunist"
-          label={"Opportunist"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.opportunist || "N/A"}</Badge>
-      </div>
-    ),
-  },
-  // Brawler
-  {
-    ...columnId({ id: "brawler" }),
-    meta: {
-      label: "Brawler",
-    },
-    accessorFn: (originalRow) => originalRow.brawler,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 110,
-    minSize: 110,
-    maxSize: 110,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="brawler"
-          label={"Brawler"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.brawler || "N/A"}</Badge>
-      </div>
-    ),
-  },
   // MP
   {
     ...columnId({ id: "mp" }),
     meta: {
       label: "MP",
     },
-    accessorFn: (originalRow) => originalRow.driver,
+    // accessorFn: (originalRow) => originalRow.driver,
     enableHiding: true,
     enableSorting: false,
     enablePinning: true,
@@ -337,7 +296,7 @@ export const columns = ({
     meta: {
       label: "AP",
     },
-    accessorFn: (originalRow) => originalRow.driver,
+    // accessorFn: (originalRow) => originalRow.driver,
     enableHiding: true,
     enableSorting: false,
     enablePinning: true,
@@ -364,24 +323,24 @@ export const columns = ({
       );
     },
   },
-  // Door dash
+  // Driver skills
   {
-    ...columnId({ id: "door_dash" }),
+    ...columnId({ id: "driver_skills" }),
     meta: {
-      label: "Door dash",
+      label: "Driver skills",
     },
-    accessorFn: (originalRow) => originalRow.door_dash,
+    // accessorFn: (originalRow) => originalRow.full_name.toLowerCase(),
     enableHiding: true,
-    enableSorting: true,
+    enableSorting: false,
     enablePinning: true,
-    size: 130,
-    minSize: 130,
-    maxSize: 130,
+    size: 205,
+    minSize: 205,
+    maxSize: 205,
     header: ({ column }) => {
       return (
         <THeadDropdown
-          id="door_dash"
-          label={"Door dash"}
+          id="driver_skills"
+          label={"Driver skills"}
           isLoading={isLoading}
           startTransition={startTransition}
           column={column}
@@ -389,30 +348,48 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.door_dash || "N/A"}</Badge>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const member = row.original;
+      const experience = member.experience.filter(
+        (exp) => exp.level.type === CrewLevelType.DRIVER,
+      );
+
+      return (
+        <div className="flex flex-col gap-2 px-2">
+          {experience.length > 0
+            ? experience.map((exp) => {
+                const xpName = exp.level.name;
+                const xpValue = exp.value;
+
+                return (
+                  <p key={exp.id}>
+                    {xpName} <Badge>{xpValue}</Badge>
+                  </p>
+                );
+              })
+            : "None"}
+        </div>
+      );
+    },
   },
-  // Alley ace
+  // Gambling skills
   {
-    ...columnId({ id: "alley_ace" }),
+    ...columnId({ id: "gambling_skills" }),
     meta: {
-      label: "Alley ace",
+      label: "Gambling skills",
     },
-    accessorFn: (originalRow) => originalRow.alley_ace,
+    // accessorFn: (originalRow) => originalRow.full_name.toLowerCase(),
     enableHiding: true,
-    enableSorting: true,
+    enableSorting: false,
     enablePinning: true,
-    size: 120,
-    minSize: 120,
-    maxSize: 120,
+    size: 205,
+    minSize: 205,
+    maxSize: 205,
     header: ({ column }) => {
       return (
         <THeadDropdown
-          id="alley_ace"
-          label={"Alley ace"}
+          id="gambling_skills"
+          label={"Gambling skills"}
           isLoading={isLoading}
           startTransition={startTransition}
           column={column}
@@ -420,30 +397,48 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.alley_ace || "N/A"}</Badge>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const member = row.original;
+      const experience = member.experience.filter(
+        (exp) => exp.level.type === CrewLevelType.GAMBLING,
+      );
+
+      return (
+        <div className="flex flex-col gap-2 px-2">
+          {experience.length > 0
+            ? experience.map((exp) => {
+                const xpName = exp.level.name;
+                const xpValue = exp.value;
+
+                return (
+                  <p key={exp.id}>
+                    {xpName} <Badge>{xpValue}</Badge>
+                  </p>
+                );
+              })
+            : "None"}
+        </div>
+      );
+    },
   },
-  // House manager
+  // General managers skills
   {
-    ...columnId({ id: "house_manager" }),
+    ...columnId({ id: "general_manager_skills" }),
     meta: {
-      label: "House manager",
+      label: "General managers skills",
     },
-    accessorFn: (originalRow) => originalRow.house_manager,
+    // accessorFn: (originalRow) => originalRow.full_name.toLowerCase(),
     enableHiding: true,
-    enableSorting: true,
+    enableSorting: false,
     enablePinning: true,
-    size: 165,
-    minSize: 165,
-    maxSize: 165,
+    size: 205,
+    minSize: 205,
+    maxSize: 205,
     header: ({ column }) => {
       return (
         <THeadDropdown
-          id="house_manager"
-          label={"House manager"}
+          id="general_manager_skills"
+          label={"General managers skills"}
           isLoading={isLoading}
           startTransition={startTransition}
           column={column}
@@ -451,30 +446,48 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.house_manager || "N/A"}</Badge>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const member = row.original;
+      const experience = member.experience.filter(
+        (exp) => exp.level.type === CrewLevelType.GENERAL,
+      );
+
+      return (
+        <div className="flex flex-col gap-2 px-2">
+          {experience.length > 0
+            ? experience.map((exp) => {
+                const xpName = exp.level.name;
+                const xpValue = exp.value;
+
+                return (
+                  <p key={exp.id}>
+                    {xpName} <Badge>{xpValue}</Badge>
+                  </p>
+                );
+              })
+            : "None"}
+        </div>
+      );
+    },
   },
-  // Mechanically minded
+  // Production skills
   {
-    ...columnId({ id: "mechanically_minded" }),
+    ...columnId({ id: "production_skills" }),
     meta: {
-      label: "Mechanically minded",
+      label: "Production skills",
     },
-    accessorFn: (originalRow) => originalRow.mechanically_minded,
+    // accessorFn: (originalRow) => originalRow.full_name.toLowerCase(),
     enableHiding: true,
-    enableSorting: true,
+    enableSorting: false,
     enablePinning: true,
-    size: 200,
-    minSize: 200,
-    maxSize: 200,
+    size: 205,
+    minSize: 205,
+    maxSize: 205,
     header: ({ column }) => {
       return (
         <THeadDropdown
-          id="mechanically_minded"
-          label={"Mechanically minded"}
+          id="production_skills"
+          label={"Production skills"}
           isLoading={isLoading}
           startTransition={startTransition}
           column={column}
@@ -482,32 +495,48 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>
-          {row.original.mechanically_minded || "N/A"}
-        </Badge>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const member = row.original;
+      const experience = member.experience.filter(
+        (exp) => exp.level.type === CrewLevelType.PRODUCTION,
+      );
+
+      return (
+        <div className="flex flex-col gap-2 px-2">
+          {experience.length > 0
+            ? experience.map((exp) => {
+                const xpName = exp.level.name;
+                const xpValue = exp.value;
+
+                return (
+                  <p key={exp.id}>
+                    {xpName} <Badge>{xpValue}</Badge>
+                  </p>
+                );
+              })
+            : "None"}
+        </div>
+      );
+    },
   },
-  // Pit boss
+  // Speakeasy skills
   {
-    ...columnId({ id: "pit_boss" }),
+    ...columnId({ id: "speakeasy_skills" }),
     meta: {
-      label: "Pit boss",
+      label: "Speakeasy skills",
     },
-    accessorFn: (originalRow) => originalRow.pit_boss,
+    // accessorFn: (originalRow) => originalRow.full_name.toLowerCase(),
     enableHiding: true,
-    enableSorting: true,
+    enableSorting: false,
     enablePinning: true,
-    size: 115,
-    minSize: 115,
-    maxSize: 115,
+    size: 205,
+    minSize: 205,
+    maxSize: 205,
     header: ({ column }) => {
       return (
         <THeadDropdown
-          id="pit_boss"
-          label={"Pit boss"}
+          id="speakeasy_skills"
+          label={"Speakeasy skills"}
           isLoading={isLoading}
           startTransition={startTransition}
           column={column}
@@ -515,207 +544,29 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.pit_boss || "N/A"}</Badge>
-      </div>
-    ),
-  },
-  // Production manager
-  {
-    ...columnId({ id: "production_manager" }),
-    meta: {
-      label: "Production manager",
-    },
-    accessorFn: (originalRow) => originalRow.production_manager,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 200,
-    minSize: 200,
-    maxSize: 200,
-    header: ({ column }) => {
+    cell: ({ row }) => {
+      const member = row.original;
+      const experience = member.experience.filter(
+        (exp) => exp.level.type === CrewLevelType.SPEAKEASY,
+      );
+
       return (
-        <THeadDropdown
-          id="production_manager"
-          label={"Production manager"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
+        <div className="flex flex-col gap-2 px-2">
+          {experience.length > 0
+            ? experience.map((exp) => {
+                const xpName = exp.level.name;
+                const xpValue = exp.value;
+
+                return (
+                  <p key={exp.id}>
+                    {xpName} <Badge>{xpValue}</Badge>
+                  </p>
+                );
+              })
+            : "None"}
+        </div>
       );
     },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>
-          {row.original.production_manager || "N/A"}
-        </Badge>
-      </div>
-    ),
-  },
-  // Booze manufacture
-  {
-    ...columnId({ id: "booze_manufacture" }),
-    meta: {
-      label: "Booze manufacture",
-    },
-    accessorFn: (originalRow) => originalRow.booze_manufacture,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 200,
-    minSize: 200,
-    maxSize: 200,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="booze_manufacture"
-          label={"Booze manufacture"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>
-          {row.original.booze_manufacture || "N/A"}
-        </Badge>
-      </div>
-    ),
-  },
-  // Booze upgrade
-  {
-    ...columnId({ id: "booze_upgrade" }),
-    meta: {
-      label: "Booze upgrade",
-    },
-    accessorFn: (originalRow) => originalRow.booze_upgrade,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 200,
-    minSize: 200,
-    maxSize: 200,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="booze_upgrade"
-          label={"Booze upgrade"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>{row.original.booze_upgrade || "N/A"}</Badge>
-      </div>
-    ),
-  },
-  // Methodical organizer
-  {
-    ...columnId({ id: "methodical_organizer" }),
-    meta: {
-      label: "Methodical organizer",
-    },
-    accessorFn: (originalRow) => originalRow.methodical_organizer,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 200,
-    minSize: 200,
-    maxSize: 200,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="methodical_organizer"
-          label={"Methodical organizer"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>
-          {row.original.methodical_organizer || "N/A"}
-        </Badge>
-      </div>
-    ),
-  },
-  // Counter chin wagger
-  {
-    ...columnId({ id: "counter_chin_wagger" }),
-    meta: {
-      label: "Counter chin wagger",
-    },
-    accessorFn: (originalRow) => originalRow.counter_chin_wagger,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 200,
-    minSize: 200,
-    maxSize: 200,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="counter_chin_wagger"
-          label={"Counter chin wagger"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>
-          {row.original.counter_chin_wagger || "N/A"}
-        </Badge>
-      </div>
-    ),
-  },
-  // Speakeasy manager
-  {
-    ...columnId({ id: "speakeasy_manager" }),
-    meta: {
-      label: "Speakeasy manager",
-    },
-    accessorFn: (originalRow) => originalRow.speakeasy_manager,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    size: 200,
-    minSize: 200,
-    maxSize: 200,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="speakeasy_manager"
-          label={"Speakeasy manager"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
-        <Badge variant={"info"}>
-          {row.original.speakeasy_manager || "N/A"}
-        </Badge>
-      </div>
-    ),
   },
   // Created At
   {
@@ -786,7 +637,13 @@ export const columns = ({
     enablePinning: true,
     cell: ({ row }) => (
       <div className="grid place-items-center p-2">
-        <RowActions crewMember={row.original} />
+        <RowActions
+          crewMember={row.original}
+          roles={roles}
+          nationalities={nationalities}
+          traits={traits}
+          levels={levels}
+        />
       </div>
     ),
   },

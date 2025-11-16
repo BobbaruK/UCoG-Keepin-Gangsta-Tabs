@@ -10,6 +10,8 @@ import { traitsTitle } from "@/constants/page-title/traits";
 import { SideEffectType } from "@/generated/prisma";
 import { CrewMember } from "../../types/crew-member";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
+import { lawsTitle } from "@/constants/page-title/laws";
+import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 
 const basePoints = (type: SideEffectType) => {
   switch (type) {
@@ -28,12 +30,23 @@ interface Props {
 
 const Points = ({ crewMember, type }: Props) => {
   // Base
-  const driver = type === SideEffectType.MOVEMENT ? crewMember.driver * 2 : 0;
+  const driverLevel =
+    crewMember.experience.find((xp) =>
+      xp.level.name.toLowerCase().includes("driver"),
+    )?.value || 0;
+
+  const opportunistLevel =
+    crewMember.experience.find((xp) =>
+      xp.level.name.toLowerCase().includes("opportunist"),
+    )?.value || 0;
+
+  // Base
+  const driver = type === SideEffectType.MOVEMENT ? driverLevel * 2 : 0;
   const opportunist =
     type === SideEffectType.ACTION
-      ? crewMember.opportunist === 3
+      ? opportunistLevel === 3
         ? 4
-        : crewMember.opportunist
+        : opportunistLevel
       : 0;
 
   // Traits
@@ -103,6 +116,15 @@ const Points = ({ crewMember, type }: Props) => {
           {capitalizeFirstLetter(SideEffectType[type])} points
         </h3>
 
+        <ul className="flex flex-col gap-1">
+          <li className="flex items-center gap-1">
+            <Badge variant={"success"} className="w-8">
+              <span>+{basePoints(type)}</span>
+            </Badge>
+            from base
+          </li>
+        </ul>
+
         {(traitsPointsPositive || traitsPointsNegative) && (
           <ul className="flex flex-col gap-1">
             {traitsPointsPositive && traitsPointsPositive.sideEffect && (
@@ -166,7 +188,7 @@ const Points = ({ crewMember, type }: Props) => {
                       buttonLabel={law.name}
                       size={"sm"}
                       variant={"link"}
-                      // className="h-auto"
+                      linkHref={`${lawsTitle.href}/${law.id}`}
                     />
                   </li>
                 );
@@ -191,6 +213,7 @@ const Points = ({ crewMember, type }: Props) => {
                 buttonLabel={captain.name}
                 size={"sm"}
                 variant={"link"}
+                linkHref={`${captainRolesTitle.href}/${captain.id}`}
                 // className="h-auto"
               />
             </li>
@@ -203,8 +226,8 @@ const Points = ({ crewMember, type }: Props) => {
               <Badge variant={"success"} className="w-8">
                 <span>+{driver}</span>
               </Badge>
-              from crew&apos;s experience (Efficient Driver: Level{" "}
-              {crewMember.driver})
+              from crew&apos;s experience (Efficient Driver: Level {driverLevel}
+              )
             </li>
           </ul>
         )}
@@ -216,7 +239,7 @@ const Points = ({ crewMember, type }: Props) => {
                 <span>+{opportunist}</span>
               </Badge>
               from crew&apos;s experience (Smart Opportunist: Level{" "}
-              {crewMember.opportunist})
+              {opportunistLevel})
             </li>
           </ul>
         )}

@@ -7,13 +7,17 @@ import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import { DataTableTransitionWrapper } from "@/features/crew-members/components/tables/data-table-transition-wrapper";
 import { getCrewMembers } from "@/features/crew-members/data/get";
+import { getCrewLevels } from "@/features/crew-members/data/get-levels";
+import { getNationalities } from "@/features/nationalities/data/get-nationalities";
 import PlaythroughMenu from "@/features/playtroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playtroughs/data/get";
+import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
-import { capitalizeFirstLetter } from "better-auth";
-import type { Metadata } from "next";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
+import { Metadata } from "next";
 import { headers } from "next/headers";
 import { SearchParams } from "nuqs/server";
 
@@ -25,10 +29,15 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: crewMembersTitle.label.plural,
+  title: capitalizeFirstLetter(crewMembersTitle.label.plural.toLowerCase()),
 };
 
-const PolicePage = async ({ params, searchParams }: Props) => {
+const CrewMembersPage = async ({ params, searchParams }: Props) => {
+  const id = (await params).id;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   const {
     // pagination
     pageIndex,
@@ -42,19 +51,17 @@ const PolicePage = async ({ params, searchParams }: Props) => {
     selected,
   } = await loadSearchParams(searchParams);
 
-  const id = (await params).id;
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
   const playthrough = await getPlaythrough(id);
-
   const crewMembers = await getCrewMembers({
     pageNumber: pageIndex,
     perPage: pageSize,
     orderBy: { [sortBy]: sort },
     where: {
       cog_playthroughId: id,
+      full_name: {
+        contains: search,
+        mode: "insensitive",
+      },
     },
   });
 
@@ -66,6 +73,11 @@ const PolicePage = async ({ params, searchParams }: Props) => {
     },
     perPage: -1,
   });
+
+  const roles = await getCaptainRoles();
+  const nationalities = await getNationalities();
+  const traits = await getTraits();
+  const levels = await getCrewLevels();
 
   if (!playthrough)
     return (
@@ -113,20 +125,25 @@ const PolicePage = async ({ params, searchParams }: Props) => {
         session={session}
       />
 
+      {/* <PlaythroughPresentation playthrough={playthrough} /> */}
+
       <PlaythroughMenu playthroughId={playthrough.id} />
 
       <DataTableTransitionWrapper
         data={crewMembers?.data || []}
         dataCount={crewMembers?.count || 0}
         dataSelected={selectedCrewMembers?.data || []}
-        respectForTheLaw={playthrough.respect_for_the_law}
+        roles={roles?.data}
+        nationalities={nationalities?.data}
+        traits={traits?.data}
+        levels={levels?.data}
       />
 
-      <div>
+      {/* <div>
         <pre>{JSON.stringify({ crewMembers }, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };
 
-export default PolicePage;
+export default CrewMembersPage;

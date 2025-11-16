@@ -41,7 +41,7 @@ export const getCrewMembers = async ({
   }
 };
 
-export const getPoliceOfficer = async (id: string) => {
+export const getCrewMember = async (id: string) => {
   try {
     const crewMember = await db.cog_crew_member.findUnique({
       where: {

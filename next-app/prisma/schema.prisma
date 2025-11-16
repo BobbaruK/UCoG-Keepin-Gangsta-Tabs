@@ -265,9 +265,11 @@ model cog_crew_level {
   updatedAt DateTime @updatedAt
 
   type        CrewLevelType @default(DRIVER)
-  name        String        @unique
+  name        String
   max_level   Int
   description String?
+
+  cogCrewExperiences cog_crew_experience[]
 }
 
 // Main Table
@@ -322,32 +324,14 @@ model cog_crew_member {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  first_name           String
-  last_name            String
-  full_name            String
-  alias                String
-  is_boss              Boolean @default(false)
-  is_dead              Boolean @default(false)
-  turn_recruited       Int
-  // base leveling
-  driver               Int
-  opportunist          Int
-  brawler              Int
-  // driver leveling
-  door_dash            Int
-  alley_ace            Int
-  // gambling leveling
-  house_manager        Int
-  mechanically_minded  Int
-  pit_boss             Int
-  // booze production leveling
-  production_manager   Int
-  booze_manufacture    Int
-  booze_upgrade        Int
-  methodical_organizer Int
-  // speakeasy
-  counter_chin_wagger  Int
-  speakeasy_manager    Int
+  first_name     String
+  last_name      String
+  full_name      String
+  alias          String?
+  is_boss        Boolean               @default(false)
+  is_dead        Boolean               @default(false)
+  turn_recruited Int
+  experience     cog_crew_experience[]
 
   captain            cog_captain_role? @relation(fields: [cog_captain_roleId], references: [id])
   cog_captain_roleId String?
@@ -360,4 +344,17 @@ model cog_crew_member {
   auth_userId        String
 
   @@index([full_name])
+}
+
+model cog_crew_experience {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  value Int
+
+  level             cog_crew_level  @relation(fields: [cog_crew_levelId], references: [id])
+  cog_crew_levelId  String
+  cogCrewMember     cog_crew_member @relation(fields: [cog_crew_memberId], references: [id], onDelete: Cascade)
+  cog_crew_memberId String
 }

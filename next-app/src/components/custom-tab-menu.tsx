@@ -21,7 +21,7 @@ const CustomTabMenu = ({ menuList }: Props) => {
             linkHref={item.url}
             icon={item.icon}
             iconPlacement="left"
-            variant={pathname === item.url ? "default" : "link"}
+            variant={pathname.startsWith(item.url) ? "default" : "link"}
             skeletonClassName="grow h-9"
           />
         );

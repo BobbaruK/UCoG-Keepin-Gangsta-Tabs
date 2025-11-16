@@ -36,6 +36,7 @@ export const crewMemberInclude = {
   },
   playthrough: {
     select: {
+      id: true,
       freight_rail_station: true,
       passenger_rail_station: true,
       laws: {
@@ -48,6 +49,20 @@ export const crewMemberInclude = {
               type: true,
             },
           },
+        },
+      },
+    },
+  },
+  experience: {
+    select: {
+      id: true,
+      value: true,
+      level: {
+        select: {
+          id: true,
+          type: true,
+          name: true,
+          max_level: true,
         },
       },
     },
