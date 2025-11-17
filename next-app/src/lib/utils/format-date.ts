@@ -31,5 +31,45 @@ export const turnToDate = (turn: number) => {
 
   date.setDate(date.getDate() + turnInDays);
 
+  /**
+   * December 28, 1920 (turn 31) + 7 days (1 turn) = January 4, 1921
+   *
+   * For some reason in game from turn 31 to turn 32 passes 8 days
+   * that give us January 5, 1921
+   */
+  if (turn >= 32) {
+    date.setDate(date.getDate() + 1);
+  }
+
+  /**
+   * December 24, 1925 (turn 239) + 7 days (1 turn) = December 31, 1925
+   *
+   * For some reason in game from turn 239 to turn 240 passes 8 days
+   * that give us January 1, 1925
+   */
+  if (turn >= 240) {
+    date.setDate(date.getDate() + 1);
+  }
+
+  /**
+   * December 27, 1928 (turn 448) + 7 days (1 turn) = January 3, 1929
+   *
+   * For some reason in game from turn 448 to turn 449 passes 8 days
+   * that give us January 4, 1929
+   */
+  if (turn >= 449) {
+    date.setDate(date.getDate() + 1);
+  }
+
+  /**
+   * December 30, 1932 (turn 657) + 7 days (1 turn) = January 6, 1933
+   *
+   * For some reason in game from turn 657 to turn 658 passes 8 days
+   * that give us January 7, 1933
+   */
+  if (turn >= 658) {
+    date.setDate(date.getDate() + 1);
+  }
+
   return date;
 };
