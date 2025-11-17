@@ -12,7 +12,7 @@ const CustomTabMenu = ({ menuList }: Props) => {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-muted text-muted-foreground flex h-auto w-full flex-wrap items-center justify-center gap-1 rounded-lg p-[3px] md:grid md:grid-cols-3 lg:grid-cols-6">
+    <nav className="bg-muted text-muted-foreground flex h-auto w-full flex-wrap items-center justify-center gap-1 rounded-lg p-[3px] shadow-sm md:grid md:grid-cols-3 lg:grid-cols-6">
       {menuList.map((item) => {
         return (
           <CustomButton
@@ -21,6 +21,7 @@ const CustomTabMenu = ({ menuList }: Props) => {
             linkHref={item.url}
             icon={item.icon}
             iconPlacement="left"
+            hideLabelOnMobile={false}
             variant={pathname.startsWith(item.url) ? "default" : "link"}
             skeletonClassName="grow h-9"
           />

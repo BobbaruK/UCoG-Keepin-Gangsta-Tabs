@@ -69,7 +69,7 @@ const Counter = ({
         iconPlacement="left"
         size={"icon"}
         skeletonClassName="size-9"
-        disabled={isPending || value === minValue}
+        disabled={isPending || (minValue === value && allowNegative === false)}
       />
 
       <CustomButton
@@ -80,7 +80,7 @@ const Counter = ({
         iconPlacement="left"
         size={"icon"}
         skeletonClassName="size-9"
-        disabled={isPending}
+        disabled={isPending || (minValue === value && allowNegative === false)}
       />
 
       <CustomButton
@@ -91,7 +91,7 @@ const Counter = ({
         iconPlacement="left"
         size={"icon"}
         skeletonClassName="size-9"
-        disabled={isPending}
+        disabled={isPending || (!!maxValue && maxValue === value)}
       />
     </div>
   );
