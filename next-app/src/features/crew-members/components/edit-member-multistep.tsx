@@ -1,5 +1,6 @@
 "use client";
 
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { CaptainRole } from "../types/captain-role";
@@ -8,7 +9,6 @@ import { CrewLevel } from "../types/level";
 import { Nationality } from "../types/nationality";
 import { Trait } from "../types/traits";
 import EditCrewMemberForm from "./form/edit";
-import AddExperienceForm from "./form/experience/add";
 import EditExperienceForm from "./form/experience/edit";
 
 type AllTabs = "edit" | "experience";
@@ -38,22 +38,34 @@ const EditMemberMultiStep = ({
       <Tabs
         value={tabSelected}
         onValueChange={(open) => setTabSelected(open as AllTabs)}
+        className="gap-6"
       >
-        <TabsList className="w-full">
-          <TabsTrigger value="edit">Edit</TabsTrigger>
-          <TabsTrigger value="experience">Experience</TabsTrigger>
+        <TabsList className="w-full shadow-sm">
+          <TabsTrigger value="edit" className="data-[state=active]:shadow-xs">
+            Edit
+          </TabsTrigger>
+          <TabsTrigger
+            value="experience"
+            className="data-[state=active]:shadow-xs"
+          >
+            Experience
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="edit">
-          <EditCrewMemberForm
-            crewMember={crewMember}
-            playthroughId={crewMember.playthrough.id}
-            roles={roles}
-            nationalities={nationalities}
-            traits={traits}
-            nextTab={() => {
-              setTabSelected("experience");
-            }}
-          />
+          <Card>
+            <CardContent>
+              <EditCrewMemberForm
+                crewMember={crewMember}
+                playthroughId={crewMember.playthrough.id}
+                roles={roles}
+                nationalities={nationalities}
+                traits={traits}
+                nextTab={() => {
+                  setTabSelected("experience");
+                }}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="experience">
           <EditExperienceForm

@@ -8,6 +8,7 @@ import { Nationality } from "../types/nationality";
 import { Trait } from "../types/traits";
 import AddCrewMemberForm from "./form/add";
 import AddExperienceForm from "./form/experience/add";
+import { Card, CardContent } from "@/components/ui/card";
 
 type AllTabs = "create" | "experience";
 
@@ -34,29 +35,39 @@ const AddMemberMultiStep = ({
       <Tabs
         value={tabSelected}
         onValueChange={(open) => setTabSelected(open as AllTabs)}
+        className="gap-6"
       >
-        <TabsList className="w-full">
-          <TabsTrigger value="create" disabled={tabSelected !== "create"}>
-            1. Create
+        <TabsList className="w-full shadow-sm">
+          <TabsTrigger
+            value="create"
+            disabled={tabSelected !== "create"}
+            className="data-[state=active]:shadow-xs"
+          >
+            Create
           </TabsTrigger>
           <TabsTrigger
             value="experience"
             disabled={tabSelected !== "experience"}
+            className="data-[state=active]:shadow-xs"
           >
-            2. Experience
+            Experience
           </TabsTrigger>
         </TabsList>
         <TabsContent value="create">
-          <AddCrewMemberForm
-            playthroughId={playthroughId}
-            roles={roles}
-            nationalities={nationalities}
-            traits={traits}
-            memberCreated={(id) => {
-              setCrewMemberId(id);
-              setTabSelected("experience");
-            }}
-          />
+          <Card>
+            <CardContent>
+              <AddCrewMemberForm
+                playthroughId={playthroughId}
+                roles={roles}
+                nationalities={nationalities}
+                traits={traits}
+                memberCreated={(id) => {
+                  setCrewMemberId(id);
+                  setTabSelected("experience");
+                }}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="experience">
           <AddExperienceForm

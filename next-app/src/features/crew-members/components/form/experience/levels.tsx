@@ -104,7 +104,12 @@ const Levels = ({
           variant="outline"
           role="combobox"
           aria-expanded={comboxCaptainRole}
-          className="justify-between"
+          className={cn(
+            "justify-between",
+            "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+            "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+            "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+          )}
         >
           {getValues(`experiences.${index}.levelId`)
             ? levels?.find(

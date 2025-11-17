@@ -158,9 +158,9 @@ const EditCrewMemberPage = async ({ params }: Props) => {
         levels={levels?.data}
       />
 
-      <div>
+      {/* <div>
         <pre>{JSON.stringify(crewMember, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };

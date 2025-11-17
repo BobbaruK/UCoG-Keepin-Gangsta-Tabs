@@ -45,10 +45,6 @@ export const DataTableTransitionWrapper = ({
           isLoading,
           startTransition,
           visibleUsers: data,
-          roles,
-          nationalities,
-          traits,
-          levels,
         })}
         data={data}
         columnVisibilityObj={{

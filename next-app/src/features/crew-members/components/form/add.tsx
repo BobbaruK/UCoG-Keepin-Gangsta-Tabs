@@ -48,6 +48,8 @@ import { AddCrewMemberSchema } from "../../schemas/add";
 import { CaptainRole } from "../../types/captain-role";
 import { Nationality } from "../../types/nationality";
 import { Trait } from "../../types/traits";
+import { TrashIcon } from "@/components/icons/trash";
+import { StarIcon } from "@/components/icons/star";
 
 interface Props {
   playthroughId: string;
@@ -111,8 +113,16 @@ const AddCrewMemberForm = ({
     });
   };
 
+  const unassigned = roles.find(
+    (role) => role.name.toLowerCase() === "unassigned",
+  );
+
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -241,14 +251,35 @@ const AddCrewMemberForm = ({
                       variant="outline"
                       role="combobox"
                       aria-expanded={comboxCaptainRole}
-                      className="w-[200px] justify-between"
+                      className={cn(
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
                     >
-                      {form.getValues("captain_role")
-                        ? roles.find(
-                            (role) =>
-                              role.id === form.getValues("captain_role"),
-                          )?.name
-                        : `Select ${captainRolesTitle.label.singular.toLowerCase()}...`}
+                      {form.getValues("captain_role") ? (
+                        <span className="flex items-center gap-2">
+                          <CustomAvatar
+                            image={
+                              roles.find(
+                                (role) =>
+                                  role.id === form.getValues("captain_role"),
+                              )?.image
+                            }
+                            icon={<StarIcon className="text-foreground" />}
+                            className="size-6 rounded-md border-none"
+                            fit="contain"
+                          />
+                          {
+                            roles.find(
+                              (role) =>
+                                role.id === form.getValues("captain_role"),
+                            )?.name
+                          }
+                        </span>
+                      ) : (
+                        `Select ${captainRolesTitle.label.singular.toLowerCase()}...`
+                      )}
                       <ChevronsUpDown className="opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -264,10 +295,10 @@ const AddCrewMemberForm = ({
                           found.
                         </CommandEmpty>
                         <CommandGroup>
-                          {roles.map((role) => (
+                          {unassigned && (
                             <CommandItem
-                              key={role.id}
-                              value={role.name}
+                              key={unassigned.id}
+                              value={unassigned.name}
                               onSelect={(currentValue) => {
                                 const role = roles.find(
                                   (role) => role.name === currentValue,
@@ -283,23 +314,65 @@ const AddCrewMemberForm = ({
                                 setComboxCaptainRole(false);
                               }}
                             >
-                              {" "}
                               <CustomAvatar
-                                image={role.image}
+                                image={unassigned.image}
                                 className="size-6 rounded-md border-none"
+                                icon={<StarIcon />}
                                 fit="contain"
                               />
-                              {role.name}
+                              {unassigned.name}
                               <Check
                                 className={cn(
                                   "ml-auto",
-                                  form.getValues("captain_role") === role.id
+                                  form.getValues("captain_role") ===
+                                    unassigned.id
                                     ? "opacity-100"
                                     : "opacity-0",
                                 )}
                               />
                             </CommandItem>
-                          ))}
+                          )}
+                          {roles
+                            .filter(
+                              (role) =>
+                                role.name.toLowerCase() !== "unassigned",
+                            )
+                            .map((role) => (
+                              <CommandItem
+                                key={role.id}
+                                value={role.name}
+                                onSelect={(currentValue) => {
+                                  const role = roles.find(
+                                    (role) => role.name === currentValue,
+                                  );
+
+                                  form.setValue(
+                                    "captain_role",
+                                    role &&
+                                      role?.id ===
+                                        form.getValues("captain_role")
+                                      ? ""
+                                      : role?.id,
+                                  );
+                                  setComboxCaptainRole(false);
+                                }}
+                              >
+                                <CustomAvatar
+                                  image={role.image}
+                                  className="size-6 rounded-md border-none"
+                                  fit="contain"
+                                />
+                                {role.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    form.getValues("captain_role") === role.id
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
                         </CommandGroup>
                       </CommandList>
                     </Command>
@@ -309,32 +382,6 @@ const AddCrewMemberForm = ({
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
-              </Field>
-            )}
-          />
-
-          <Controller
-            name="isDead"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field
-                data-invalid={fieldState.invalid}
-                orientation={"horizontal"}
-              >
-                <FieldContent>
-                  <FieldLabel htmlFor={inputId(field.name)}>Is dead</FieldLabel>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </FieldContent>
-
-                <Switch
-                  id={inputId(field.name)}
-                  aria-invalid={fieldState.invalid}
-                  name={field.name}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
               </Field>
             )}
           />
@@ -361,16 +408,21 @@ const AddCrewMemberForm = ({
                       aria-invalid={fieldState.invalid}
                       variant="outline"
                       role="combobox"
-                      aria-expanded={comboxCaptainRole}
-                      className="w-[200px] justify-between"
+                      aria-expanded={comboxNationality}
+                      className={cn(
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
                     >
                       {form.getValues("nationality") ? (
                         <span className="flex items-center gap-2">
                           <CustomAvatar
                             image={
                               nationalities.find(
-                                (role) =>
-                                  role.id === form.getValues("nationality"),
+                                (nationality) =>
+                                  nationality.id ===
+                                  form.getValues("nationality"),
                               )?.flag
                             }
                             className="size-6 rounded-md border-none"
@@ -378,8 +430,9 @@ const AddCrewMemberForm = ({
                           />
                           {
                             nationalities.find(
-                              (role) =>
-                                role.id === form.getValues("nationality"),
+                              (nationality) =>
+                                nationality.id ===
+                                form.getValues("nationality"),
                             )?.name
                           }
                         </span>
@@ -486,9 +539,14 @@ const AddCrewMemberForm = ({
                   onValueChange={field.onChange}
                   placeholder={`Choose ${traitsTitle.label.plural.toLowerCase()}...`}
                   hideSelectAll
-                  variant={"secondary"}
+                  variant={"default"}
                   disabled={isPending}
-                  className="h-9 min-h-9"
+                  className={cn(
+                    "h-9 min-h-9",
+                    // "dark:bg-input/30 hover:dark:bg-accent hover:dark:text-accent-foreground justify-between bg-transparent shadow-xs",
+                    // "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                    // "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                  )}
                   animationConfig={{
                     badgeAnimation: "slide",
                     optionHoverAnimation: "none",
@@ -512,15 +570,41 @@ const AddCrewMemberForm = ({
             )}
           />
 
-          <CustomButton
-            buttonLabel={`Add ${crewMembersTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
+          <Controller
+            name="isDead"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                orientation={"horizontal"}
+              >
+                <FieldContent>
+                  <FieldLabel htmlFor={inputId(field.name)}>Is dead</FieldLabel>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </FieldContent>
+
+                <Switch
+                  id={inputId(field.name)}
+                  aria-invalid={fieldState.invalid}
+                  name={field.name}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </Field>
+            )}
           />
         </FieldGroup>
       </FieldSet>
+
+      <CustomButton
+        buttonLabel={`Add ${crewMembersTitle.label.singular.toLowerCase()}`}
+        type="submit"
+        className="ms-auto"
+        disabled={isPending}
+        skeletonClassName="ms-auto w-32"
+      />
     </form>
   );
 };

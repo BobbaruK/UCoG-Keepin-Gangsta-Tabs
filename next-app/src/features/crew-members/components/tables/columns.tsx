@@ -31,23 +31,18 @@ import { CaptainRole } from "../../types/captain-role";
 import { Nationality } from "../../types/nationality";
 import { Trait } from "../../types/traits";
 import { CrewLevel } from "../../types/level";
+import { StarIcon } from "@/components/icons/star";
+import { CustomButton } from "@/components/custom-button";
+import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 
 export const columns = ({
   isLoading,
   startTransition,
   visibleUsers,
-  roles,
-  nationalities,
-  traits,
-  levels,
 }: {
   isLoading: boolean;
   startTransition: TransitionStartFunction;
   visibleUsers: CrewMember[];
-  roles: CaptainRole[] | undefined;
-  nationalities: Nationality[] | undefined;
-  traits: Trait[] | undefined;
-  levels: CrewLevel[] | undefined;
 }): ColumnDef<CrewMember>[] => [
   // Select
   {
@@ -159,6 +154,7 @@ export const columns = ({
                           <CustomAvatar
                             className="size-6 rounded-md border-none"
                             image={captain.image}
+                            icon={<StarIcon size={16} />}
                             fit="contain"
                           />
                         </Link>
@@ -356,18 +352,27 @@ export const columns = ({
 
       return (
         <div className="flex flex-col gap-2 px-2">
-          {experience.length > 0
-            ? experience.map((exp) => {
+          {experience.length > 0 ? (
+            <ul className="flex flex-col gap-2">
+              {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
+                const levelId = exp.level.id;
 
                 return (
-                  <p key={exp.id}>
-                    {xpName} <Badge>{xpValue}</Badge>
-                  </p>
+                  <li key={exp.id} className="flex items-center gap-2">
+                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
+                      {xpName}
+                    </Link>
+
+                    <Badge>{xpValue}</Badge>
+                  </li>
                 );
-              })
-            : "None"}
+              })}
+            </ul>
+          ) : (
+            "None"
+          )}
         </div>
       );
     },
@@ -405,18 +410,27 @@ export const columns = ({
 
       return (
         <div className="flex flex-col gap-2 px-2">
-          {experience.length > 0
-            ? experience.map((exp) => {
+          {experience.length > 0 ? (
+            <ul className="flex flex-col gap-2">
+              {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
+                const levelId = exp.level.id;
 
                 return (
-                  <p key={exp.id}>
-                    {xpName} <Badge>{xpValue}</Badge>
-                  </p>
+                  <li key={exp.id} className="flex items-center gap-2">
+                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
+                      {xpName}
+                    </Link>
+
+                    <Badge>{xpValue}</Badge>
+                  </li>
                 );
-              })
-            : "None"}
+              })}
+            </ul>
+          ) : (
+            "None"
+          )}
         </div>
       );
     },
@@ -454,18 +468,27 @@ export const columns = ({
 
       return (
         <div className="flex flex-col gap-2 px-2">
-          {experience.length > 0
-            ? experience.map((exp) => {
+          {experience.length > 0 ? (
+            <ul className="flex flex-col gap-2">
+              {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
+                const levelId = exp.level.id;
 
                 return (
-                  <p key={exp.id}>
-                    {xpName} <Badge>{xpValue}</Badge>
-                  </p>
+                  <li key={exp.id} className="flex items-center gap-2">
+                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
+                      {xpName}
+                    </Link>
+
+                    <Badge>{xpValue}</Badge>
+                  </li>
                 );
-              })
-            : "None"}
+              })}
+            </ul>
+          ) : (
+            "None"
+          )}
         </div>
       );
     },
@@ -503,18 +526,27 @@ export const columns = ({
 
       return (
         <div className="flex flex-col gap-2 px-2">
-          {experience.length > 0
-            ? experience.map((exp) => {
+          {experience.length > 0 ? (
+            <ul className="flex flex-col gap-2">
+              {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
+                const levelId = exp.level.id;
 
                 return (
-                  <p key={exp.id}>
-                    {xpName} <Badge>{xpValue}</Badge>
-                  </p>
+                  <li key={exp.id} className="flex items-center gap-2">
+                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
+                      {xpName}
+                    </Link>
+
+                    <Badge>{xpValue}</Badge>
+                  </li>
                 );
-              })
-            : "None"}
+              })}
+            </ul>
+          ) : (
+            "None"
+          )}
         </div>
       );
     },
@@ -552,18 +584,27 @@ export const columns = ({
 
       return (
         <div className="flex flex-col gap-2 px-2">
-          {experience.length > 0
-            ? experience.map((exp) => {
+          {experience.length > 0 ? (
+            <ul className="flex flex-col gap-2">
+              {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
+                const levelId = exp.level.id;
 
                 return (
-                  <p key={exp.id}>
-                    {xpName} <Badge>{xpValue}</Badge>
-                  </p>
+                  <li key={exp.id} className="flex items-center gap-2">
+                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
+                      {xpName}
+                    </Link>
+
+                    <Badge>{xpValue}</Badge>
+                  </li>
                 );
-              })
-            : "None"}
+              })}
+            </ul>
+          ) : (
+            "None"
+          )}
         </div>
       );
     },

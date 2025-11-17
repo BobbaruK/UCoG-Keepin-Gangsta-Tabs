@@ -32,6 +32,8 @@ import { toast } from "sonner";
 import { experienceSchema } from "../../../schemas/experience";
 import { CrewLevel } from "../../../types/level";
 import Levels from "../experience/levels";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   member: CrewMember;
@@ -87,16 +89,17 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
     <form
       id={formId}
       onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-6"
+      className="flex flex-col gap-7"
     >
       <FieldSet className="gap-4">
-        <FieldLegend variant="label">Experience</FieldLegend>
-        <FieldDescription>Add experience</FieldDescription>
-        <FieldGroup className="gap-4">
+        {/* <FieldLegend variant="label">Experience</FieldLegend>
+        <FieldDescription>Add experience</FieldDescription> */}
+        <FieldGroup className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
           {fields.map((field, index) => (
-            <div key={field.id} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                {/* <Controller
+            <Card key={field.id}>
+              <CardContent className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  {/* <Controller
                     name={`experiences.${index}.memberId`}
                     control={form.control}
                     render={({ field: controllerField, fieldState }) => (
@@ -135,98 +138,100 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
                     )}
                   /> */}
 
-                <Controller
-                  name={`experiences.${index}.levelId`}
-                  control={form.control}
-                  render={({ field: controllerField, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={inputId(controllerField.name)}>
-                        {capitalizeFirstLetter(
-                          crewLevelsTitle.label.singular.toLowerCase(),
+                  <Controller
+                    name={`experiences.${index}.levelId`}
+                    control={form.control}
+                    render={({ field: controllerField, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={inputId(controllerField.name)}>
+                          {capitalizeFirstLetter(
+                            crewLevelsTitle.label.singular.toLowerCase(),
+                          )}
+                        </FieldLabel>
+
+                        <Levels
+                          memberId={member.id}
+                          levels={levels}
+                          controllerField={controllerField}
+                          fieldState={fieldState}
+                          getValues={form.getValues}
+                          setValue={form.setValue}
+                          index={index}
+                          updateExperience={(index, obj) => update(index, obj)}
+                          fields={fields}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
                         )}
-                      </FieldLabel>
+                      </Field>
+                    )}
+                  />
 
-                      <Levels
-                        memberId={member.id}
-                        levels={levels}
-                        controllerField={controllerField}
-                        fieldState={fieldState}
-                        getValues={form.getValues}
-                        setValue={form.setValue}
-                        index={index}
-                        updateExperience={(index, obj) => update(index, obj)}
-                        fields={fields}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
+                  <Controller
+                    name={`experiences.${index}.value`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={inputId(field.name)}>
+                          Recruited turn
+                        </FieldLabel>
+
+                        <div className="flex items-center gap-2">
+                          <Input
+                            {...field}
+                            id={inputId(field.name)}
+                            aria-invalid={fieldState.invalid}
+                            placeholder="12"
+                            autoComplete="off"
+                            type="number"
+                            disabled={true}
+                            className={"opacity-100!"}
+                            {...form.register(`experiences.${index}.value`, {
+                              valueAsNumber: true,
+                            })}
+                          />
+                          <Counter
+                            value={field.value}
+                            emitClick={(val) =>
+                              form.setValue(`experiences.${index}.value`, val)
+                            }
+                            minValue={1}
+                            maxValue={
+                              levels?.find(
+                                (level) => level.id === fields[index].levelId,
+                              )?.max_level
+                            }
+                          />
+                        </div>
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                </div>
+
+                <CustomButton
+                  type="button"
+                  buttonLabel="Remove"
+                  icon={TrashIcon}
+                  iconPlacement="left"
+                  variant={"destructive"}
+                  hideLabelOnMobile={false}
+                  size={"sm"}
+                  className="ms-auto"
+                  onClick={() => remove(index)}
                 />
-
-                <Controller
-                  name={`experiences.${index}.value`}
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={inputId(field.name)}>
-                        Recruited turn
-                      </FieldLabel>
-
-                      <div className="flex items-center gap-2">
-                        <Input
-                          {...field}
-                          id={inputId(field.name)}
-                          aria-invalid={fieldState.invalid}
-                          placeholder="12"
-                          autoComplete="off"
-                          type="number"
-                          disabled={true}
-                          className={"opacity-100!"}
-                          {...form.register(`experiences.${index}.value`, {
-                            valueAsNumber: true,
-                          })}
-                        />
-                        <Counter
-                          value={field.value}
-                          emitClick={(val) =>
-                            form.setValue(`experiences.${index}.value`, val)
-                          }
-                          minValue={1}
-                          maxValue={
-                            levels?.find(
-                              (level) => level.id === fields[index].levelId,
-                            )?.max_level
-                          }
-                        />
-                      </div>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </div>
-
-              <CustomButton
-                type="button"
-                buttonLabel="Remove"
-                icon={TrashIcon}
-                iconPlacement="left"
-                variant={"destructive"}
-                size={"sm"}
-                className="ms-auto"
-                onClick={() => remove(index)}
-              />
-              <Separator />
-            </div>
+              </CardContent>
+            </Card>
           ))}
 
           <CustomButton
             buttonLabel="Add experience"
             type="button"
             variant="outline"
-            size="sm"
+            // size="sm"
+            className="h-auto w-auto rounded-xl shadow-sm"
             onClick={() =>
               append({
                 memberId: member.id,
@@ -235,11 +240,14 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
               })
             }
           />
+          {/* </div> */}
         </FieldGroup>
+        
         {form.formState.errors.experiences?.root && (
           <FieldError errors={[form.formState.errors.experiences.root]} />
         )}
       </FieldSet>
+
       <div className="flex items-center gap-4">
         <CustomButton
           buttonLabel="Reset"
@@ -247,6 +255,12 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
           type="button"
           onClick={() => form.reset()}
           disabled={isPending || !form.getValues("experiences").length}
+          className="ms-auto"
+        />
+        <CustomButton
+          buttonLabel="Skip"
+          linkHref={crewMembersPath}
+          variant={"outline"}
         />
         <CustomButton
           buttonLabel="Save experience"
@@ -254,7 +268,6 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
           form={formId}
           disabled={isPending}
         />
-        <CustomButton buttonLabel="Skip" linkHref={crewMembersPath} />
       </div>
     </form>
   );
