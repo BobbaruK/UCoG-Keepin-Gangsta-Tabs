@@ -40,7 +40,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { addCrewMember } from "../../actions/member/add";
@@ -50,6 +50,7 @@ import { Nationality } from "../../types/nationality";
 import { Trait } from "../../types/traits";
 import { TrashIcon } from "@/components/icons/trash";
 import { StarIcon } from "@/components/icons/star";
+import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 
 interface Props {
   playthroughId: string;
@@ -80,6 +81,10 @@ const AddCrewMemberForm = ({
       nationality: "",
       traits: [],
     },
+  });
+  const turns = useWatch({
+    control: form.control,
+    name: "turn_recruited", // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
   });
 
   const [comboxCaptainRole, setComboxCaptainRole] = useState(false);
@@ -199,7 +204,16 @@ const AddCrewMemberForm = ({
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={inputId(field.name)}>
-                  Recruited turn
+                  Recruited turn (
+                  {dateFormatter({
+                    date: turnToDate(turns),
+                    options: {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    },
+                  })}
+                  )
                 </FieldLabel>
                 <div className="flex items-center gap-2">
                   <Input
