@@ -34,6 +34,7 @@ export const SelectCell = ({ id, isLoading, startTransition }: Props) => {
         onCheckedChange={handleCheckChange}
         checked={selected?.includes(id)}
         disabled={isLoading}
+        className="border-inherit"
       />
     </div>
   );

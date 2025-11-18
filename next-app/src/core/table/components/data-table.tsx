@@ -179,7 +179,7 @@ export function DataTable<TData, TValue>({
                     return (
                       <TableHead
                         key={header.id}
-                        className="bg-secondary text-secondary-foreground"
+                        className="bg-primary text-primary-foreground"
                         style={{
                           ...getCommonPinningStyles<TData>(column),
                         }}
