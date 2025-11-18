@@ -98,7 +98,6 @@ export const editCrewMember = async ({
         traits: {
           set: traits.map((trait) => ({ id: trait })),
         },
-        is_boss: false,
         auth_userId: dataSession.user.id,
         cog_playthroughId: playthroughId,
       },

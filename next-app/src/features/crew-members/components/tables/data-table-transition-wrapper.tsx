@@ -15,20 +15,12 @@ interface Props {
   data: CrewMember[];
   dataCount: number | null;
   dataSelected?: CrewMember[];
-  roles: CaptainRole[] | undefined;
-  nationalities: Nationality[] | undefined;
-  traits: Trait[] | undefined;
-  levels: CrewLevel[] | undefined;
 }
 
 export const DataTableTransitionWrapper = ({
   data,
   dataCount,
   dataSelected,
-  roles,
-  nationalities,
-  traits,
-  levels,
 }: Props) => {
   const [isLoading, startTransition] = useTransition();
 
@@ -55,7 +47,7 @@ export const DataTableTransitionWrapper = ({
           left: ["select"],
           right: ["actions", "mp", "ap"],
         }}
-        twSkeletonHeightCell="h-[64px]"
+        twSkeletonHeightCell="h-[106px]"
       />
     </TableProvider>
   );

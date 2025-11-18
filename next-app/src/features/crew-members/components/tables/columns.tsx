@@ -27,7 +27,7 @@ import { SkullIcon } from "lucide-react";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import { CrewMember } from "../../types/crew-member";
-import Points from "./movement-points";
+import Points from "./points";
 import RowActions from "./row-actions";
 
 export const columns = ({
@@ -161,18 +161,17 @@ export const columns = ({
                     {captain && <p>Role: {captain.name}</p>}
                   </TooltipContent>
                 </Tooltip>
-
-                {row.original.is_dead && (
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <SkullIcon className="text-danger" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Killed</p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
               </>
+            )}
+            {row.original.is_dead && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <SkullIcon className="text-danger" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Killed</p>
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
           <div className="my-auto flex items-center gap-2">
@@ -185,7 +184,7 @@ export const columns = ({
           {traits.length > 0 && (
             <div className="flex items-center gap-2">
               {/* <span className="text-muted-foreground">Traits: </span> */}
-              <ul className="flex items-center justify-end gap-2">
+              <ul className="flex items-center gap-2">
                 {traits.map((trait) => (
                   <li key={trait.id}>
                     <Tooltip>
@@ -193,7 +192,7 @@ export const columns = ({
                         <Link href={`${traitsTitle.href}/${trait.id}`}>
                           <CustomAvatar
                             image={trait.image}
-                            className="size-6 rounded-md border-none"
+                            className="block size-6 rounded-md border-none"
                             fit="contain"
                           />
                         </Link>

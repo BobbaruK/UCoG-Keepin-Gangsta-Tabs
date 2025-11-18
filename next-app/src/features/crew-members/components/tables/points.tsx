@@ -12,6 +12,7 @@ import { CrewMember } from "../../types/crew-member";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
+import Link from "next/link";
 
 const basePoints = (type: SideEffectType) => {
   switch (type) {
@@ -133,13 +134,12 @@ const Points = ({ crewMember, type }: Props) => {
                   <span>+{traitsPointsPositive.sideEffect.value}</span>
                 </Badge>
                 from trait
-                <CustomButton
-                  buttonLabel={traitsPointsPositive.name}
-                  size={"sm"}
-                  variant={"link"}
-                  linkHref={`${traitsTitle.href}/${traitsPointsPositive.id}`}
-                  // className="h-auto"
-                />
+                <Link
+                  href={`${traitsTitle.href}/${traitsPointsPositive.id}`}
+                  className="font-bold"
+                >
+                  {traitsPointsPositive.name}
+                </Link>
               </li>
             )}
             {traitsPointsNegative && traitsPointsNegative.sideEffect && (
@@ -148,13 +148,12 @@ const Points = ({ crewMember, type }: Props) => {
                   <span>{traitsPointsNegative.sideEffect.value}</span>
                 </Badge>
                 from trait
-                <CustomButton
-                  buttonLabel={traitsPointsNegative.name}
-                  size={"sm"}
-                  variant={"link"}
-                  linkHref={`${traitsTitle.href}/${traitsPointsNegative.id}`}
-                  // className="h-auto"
-                />
+                <Link
+                  href={`${traitsTitle.href}/${traitsPointsNegative.id}`}
+                  className="font-bold"
+                >
+                  {traitsPointsNegative.name}
+                </Link>
               </li>
             )}
           </ul>
@@ -184,12 +183,12 @@ const Points = ({ crewMember, type }: Props) => {
                       </span>
                     </Badge>
                     from law
-                    <CustomButton
-                      buttonLabel={law.name}
-                      size={"sm"}
-                      variant={"link"}
-                      linkHref={`${lawsTitle.href}/${law.id}`}
-                    />
+                    <Link
+                      href={`${lawsTitle.href}/${law.id}`}
+                      className="font-bold"
+                    >
+                      {law.name}
+                    </Link>
                   </li>
                 );
             })}
@@ -209,13 +208,12 @@ const Points = ({ crewMember, type }: Props) => {
                 </span>
               </Badge>
               from role
-              <CustomButton
-                buttonLabel={captain.name}
-                size={"sm"}
-                variant={"link"}
-                linkHref={`${captainRolesTitle.href}/${captain.id}`}
-                // className="h-auto"
-              />
+              <Link
+                href={`${captainRolesTitle.href}/${captain.id}`}
+                className="font-bold"
+              >
+                {captain.name}
+              </Link>
             </li>
           </ul>
         )}
@@ -226,8 +224,8 @@ const Points = ({ crewMember, type }: Props) => {
               <Badge variant={"success"} className="w-8">
                 <span>+{driver}</span>
               </Badge>
-              from crew&apos;s experience (Efficient Driver: Level {driverLevel}
-              )
+              from crew&apos;s experience:{" "}
+              <strong>Efficient Driver: Level {driverLevel}</strong>
             </li>
           </ul>
         )}
@@ -265,7 +263,7 @@ const Points = ({ crewMember, type }: Props) => {
                 <Badge variant={"success"} className="w-8">
                   <span>+{passengerStationPoints}</span>
                 </Badge>
-                from <strong>Freight Rail Station</strong>
+                from <strong>Passenger Rail Station</strong>
               </li>
             </ul>
           )}
