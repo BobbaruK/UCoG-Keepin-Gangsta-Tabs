@@ -13,7 +13,7 @@ import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";

@@ -24,7 +24,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteCrewMember } from "../../actions/member/delete";
 import { CrewMember } from "../../types/crew-member";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 // const EditPoliceOfficerForm = lazy(() => import("../form/edit"));
 
 interface Props {

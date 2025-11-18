@@ -1,15 +1,15 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import AddMemberMultiStep from "@/features/crew-members/components/add-member-multistep";
 import { getCrewLevels } from "@/features/crew-members/data/get-levels";
 import { getNationalities } from "@/features/nationalities/data/get-nationalities";
-import PlaythroughMenu from "@/features/playtroughs/components/playthrough-menu-wrapper";
-import { getPlaythrough } from "@/features/playtroughs/data/get";
+import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
+import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";

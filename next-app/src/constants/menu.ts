@@ -22,7 +22,7 @@ import { crewLevelsTitle } from "./page-title/crew-levels";
 import { crewMembersTitle } from "./page-title/crew-members";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
-import { playthroughTitle } from "./page-title/playtrough";
+import { playthroughTitle } from "./page-title/playthrough";
 import { policeOfficersTitle } from "./page-title/police-officers";
 import { resourceTypesTitle } from "./page-title/resource-types";
 import { resourcesTitle } from "./page-title/resources";

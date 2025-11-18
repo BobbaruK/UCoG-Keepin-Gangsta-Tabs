@@ -35,7 +35,7 @@ import { MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";

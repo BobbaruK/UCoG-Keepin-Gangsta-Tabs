@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";

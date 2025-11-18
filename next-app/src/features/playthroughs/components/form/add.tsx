@@ -34,7 +34,7 @@ import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { Nationality } from "@/core/db/nationality/types/nationality";
 import { Trait } from "@/core/db/trait/types/trait";

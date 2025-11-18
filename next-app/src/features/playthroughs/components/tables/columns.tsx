@@ -2,7 +2,7 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { Badge } from "@/components/ui/badge";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";

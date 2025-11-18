@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { lawsTitle } from "@/constants/page-title/laws";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Law } from "@/core/db/law/types/law";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import Link from "next/link";

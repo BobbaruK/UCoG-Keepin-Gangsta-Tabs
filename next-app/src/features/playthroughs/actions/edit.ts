@@ -1,7 +1,7 @@
 "use server";
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";

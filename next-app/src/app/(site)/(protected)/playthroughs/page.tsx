@@ -1,11 +1,11 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { loadSearchParams } from "@/components/search-params";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { DataTableTransitionWrapper } from "@/features/playtroughs/components/tables/data-table-transition-wrapper";
-import { getPlaythroughs } from "@/features/playtroughs/data/get";
+import { DataTableTransitionWrapper } from "@/features/playthroughs/components/tables/data-table-transition-wrapper";
+import { getPlaythroughs } from "@/features/playthroughs/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";

@@ -21,7 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { MESSAGES } from "@/constants/messages";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { editExperiences } from "@/features/crew-members/actions/experience/edit";
 import { CrewMember } from "@/features/crew-members/types/crew-member";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";

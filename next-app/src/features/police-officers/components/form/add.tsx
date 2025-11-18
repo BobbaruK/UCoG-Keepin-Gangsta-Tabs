@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { addPoliceOfficer } from "../../actions/add";
 import { AddPoliceOfficerSchema } from "../../schemas/add";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 
 interface Props {
   playthroughId: string;

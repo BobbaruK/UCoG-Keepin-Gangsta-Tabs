@@ -1,11 +1,11 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
 import { getNationalities } from "@/features/nationalities/data/get-nationalities";
-import AddPlaythroughForm from "@/features/playtroughs/components/form/add";
+import AddPlaythroughForm from "@/features/playthroughs/components/form/add";
 import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";

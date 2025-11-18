@@ -1,10 +1,7 @@
 "use client";
 
 import { CustomButton } from "@/components/custom-button";
-import { CastleIcon } from "@/components/icons/castle";
 import { CopyIcon } from "@/components/icons/copy";
-import { EditIcon } from "@/components/icons/edit";
-import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -14,41 +11,54 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { BATCH_ITEMS } from "@/constants/misc";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { useTableContext } from "@/core/table/providers/table-provider";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
+import { useSearchParams } from "@/hooks/use-search-params";
 import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
-import { useState, useTransition } from "react";
+import { chunkArray } from "@/lib/utils/chunk-array";
+import { useState } from "react";
 import { toast } from "sonner";
 import { deletePlaythrough } from "../../actions/delete";
 
-interface Props {
-  playthrough: Playthrough;
-}
-
-const RowActions = ({ playthrough }: Props) => {
-  const [isPending, startTransition] = useTransition();
+const PaginationActions = () => {
+  const { isLoading, startTransition, dataSelected } =
+    useTableContext<Playthrough>();
+  const [{}, setSearchParams] = useSearchParams(startTransition);
   const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
-  const handleDelete = () => {
+  const playthroughIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
+
+  const handleDeleteLaws = () => {
+    setOpenDeleteDialog(false);
+
     startTransition(async () => {
-      await deletePlaythrough(playthrough)
-        .then(async (data) => {
-          if (data.error) {
-            toast.error(data.error);
-            setOpenDeleteDialog(false);
-          }
-          if (data.success) {
-            toast.success(data.success);
-          }
-        })
-        .catch(() => {
-          toast.error(MESSAGES.SOMETHING_WRONG);
-        });
+      for (const batch of playthroughIdBatches) {
+        const results = (await Promise.allSettled(
+          batch.map((playthrough) => deletePlaythrough(playthrough)),
+        )) as {
+          status: string;
+          value: {
+            error?: string;
+            success?: string;
+          };
+        }[];
+
+        for (const result of results) {
+          if (result.value.error) toast.error(result.value.error);
+          if (result.value.success) toast.success(result.value.success);
+        }
+
+        await new Promise((r) => setTimeout(r, 200));
+      }
+
+      setSearchParams({
+        selected: [],
+      });
     });
   };
 
@@ -64,7 +74,7 @@ const RowActions = ({ playthrough }: Props) => {
               buttonLabel="Delete"
               variant={"destructive"}
               className="w-full"
-              disabled={isPending}
+              disabled={isLoading}
               onClick={() => setOpenDeleteDialog(true)}
             />
           ),
@@ -74,7 +84,7 @@ const RowActions = ({ playthrough }: Props) => {
           title: {
             label: "Are you absolutely sure?",
           },
-          description: `This action cannot be undone. This will permanently delete this ${playthroughTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
+          description: `This action cannot be undone. This will permanently delete selected ${playthroughTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
         }}
       >
         <div className="flex items-center justify-end">
@@ -85,51 +95,40 @@ const RowActions = ({ playthrough }: Props) => {
             iconPlacement="left"
             hideLabelOnMobile={false}
             className="ms-auto max-sm:w-full"
-            onClick={handleDelete}
+            onClick={handleDeleteLaws}
           />
         </div>
       </ResponsiveDialog>
 
       <DropdownMenu>
-        <DropdownMenuTrigger asChild disabled={isPending}>
+        <DropdownMenuTrigger asChild>
           <CustomButton
-            buttonLabel="More"
-            size={"icon"}
-            icon={MoreIcon}
-            iconPlacement="left"
+            buttonLabel="Actions"
+            size={"sm"}
             variant={"outline"}
-            className="size-8"
-            skeletonClassName="size-8"
+            className="h-8"
+            skeletonClassName="w-[73px] h-8"
+            disabled={isLoading}
           />
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleCopy(playthrough.id)}>
-            <CopyIcon /> Copy ID
+        <DropdownMenuContent align="start">
+          <DropdownMenuItem
+            onClick={handleCopy(
+              dataSelected.map((user) => user.id).join("\n") || "",
+            )}
+          >
+            <CopyIcon />
+            Copy id(s)
           </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href={`${playthroughTitle.href}/${playthrough.id}`}>
-              <CastleIcon />
-              Go to {playthroughTitle.label.singular.toLowerCase()}
-            </Link>
-          </DropdownMenuItem>
-
           {session && (
             <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={`${playthroughTitle.href}/${playthrough.id}/edit`}>
-                  <EditIcon />
-                  Edit {playthroughTitle.label.singular.toLowerCase()}
-                </Link>
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => setOpenDeleteDialog(true)}
               >
                 <TrashIcon />
-                Delete {playthroughTitle.label.singular.toLowerCase()}
+                Delete {playthroughTitle.label.singular.toLowerCase()}(s)
               </DropdownMenuItem>
             </>
           )}
@@ -139,4 +138,4 @@ const RowActions = ({ playthrough }: Props) => {
   );
 };
 
-export default RowActions;
+export default PaginationActions;

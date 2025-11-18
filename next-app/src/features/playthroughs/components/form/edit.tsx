@@ -18,7 +18,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { cog_law } from "@/generated/prisma";
 import { formInputId } from "@/lib/utils/form-input-id";
