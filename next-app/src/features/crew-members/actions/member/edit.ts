@@ -6,10 +6,10 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
+import { setFullName } from "@/lib/utils/full-name";
 import { headers } from "next/headers";
 import z from "zod";
 import { AddCrewMemberSchema } from "../../schemas/add";
-import { setFullName } from "../../utils/full-name";
 
 export const editCrewMember = async ({
   playthroughId,
@@ -98,6 +98,7 @@ export const editCrewMember = async ({
         traits: {
           set: traits.map((trait) => ({ id: trait })),
         },
+        is_boss: false,
         auth_userId: dataSession.user.id,
         cog_playthroughId: playthroughId,
       },

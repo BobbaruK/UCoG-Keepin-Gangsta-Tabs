@@ -2,6 +2,7 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { BossIcon } from "@/components/icons/boss";
+import { StarIcon } from "@/components/icons/star";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -9,31 +10,25 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
+import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
+import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { nationalitiesTitle } from "@/constants/page-title/nationalities";
+import { playthroughTitle } from "@/constants/page-title/playtrough";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
+import { CrewLevelType } from "@/generated/prisma";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
+import { setFullName } from "@/lib/utils/full-name";
 import { ColumnDef } from "@tanstack/react-table";
+import { SkullIcon } from "lucide-react";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import { CrewMember } from "../../types/crew-member";
 import Points from "./movement-points";
 import RowActions from "./row-actions";
-import { SkullIcon } from "lucide-react";
-import { CrewLevelType } from "@/generated/prisma";
-import { nationalitiesTitle } from "@/constants/page-title/nationalities";
-import { playthroughTitle } from "@/constants/page-title/playtrough";
-import { crewMembersTitle } from "@/constants/page-title/crew-members";
-import { setFullName } from "../../utils/full-name";
-import { CaptainRole } from "../../types/captain-role";
-import { Nationality } from "../../types/nationality";
-import { Trait } from "../../types/traits";
-import { CrewLevel } from "../../types/level";
-import { StarIcon } from "@/components/icons/star";
-import { CustomButton } from "@/components/custom-button";
-import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 
 export const columns = ({
   isLoading,
