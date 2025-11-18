@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const EditLawPage = async ({ params }: Props) => {
+const EditPlaythroughPage = async ({ params }: Props) => {
   const id = (await params).playthroughId;
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -86,4 +86,4 @@ const EditLawPage = async ({ params }: Props) => {
   );
 };
 
-export default EditLawPage;
+export default EditPlaythroughPage;

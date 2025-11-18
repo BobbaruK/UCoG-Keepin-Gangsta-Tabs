@@ -5,6 +5,7 @@ import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { getCrewMembers } from "@/features/crew-members/data/get";
 import PlaythroughMenu from "@/features/playtroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playtroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playtroughs/data/get";
@@ -53,6 +54,13 @@ const LawPage = async ({ params }: Props) => {
       </PageStructure>
     );
 
+  const boss = await getCrewMembers({
+    where: {
+      cog_playthroughId: playthrough.id,
+      is_boss: true,
+    },
+  });
+
   return (
     <PageStructure>
       <PageBreadcrumbs
@@ -75,11 +83,9 @@ const LawPage = async ({ params }: Props) => {
         session={session}
       />
 
-      <PlaythroughPresentation playthrough={playthrough} />
-
-      <div>TODO: tables here - playthrough</div>
-
       <PlaythroughMenu playthroughId={playthrough.id} />
+
+      <PlaythroughPresentation type="detailed" playthrough={playthrough} />
 
       <div>
         <pre>{JSON.stringify(playthrough, null, 2)}</pre>

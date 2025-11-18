@@ -1,7 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { playthroughInclude } from "@/core/db/playthrough/constants/include";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Playthrough, playthroughInclude } from "../types/playthrough";
 
 export const getPlaythroughs = async ({
   where,

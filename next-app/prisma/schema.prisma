@@ -338,7 +338,7 @@ model cog_crew_member {
   nationality        cog_nationality   @relation(fields: [cog_nationalityId], references: [id])
   cog_nationalityId  String
   traits             cog_trait[]
-  playthrough        cog_playthrough   @relation(fields: [cog_playthroughId], references: [id])
+  playthrough        cog_playthrough   @relation(fields: [cog_playthroughId], references: [id], onDelete: Cascade)
   cog_playthroughId  String
   user               auth_user         @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
   auth_userId        String

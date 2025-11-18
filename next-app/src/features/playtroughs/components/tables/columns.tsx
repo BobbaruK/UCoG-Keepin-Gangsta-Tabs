@@ -1,19 +1,19 @@
 "use client";
 
+import { CustomAvatar } from "@/components/custom-avatar";
 import { Badge } from "@/components/ui/badge";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
+import { cn } from "@/lib/utils";
 import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { Playthrough } from "../../types/playthrough";
 import RowActions from "./row-actions";
-import { CustomAvatar } from "@/components/custom-avatar";
-import { cn } from "@/lib/utils";
 
 export const columns = ({
   isLoading,
@@ -89,68 +89,11 @@ export const columns = ({
       const sideEffectId = trait.id;
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 px-2">
           <Link
             className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
             href={`${playthroughTitle.href}/${sideEffectId}`}
           >
-            {name}
-          </Link>
-        </div>
-      );
-    },
-  },
-  // User
-  {
-    ...columnId({ id: "user" }),
-    meta: {
-      label: "User",
-    },
-    accessorFn: (originalRow) => originalRow.user.displayUsername.toLowerCase(),
-    enableHiding: false,
-    enableSorting: true,
-    enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="user"
-          label={"User"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => {
-      const user = row.original.user;
-      const name = user.displayUsername;
-      const slug = user.slug;
-      const image = user.image;
-      const isBanned = user.banned;
-
-      return (
-        <div className="flex items-center gap-2">
-          <Link
-            className={cn(
-              "flex h-auto items-center justify-start gap-2 p-0 decoration-2 hover:cursor-pointer",
-              {
-                "decoration-danger": isBanned,
-                underline: isBanned,
-                "underline-offset-4": isBanned,
-              },
-            )}
-            href={`/profile/${slug}`}
-          >
-            <CustomAvatar
-              image={image}
-              className={cn({
-                "border-danger border-2": isBanned,
-              })}
-            />
             {name}
           </Link>
         </div>
@@ -360,7 +303,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,

@@ -11,8 +11,10 @@ import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import { DataTableTransitionWrapper } from "@/features/crew-members/components/tables/data-table-transition-wrapper";
 import { getCrewMembers } from "@/features/crew-members/data/get";
 import { getCrewLevels } from "@/features/crew-members/data/get-levels";
+import { getLaws } from "@/features/laws/data/get-laws";
 import { getNationalities } from "@/features/nationalities/data/get-nationalities";
 import PlaythroughMenu from "@/features/playtroughs/components/playthrough-menu-wrapper";
+import PlaythroughPresentation from "@/features/playtroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playtroughs/data/get";
 import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
@@ -78,6 +80,7 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
   const nationalities = await getNationalities();
   const traits = await getTraits();
   const levels = await getCrewLevels();
+  const laws = await getLaws();
 
   if (!playthrough)
     return (
@@ -126,17 +129,18 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
       />
 
       {/* <PlaythroughPresentation playthrough={playthrough} /> */}
-
       <PlaythroughMenu playthroughId={playthrough.id} />
+
+      <PlaythroughPresentation
+        type="default"
+        playthrough={playthrough}
+        laws={laws?.data}
+      />
 
       <DataTableTransitionWrapper
         data={crewMembers?.data || []}
         dataCount={crewMembers?.count || 0}
         dataSelected={selectedCrewMembers?.data || []}
-        roles={roles?.data}
-        nationalities={nationalities?.data}
-        traits={traits?.data}
-        levels={levels?.data}
       />
 
       {/* <div>

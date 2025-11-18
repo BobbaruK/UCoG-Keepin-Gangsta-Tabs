@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
@@ -21,7 +22,6 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deletePlaythrough } from "../../actions/delete";
-import { Playthrough } from "../../types/playthrough";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =

@@ -2,18 +2,18 @@
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
 import { headers } from "next/headers";
 import z from "zod";
-import { AddPlaythroughSchema } from "../schemas/add";
-import { Playthrough } from "../types/playthrough";
+import { EditPlaythroughSchema } from "../schemas/edit-playthrough";
 
 export const editPlaythrough = async (
   playthrough: Playthrough,
-  values: z.infer<typeof AddPlaythroughSchema>,
+  values: z.infer<typeof EditPlaythroughSchema>,
 ): Promise<
   | {
       error: string;
@@ -24,7 +24,7 @@ export const editPlaythrough = async (
       error?: undefined;
     }
 > => {
-  const validatedFields = AddPlaythroughSchema.safeParse(values);
+  const validatedFields = EditPlaythroughSchema.safeParse(values);
 
   if (!validatedFields.success) return { error: MESSAGES.INVALID_FIELDS };
 

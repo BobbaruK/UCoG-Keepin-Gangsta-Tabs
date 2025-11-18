@@ -16,13 +16,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deletePlaythrough } from "../../actions/delete";
-import { Playthrough } from "../../types/playthrough";
 
 interface Props {
   playthrough: Playthrough;

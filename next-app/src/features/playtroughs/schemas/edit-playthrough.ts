@@ -1,7 +1,7 @@
 import { MAX_USERNAME, MIN_USERNAME } from "@/constants/misc";
 import { z } from "zod";
 
-export const AddPlaythroughSchema = z.object({
+export const EditPlaythroughSchema = z.object({
   name: z
     .string()
     .min(MIN_USERNAME, {

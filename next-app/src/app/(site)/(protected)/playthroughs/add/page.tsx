@@ -1,12 +1,12 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
-import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
+import { getNationalities } from "@/features/nationalities/data/get-nationalities";
 import AddPlaythroughForm from "@/features/playtroughs/components/form/add";
-import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
+import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -22,6 +22,8 @@ const AddPlaythroughPage = async () => {
   });
 
   const laws = await getLaws();
+  const nationalities = await getNationalities();
+  const traits = await getTraits();
 
   return (
     <PageStructure>
@@ -43,7 +45,11 @@ const AddPlaythroughPage = async () => {
         session={session}
       />
 
-      <AddPlaythroughForm laws={laws?.data} />
+      <AddPlaythroughForm
+        laws={laws?.data}
+        nationalities={nationalities?.data}
+        traits={traits?.data}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

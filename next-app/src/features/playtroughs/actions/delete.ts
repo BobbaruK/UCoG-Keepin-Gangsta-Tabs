@@ -2,13 +2,13 @@
 
 import { MESSAGES_FN } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playtrough";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { Playthrough } from "../types/playthrough";
 
 export const deletePlaythrough = async (
   playthrough: Playthrough,

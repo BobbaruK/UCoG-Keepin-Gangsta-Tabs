@@ -1,9 +1,9 @@
 "use client";
 
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";
-import { Playthrough } from "../../types/playthrough";
 import { columns } from "./columns";
 import PaginationActions from "./pagination-actions";
 
