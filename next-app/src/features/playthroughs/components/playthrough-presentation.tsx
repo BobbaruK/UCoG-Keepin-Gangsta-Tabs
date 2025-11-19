@@ -1,6 +1,8 @@
+"use client";
+
 import { CustomButton } from "@/components/custom-button";
 import { BossIcon } from "@/components/icons/boss";
-import { Badge, badgeVariants } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,12 +12,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Law } from "@/core/db/law/types/law";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import Link from "next/link";
+import { useState } from "react";
 
 interface Props {
   playthrough: Playthrough;
@@ -28,6 +36,8 @@ const PlaythroughPresentation = ({
   type = "default",
   laws = [],
 }: Props) => {
+  const [minimalSeeMore, setMinimalSeeMore] = useState(false);
+
   const boss = playthrough.crew_members.find(
     (member) => member.is_boss === true,
   );
@@ -153,97 +163,114 @@ const PlaythroughPresentation = ({
             variant={"outline"}
             linkHref={`${playthroughTitle.href}/${playthrough.id}/edit`}
             size="sm"
-            skeletonClassName="h-9 w-[75px]"
+            skeletonClassName="h-8 w-[50px]"
           />
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-wrap items-start gap-6">
-        <div>
-          <p>This outfit has:</p>
-          <ul className="list-inside list-disc">
-            <li>
-              <Badge variant={"success"}>{membersLength}</Badge> member
-              {membersLength === 1 ? "" : "s"}, of which{" "}
-              <Badge variant={"success"}>{captainsLength}</Badge>{" "}
-              {captainsLength === 1 ? "is" : "are"} captain
-              {captainsLength === 1 ? "" : "s"},{" "}
-              <Badge variant={"success"}>{managersLength}</Badge>{" "}
-              {managersLength === 1 ? "is" : "are"} manager
-              {captainsLength === 1 ? "" : "s"} and{" "}
-              <Badge variant={"success"}>{muscleLength}</Badge>{" "}
-              {muscleLength === 1 ? "is" : "are"} muscle.
-            </li>
-            <li>
-              <Badge variant={"info"}>{autoRoutesLength}</Badge> auto-route
-              {autoRoutesLength === 1 ? "" : "s"} with{" "}
-              <Badge variant={"info"}>{stepsCount}</Badge> steps in total.
-            </li>
-            <li>
-              <Badge variant={"success"}>{copsLength}</Badge> cop
-              {copsLength === 1 ? "" : "s"} bribed.
-            </li>
-            <li>
-              <Badge variant={"info"}>{buildingsLength}</Badge> building
-              {buildingsLength === 1 ? "" : "s"} equalling{" "}
-              <Badge variant={"info"}>{0}</Badge> in total and using{" "}
-              <Badge variant={"info"}>{0}</Badge> of them at the moment.
-            </li>
-            <li>
-              <Badge variant={"info"}>{gamblingLength}</Badge> gambling op
-              {gamblingLength === 1 ? "" : "s"} costing{" "}
-              <Badge variant={"info"}>{0}</Badge> weekly, with{" "}
-              <Badge variant={"info"}>{0}</Badge> cash on hand required in
-              total.
-            </li>
-          </ul>
-        </div>
-        <div>
-          <p>Other:</p>
-          <ul className="list-inside list-disc">
-            {laws
-              .filter((law) => law.sideEffect !== null)
-              .map((law) => {
-                const isNegative =
-                  law.sideEffect && Math.sign(law.sideEffect.value) === -1;
-                const isActive = playthrough.laws.find(
-                  (playthroughLaw) => playthroughLaw.id === law.id,
-                );
+      <CardContent>
+        <Collapsible open={minimalSeeMore} onOpenChange={setMinimalSeeMore}>
+          <CollapsibleTrigger asChild>
+            <CustomButton
+              buttonLabel={`Show ${minimalSeeMore ? "less" : "more"}`}
+              size={"sm"}
+              skeletonClassName="h-8 w-24"
+              variant={minimalSeeMore ? "link" : "secondary"}
+            />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="flex flex-wrap items-start gap-6 py-2">
+            <div>
+              <p>This outfit has:</p>
+              <ul className="list-inside list-disc">
+                <li>
+                  <Badge variant={"success"}>{membersLength}</Badge> member
+                  {membersLength === 1 ? "" : "s"}, of which{" "}
+                  <Badge variant={"success"}>{captainsLength}</Badge>{" "}
+                  {captainsLength === 1 ? "is" : "are"} captain
+                  {captainsLength === 1 ? "" : "s"},{" "}
+                  <Badge variant={"success"}>{managersLength}</Badge>{" "}
+                  {managersLength === 1 ? "is" : "are"} manager
+                  {captainsLength === 1 ? "" : "s"} and{" "}
+                  <Badge variant={"success"}>{muscleLength}</Badge>{" "}
+                  {muscleLength === 1 ? "is" : "are"} muscle.
+                </li>
+                <li>
+                  <Badge variant={"info"}>{autoRoutesLength}</Badge> auto-route
+                  {autoRoutesLength === 1 ? "" : "s"} with{" "}
+                  <Badge variant={"info"}>{stepsCount}</Badge> steps in total.
+                </li>
+                <li>
+                  <Badge variant={"success"}>{copsLength}</Badge> cop
+                  {copsLength === 1 ? "" : "s"} bribed.
+                </li>
+                <li>
+                  <Badge variant={"info"}>{buildingsLength}</Badge> building
+                  {buildingsLength === 1 ? "" : "s"} equalling{" "}
+                  <Badge variant={"info"}>{0}</Badge> in total and using{" "}
+                  <Badge variant={"info"}>{0}</Badge> of them at the moment.
+                </li>
+                <li>
+                  <Badge variant={"info"}>{gamblingLength}</Badge> gambling op
+                  {gamblingLength === 1 ? "" : "s"} costing{" "}
+                  <Badge variant={"info"}>{0}</Badge> weekly, with{" "}
+                  <Badge variant={"info"}>{0}</Badge> cash on hand required in
+                  total.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p>Other:</p>
+              <ul className="list-inside list-disc">
+                {laws
+                  .filter((law) => law.sideEffect !== null)
+                  .map((law) => {
+                    const isNegative =
+                      law.sideEffect && Math.sign(law.sideEffect.value) === -1;
+                    const isActive = playthrough.laws.find(
+                      (playthroughLaw) => playthroughLaw.id === law.id,
+                    );
 
-                return (
-                  <li key={law.id}>
-                    <Link href={`${lawsTitle.href}/${law.id}`}>{law.name}</Link>
-                    :{" "}
-                    <Badge
-                      variant={showDanger({ isActive: !!isActive, isNegative })}
-                    >
-                      {isActive ? "Yes" : "No"}
-                    </Badge>
-                  </li>
-                );
-              })}
+                    return (
+                      <li key={law.id}>
+                        <Link href={`${lawsTitle.href}/${law.id}`}>
+                          {law.name}
+                        </Link>
+                        :{" "}
+                        <Badge
+                          variant={showDanger({
+                            isActive: !!isActive,
+                            isNegative,
+                          })}
+                        >
+                          {isActive ? "Yes" : "No"}
+                        </Badge>
+                      </li>
+                    );
+                  })}
 
-            <li>
-              Passenger train station:{" "}
-              <Badge
-                variant={
-                  playthrough.passenger_rail_station ? "success" : "danger"
-                }
-              >
-                {playthrough.passenger_rail_station ? "Yes" : "No"}
-              </Badge>
-            </li>
-            <li>
-              Freight train station:{" "}
-              <Badge
-                variant={
-                  playthrough.freight_rail_station ? "success" : "danger"
-                }
-              >
-                {playthrough.freight_rail_station ? "Yes" : "No"}
-              </Badge>
-            </li>
-          </ul>
-        </div>
+                <li>
+                  Passenger train station:{" "}
+                  <Badge
+                    variant={
+                      playthrough.passenger_rail_station ? "success" : "danger"
+                    }
+                  >
+                    {playthrough.passenger_rail_station ? "Yes" : "No"}
+                  </Badge>
+                </li>
+                <li>
+                  Freight train station:{" "}
+                  <Badge
+                    variant={
+                      playthrough.freight_rail_station ? "success" : "danger"
+                    }
+                  >
+                    {playthrough.freight_rail_station ? "Yes" : "No"}
+                  </Badge>
+                </li>
+              </ul>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </CardContent>
     </Card>
   );
