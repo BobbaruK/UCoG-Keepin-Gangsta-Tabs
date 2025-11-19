@@ -131,8 +131,12 @@ const CrewMemberPage = async ({ params }: Props) => {
           }).outputFE
         }
         backBtnHref={`${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`}
-        editBtnHref={`${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}/${crewMember.id}/edit`}
-        forceEditButton
+        editBtnHref={
+          !playthrough.is_finished
+            ? `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}/${crewMember.id}/edit`
+            : undefined
+        }
+        forceEditButton={!playthrough.is_finished}
         session={session}
       />
 

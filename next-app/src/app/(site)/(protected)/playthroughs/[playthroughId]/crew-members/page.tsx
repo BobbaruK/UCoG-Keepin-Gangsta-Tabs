@@ -123,8 +123,12 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
           crewMembersTitle.label.plural.toLowerCase(),
         )}
         backBtnHref={`${playthroughTitle.href}/${playthrough.id}`}
-        addBtnHref={`${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}/add`}
-        forceAddButton
+        addBtnHref={
+          !playthrough.is_finished
+            ? `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}/add`
+            : undefined
+        }
+        forceAddButton={!playthrough.is_finished}
         session={session}
       />
 

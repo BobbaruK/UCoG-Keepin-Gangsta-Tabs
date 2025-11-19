@@ -77,30 +77,68 @@ export const editCrewMember = async ({
       }).RESOURCE_CREATE_UNAUTHORIZED,
     };
 
+  const existingMember = await db.cog_crew_member.findUnique({
+    where: { id: memberId },
+  });
+
+  if (!existingMember)
+    return {
+      error: MESSAGES_FN({
+        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
+      }).RESOURCE_NOT_EXISTS,
+    };
+
   try {
-    const member = await db.cog_crew_member.update({
-      where: {
-        id: memberId,
-      },
-      data: {
+    if (existingMember.is_boss && isDead) {
+      const member = await editMember({
+        userId: dataSession.user.id,
+        playthroughId: playthroughId,
+        memberId: memberId,
         first_name,
         last_name,
-        full_name: setFullName({
-          firstName: first_name,
-          lastName: last_name,
-          alias: alias,
-        }).outputDB,
-        alias: alias || null,
+        alias,
         turn_recruited,
-        cog_captain_roleId: captain_role || null,
-        is_dead: isDead,
-        cog_nationalityId: nationality,
-        traits: {
-          set: traits.map((trait) => ({ id: trait })),
+        captain_role,
+        isDead,
+        nationality,
+        traits,
+      });
+
+      const playthrough = await db.cog_playthrough.update({
+        where: {
+          id: playthroughId,
         },
-        auth_userId: dataSession.user.id,
-        cog_playthroughId: playthroughId,
-      },
+        data: {
+          is_finished: true,
+        },
+      });
+
+      return {
+        success: MESSAGES_FN({
+          resource: crewMembersTitle.label.singular.toLowerCase(),
+          resourceName: `${
+            setFullName({
+              firstName: member.first_name,
+              lastName: member.last_name,
+              alias: member.alias,
+            }).outputFE
+          } (dead) and ${playthrough.name} (finished)`,
+        }).RESOURCE_EDIT_SUCCESS,
+      };
+    }
+
+    const member = await editMember({
+      userId: dataSession.user.id,
+      playthroughId: playthroughId,
+      memberId: memberId,
+      first_name,
+      last_name,
+      alias,
+      turn_recruited,
+      captain_role,
+      isDead,
+      nationality,
+      traits,
     });
 
     return {
@@ -117,3 +155,46 @@ export const editCrewMember = async ({
     return catchError(error);
   }
 };
+
+async function editMember({
+  memberId,
+  userId,
+  playthroughId,
+  first_name,
+  last_name,
+  alias,
+  turn_recruited,
+  captain_role,
+  isDead,
+  nationality,
+  traits,
+}: z.infer<typeof AddCrewMemberSchema> & {
+  memberId: string;
+  userId: string;
+  playthroughId: string;
+}) {
+  return db.cog_crew_member.update({
+    where: {
+      id: memberId,
+    },
+    data: {
+      first_name,
+      last_name,
+      full_name: setFullName({
+        firstName: first_name,
+        lastName: last_name,
+        alias: alias,
+      }).outputDB,
+      alias: alias || null,
+      turn_recruited,
+      cog_captain_roleId: captain_role || null,
+      is_dead: isDead,
+      cog_nationalityId: nationality,
+      traits: {
+        set: traits.map((trait) => ({ id: trait })),
+      },
+      auth_userId: userId,
+      cog_playthroughId: playthroughId,
+    },
+  });
+}

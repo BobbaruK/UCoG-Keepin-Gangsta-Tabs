@@ -15,6 +15,7 @@ import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: Promise<{
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
   title: `Add ${crewMembersTitle.label.singular}`,
 };
 
-const AddPoliceOfficerPage = async ({ params }: Props) => {
+const AddCrewMemberPage = async ({ params }: Props) => {
   const playthroughId = (await params).playthroughId;
 
   const session = await auth.api.getSession({
@@ -34,6 +35,12 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
   });
 
   const playthrough = await getPlaythrough(playthroughId);
+
+  if (playthrough?.is_finished)
+    redirect(
+      `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}`,
+    );
+
   const roles = await getCaptainRoles();
   const nationalities = await getNationalities();
   const traits = await getTraits();
@@ -86,4 +93,4 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
   );
 };
 
-export default AddPoliceOfficerPage;
+export default AddCrewMemberPage;

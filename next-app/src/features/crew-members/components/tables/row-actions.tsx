@@ -120,15 +120,21 @@ const RowActions = ({ crewMember }: Props) => {
           {session && session.user.role !== UserRole.USER && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link
-                  href={`${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}/${crewMember.id}/edit`}
-                >
-                  <EditIcon />
-                  Edit {crewMembersTitle.label.singular.toLowerCase()}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+
+              {!crewMember.playthrough.is_finished && (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}/${crewMember.id}/edit`}
+                    >
+                      <EditIcon />
+                      Edit {crewMembersTitle.label.singular.toLowerCase()}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => setOpenDeleteDialog(true)}

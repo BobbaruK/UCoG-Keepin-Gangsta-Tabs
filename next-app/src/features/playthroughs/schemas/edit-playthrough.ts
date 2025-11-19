@@ -11,9 +11,11 @@ export const EditPlaythroughSchema = z.object({
       message: `Name must have ${MAX_USERNAME} or fewer characters.`,
     }),
   seed: z.string().optional(),
-  isPublic: z.boolean(),
   passengerRailStation: z.boolean(),
   freightRailStation: z.boolean(),
   respectForTheLaw: z.boolean(),
   laws: z.array(z.string()),
+
+  isPublic: z.boolean(),
+  isFinished: z.boolean(),
 });

@@ -77,11 +77,13 @@ export const editPlaythrough = async (
   const {
     name,
     seed,
-    isPublic,
     passengerRailStation,
     freightRailStation,
     respectForTheLaw,
     laws,
+
+    isPublic,
+    isFinished,
   } = validatedFields.data;
 
   try {
@@ -92,13 +94,14 @@ export const editPlaythrough = async (
       data: {
         name,
         seed: seed || null,
-        is_public: isPublic,
         passenger_rail_station: passengerRailStation,
         freight_rail_station: freightRailStation,
         respect_for_the_law: respectForTheLaw,
         laws: {
           set: laws.map((law) => ({ id: law })),
         },
+        is_public: isPublic,
+        is_finished: isFinished,
       },
     });
 

@@ -31,7 +31,6 @@ const EditMemberMultiStep = ({
   levels = [],
 }: Props) => {
   const [tabSelected, setTabSelected] = useState<AllTabs>("edit");
-  const [crewMemberId, setCrewMemberId] = useState("");
 
   return (
     <div>

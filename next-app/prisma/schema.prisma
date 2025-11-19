@@ -285,6 +285,7 @@ model cog_playthrough {
   freight_rail_station   Boolean @default(false)
   respect_for_the_law    Boolean @default(false)
   is_public              Boolean @default(false)
+  is_finished            Boolean @default(false)
 
   laws cog_law[]
 

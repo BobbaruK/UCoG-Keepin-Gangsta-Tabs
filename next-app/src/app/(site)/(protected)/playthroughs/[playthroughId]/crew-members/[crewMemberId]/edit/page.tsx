@@ -19,6 +19,7 @@ import { setFullName } from "@/lib/utils/full-name";
 import { capitalizeFirstLetter } from "better-auth";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: Promise<{
@@ -65,6 +66,11 @@ const EditCrewMemberPage = async ({ params }: Props) => {
   });
 
   const playthrough = await getPlaythrough(playthroughId);
+
+  if (playthrough?.is_finished)
+    redirect(
+      `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}/${crewMemberId}`,
+    );
 
   if (!playthrough)
     return (

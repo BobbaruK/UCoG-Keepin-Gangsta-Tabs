@@ -17,6 +17,7 @@ import {
 import {
   Field,
   FieldContent,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -608,6 +609,11 @@ const EditCrewMemberForm = ({
               >
                 <FieldContent>
                   <FieldLabel htmlFor={inputId(field.name)}>Is dead</FieldLabel>
+                  {crewMember.is_boss && (
+                    <FieldDescription>
+                      If your boss died, this playthrough is over
+                    </FieldDescription>
+                  )}
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}

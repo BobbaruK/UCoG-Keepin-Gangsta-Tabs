@@ -44,11 +44,13 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
     defaultValues: {
       name: playthrough.name,
       seed: playthrough.seed || "",
-      isPublic: playthrough.is_public,
       freightRailStation: playthrough.freight_rail_station,
       passengerRailStation: playthrough.passenger_rail_station,
       respectForTheLaw: playthrough.respect_for_the_law,
       laws: playthrough.laws.map((law) => law.id),
+
+      isPublic: playthrough.is_public,
+      isFinished: playthrough.is_finished,
     },
   });
 
@@ -57,8 +59,6 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
   );
 
   const onSubmit = (values: z.infer<typeof EditPlaythroughSchema>) => {
-    console.log("first");
-
     startTransition(async () => {
       editPlaythrough(playthrough, values)
         .then(async (data) => {
@@ -293,6 +293,41 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
             <FieldSeparator />
 
             <FieldGroup>
+              <Controller
+                name="isFinished"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    orientation={"horizontal"}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor={inputId(field.name)}>
+                        Is finished
+                      </FieldLabel>{" "}
+                      <FieldDescription>
+                        This will freeze your playthrough. You will cannot add
+                        new crew members, buildings, etc.
+                      </FieldDescription>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </FieldContent>
+
+                    <Switch
+                      id={inputId(field.name)}
+                      aria-invalid={fieldState.invalid}
+                      name={field.name}
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isPending}
+                    />
+                  </Field>
+                )}
+              />
+
+              <FieldSeparator />
+
               <Controller
                 name="isPublic"
                 control={form.control}

@@ -84,9 +84,10 @@ export const columns = ({
     },
 
     cell: ({ row }) => {
-      const trait = row.original;
-      const name = trait.name;
-      const sideEffectId = trait.id;
+      const playthrough = row.original;
+      const name = playthrough.name;
+      const sideEffectId = playthrough.id;
+      const isFinished = playthrough.is_finished;
 
       return (
         <div className="flex items-center gap-2 px-2">
@@ -96,6 +97,9 @@ export const columns = ({
           >
             {name}
           </Link>
+          <Badge variant={isFinished ? "danger" : "success"}>
+            {isFinished ? "Finished" : "Ongoing"}
+          </Badge>
         </div>
       );
     },

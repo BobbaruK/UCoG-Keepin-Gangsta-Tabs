@@ -133,7 +133,10 @@ const PlaythroughPresentation = ({
       <CardHeader>
         <CardTitle>
           <Link href={`${playthroughTitle.href}/${playthrough.id}`}>
-            {playthrough.name}
+            {playthrough.name}{" "}
+            <Badge variant={playthrough.is_finished ? "danger" : "success"}>
+              {playthrough.is_finished ? "Finished" : "Ongoing"}
+            </Badge>
           </Link>
         </CardTitle>
         <CardDescription className="flex items-center gap-2">
