@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
@@ -70,12 +70,12 @@ const RowActions = ({ playthrough }: Props) => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${playthroughTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: playthroughTitle.label.singular.toLowerCase(),
+            resourceName: playthrough.name,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { useTableContext } from "@/core/table/providers/table-provider";
@@ -80,12 +81,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${crewMembersTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: `${crewMembersTitle.label.singular.toLowerCase()}(s)`,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

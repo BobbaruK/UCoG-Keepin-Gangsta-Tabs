@@ -14,8 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
@@ -24,7 +25,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteCrewMember } from "../../actions/member/delete";
 import { CrewMember } from "../../types/crew-member";
-import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { setFullName } from "@/lib/utils/full-name";
 // const EditPoliceOfficerForm = lazy(() => import("../form/edit"));
 
 interface Props {
@@ -73,12 +74,16 @@ const RowActions = ({ crewMember }: Props) => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${crewMembersTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: crewMembersTitle.label.singular.toLowerCase(),
+            resourceName: setFullName({
+              firstName: crewMember.first_name,
+              lastName: crewMember.last_name,
+              alias: crewMember.alias,
+            }).outputFE,
+          }).DELETE
+        }
       >
         <CustomButton
           buttonLabel="Delete"
