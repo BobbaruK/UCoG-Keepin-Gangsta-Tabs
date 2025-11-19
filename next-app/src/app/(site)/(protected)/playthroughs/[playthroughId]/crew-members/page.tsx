@@ -7,16 +7,12 @@ import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import { DataTableTransitionWrapper } from "@/features/crew-members/components/tables/data-table-transition-wrapper";
 import { getCrewMembers } from "@/features/crew-members/data/get";
-import { getCrewLevels } from "@/features/crew-members/data/get-levels";
 import { getLaws } from "@/features/laws/data/get-laws";
-import { getNationalities } from "@/features/nationalities/data/get-nationalities";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
-import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -76,10 +72,6 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
     perPage: -1,
   });
 
-  const roles = await getCaptainRoles();
-  const nationalities = await getNationalities();
-  const traits = await getTraits();
-  const levels = await getCrewLevels();
   const laws = await getLaws();
 
   if (!playthrough)
@@ -132,7 +124,6 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
         session={session}
       />
 
-      {/* <PlaythroughPresentation playthrough={playthrough} /> */}
       <PlaythroughMenu playthroughId={playthrough.id} />
 
       <PlaythroughPresentation

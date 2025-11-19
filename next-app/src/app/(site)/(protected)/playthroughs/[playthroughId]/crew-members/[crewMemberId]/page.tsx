@@ -7,7 +7,9 @@ import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getCrewMember } from "@/features/crew-members/data/get";
+import { getLaws } from "@/features/laws/data/get-laws";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
+import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { auth } from "@/lib/auth";
 import { setFullName } from "@/lib/utils/full-name";
@@ -77,6 +79,7 @@ const CrewMemberPage = async ({ params }: Props) => {
     );
 
   const crewMember = await getCrewMember(crewMemberId);
+  const laws = await getLaws();
 
   if (!crewMember)
     return (
@@ -141,6 +144,12 @@ const CrewMemberPage = async ({ params }: Props) => {
       />
 
       <PlaythroughMenu playthroughId={playthrough.id} />
+
+      <PlaythroughPresentation
+        type="default"
+        playthrough={playthrough}
+        laws={laws?.data}
+      />
 
       <div>
         <pre>{JSON.stringify(crewMember, null, 2)}</pre>
