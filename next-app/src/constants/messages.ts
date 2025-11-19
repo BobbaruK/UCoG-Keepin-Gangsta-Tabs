@@ -1,10 +1,12 @@
+import { Header } from "@/types/responsive-dialog";
+
 export const MESSAGES_FN = ({
   resource,
   resourceName,
 }: {
   resource?: string;
   resourceName?: string;
-}) => {
+} = {}) => {
   return {
     ACCOUNT_LINK_SUCCESSFUL: "Account linked successfully.",
     ACCOUNT_UNLINK_SUCCESSFUL: "Account unlinked successfully.",
@@ -81,4 +83,21 @@ export const MESSAGES_FN = ({
   };
 };
 
-export const MESSAGES = MESSAGES_FN({});
+export const MESSAGES = MESSAGES_FN();
+
+export const DIALOG_MESSAGES = ({
+  resource,
+  resourceName,
+}: {
+  resource?: string;
+  resourceName?: string;
+} = {}): Record<string, Header> => {
+  return {
+    DELETE: {
+      title: {
+        label: "Are you absolutely sure?",
+      },
+      description: `This action cannot be undone. This will permanently delete this ${resource || "resource"} ${resourceName ? `(${resourceName})` : ""} and remove it's data from our servers.`,
+    },
+  };
+};
