@@ -779,11 +779,11 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
           onOpenChange={setIsPopoverOpen}
           modal={modalPopover}
         >
-          <div id={triggerDescriptionId} className="sr-only">
+          <div id={triggerDescriptionId} className="sr-only w-px!">
             Multi-select dropdown. Use arrow keys to navigate, Enter to select,
             and Escape to close.
           </div>
-          <div id={selectedCountId} className="sr-only" aria-live="polite">
+          <div id={selectedCountId} className="sr-only w-px!" aria-live="polite">
             {selectedValues.length === 0
               ? "No options selected"
               : `${selectedValues.length} option${
