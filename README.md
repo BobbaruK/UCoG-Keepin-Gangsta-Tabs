@@ -1,6 +1,6 @@
 # Unofficial City of Gangsters: Keepin' Gangsta Tabs
 
-This repository is built on top of [auth-v3 v1.0.0](https://github.com/BobbaruK/auth-v3/releases/tag/v1.0.0)
+This repository is built on top of [auth-v3 v1.1.0](https://github.com/BobbaruK/auth-v3/releases/tag/v1.1.0)
 
 ## Table of Contents
 
