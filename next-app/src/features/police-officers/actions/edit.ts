@@ -2,6 +2,7 @@
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
+import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -9,7 +10,6 @@ import { catchError } from "@/lib/utils/catch-error-action";
 import { headers } from "next/headers";
 import z from "zod";
 import { AddPoliceOfficerSchema } from "../schemas/add";
-import { PoliceOfficer } from "../types/police-officer";
 
 export const editPoliceOfficer = async (
   policeOfficer: PoliceOfficer,
@@ -95,8 +95,6 @@ export const editPoliceOfficer = async (
         political_contact_used,
       },
     });
-
-    // revalidatePath(playthroughTitle.href);
 
     return {
       success: MESSAGES_FN({

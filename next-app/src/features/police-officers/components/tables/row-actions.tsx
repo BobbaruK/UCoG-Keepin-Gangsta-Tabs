@@ -1,17 +1,31 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
+import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
+import { MoreIcon } from "@/components/icons/more";
+import { SirenIcon } from "@/components/icons/siren";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
-import { MESSAGES } from "@/constants/messages";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
-import { lazy, Suspense, useState, useTransition } from "react";
+import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { UserRole } from "@/generated/prisma";
+import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
+import { useSession } from "@/lib/auth-client";
+import Link from "next/link";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deletePoliceOfficer } from "../../actions/delete";
-import { PoliceOfficer } from "../../types/police-officer";
-import { EditPoliceOfficerFormSkeleton } from "../form/edit";
-const EditPoliceOfficerForm = lazy(() => import("../form/edit"));
 
 interface Props {
   policeOfficer: PoliceOfficer;
@@ -20,7 +34,8 @@ interface Props {
 const RowActions = ({ policeOfficer }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [openEditPoliceOfficer, setOpenEditPoliceOfficer] = useState(false);
+  const { handleCopy } = useCustomCopyToClipboard();
+  const { data: session } = useSession();
 
   const handleDelete = () => {
     startTransition(async () => {
@@ -32,6 +47,13 @@ const RowActions = ({ policeOfficer }: Props) => {
           }
           if (data.success) {
             toast.success(data.success);
+            setOpenDeleteDialog(false);
+
+            setTimeout(() => {
+              revPath(
+                `${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}`,
+              );
+            }, 250);
           }
         })
         .catch(() => {
@@ -41,42 +63,7 @@ const RowActions = ({ policeOfficer }: Props) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <ResponsiveDialog
-        open={openEditPoliceOfficer}
-        setOpen={setOpenEditPoliceOfficer}
-        trigger={{
-          type: "element",
-          element: (
-            <CustomButton
-              buttonLabel="Edit"
-              variant={"outline"}
-              icon={EditIcon}
-              iconPlacement="left"
-              size={"icon"}
-              className="size-8"
-              disabled={isPending}
-              skeletonClassName="size-8"
-            />
-          ),
-          hidden: false,
-        }}
-        header={{
-          title: {
-            label: `Edit ${policeOfficersTitle.label.singular.toLowerCase()}`,
-          },
-        }}
-      >
-        <Suspense fallback={<EditPoliceOfficerFormSkeleton />}>
-          <EditPoliceOfficerForm
-            policeOfficer={policeOfficer}
-            editOfficerDialog={(open) => {
-              setOpenEditPoliceOfficer(open);
-            }}
-          />
-        </Suspense>
-      </ResponsiveDialog>
-
+    <>
       <ResponsiveDialog
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
@@ -86,37 +73,87 @@ const RowActions = ({ policeOfficer }: Props) => {
             <CustomButton
               buttonLabel="Delete"
               variant={"destructive"}
-              icon={TrashIcon}
-              iconPlacement="left"
-              size={"icon"}
-              className="size-8"
+              className="w-full"
               disabled={isPending}
               onClick={() => setOpenDeleteDialog(true)}
-              skeletonClassName="size-8"
             />
           ),
-          hidden: false,
+          hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${policeOfficersTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: policeOfficersTitle.label.singular.toLowerCase(),
+            resourceName: policeOfficer.name,
+          }).DELETE
+        }
       >
-        <div className="flex items-center justify-end">
-          <CustomButton
-            buttonLabel="Delete"
-            variant={"destructive"}
-            icon={TrashIcon}
-            iconPlacement="left"
-            hideLabelOnMobile={false}
-            className="ms-auto max-sm:w-full"
-            onClick={handleDelete}
-          />
-        </div>
+        <CustomButton
+          buttonLabel="Delete"
+          variant={"destructive"}
+          icon={TrashIcon}
+          iconPlacement="left"
+          hideLabelOnMobile={false}
+          className="ms-auto max-sm:w-full"
+          onClick={handleDelete}
+        />
       </ResponsiveDialog>
-    </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild disabled={isPending}>
+          <CustomButton
+            buttonLabel="More"
+            size={"icon"}
+            icon={MoreIcon}
+            iconPlacement="left"
+            variant={"outline"}
+            className="size-8"
+            skeletonClassName="size-8"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={handleCopy(policeOfficer.id)}>
+            <CopyIcon /> Copy ID
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}`}
+            >
+              <SirenIcon />
+              Go to {policeOfficersTitle.label.singular.toLowerCase()}
+            </Link>
+          </DropdownMenuItem>
+
+          {session && session.user.role !== UserRole.USER && (
+            <>
+              <DropdownMenuSeparator />
+
+              {!policeOfficer.cogPlaythrough.is_finished && (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}/edit`}
+                    >
+                      <EditIcon />
+                      Edit {policeOfficersTitle.label.singular.toLowerCase()}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                <TrashIcon />
+                Delete {policeOfficersTitle.label.singular.toLowerCase()}
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 };
 

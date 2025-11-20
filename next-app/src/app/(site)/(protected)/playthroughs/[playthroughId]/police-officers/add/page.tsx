@@ -1,9 +1,11 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import AddPoliceOfficerForm from "@/features/police-officers/components/form/add";
 import { auth } from "@/lib/auth";
@@ -60,7 +62,13 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
         session={session}
       />
 
-      <AddPoliceOfficerForm playthroughId={playthroughId} />
+      <PlaythroughMenu playthroughId={playthroughId} />
+
+      <Card>
+        <CardContent>
+          <AddPoliceOfficerForm playthroughId={playthroughId} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

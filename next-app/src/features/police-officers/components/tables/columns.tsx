@@ -1,14 +1,17 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { policeOfficersTitle } from "@/constants/page-title/police-officers";
+import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { PoliceOfficer } from "../../types/police-officer";
 import { bribeDuration } from "../../utils/bribe";
 import RowActions from "./row-actions";
 
@@ -83,10 +86,19 @@ export const columns = ({
     },
 
     cell: ({ row }) => {
-      const officer = row.original;
-      const name = officer.name;
+      const policeOfficer = row.original;
+      const id = policeOfficer.id;
+      const name = policeOfficer.name;
 
-      return <div className="flex items-center gap-2">{name}</div>;
+      return (
+        <div className="flex items-center gap-2 px-2">
+          <Link
+            href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${id}`}
+          >
+            {name}
+          </Link>
+        </div>
+      );
     },
   },
   // Bribed turn
@@ -119,7 +131,7 @@ export const columns = ({
       const bribedTurn = officer.bribed_turn;
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 px-2">
           <Badge variant={"outline"}>{bribedTurn}</Badge>
           {dateFormatter({
             date: turnToDate(bribedTurn),
@@ -168,7 +180,7 @@ export const columns = ({
       });
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 px-2">
           <Badge variant={"outline"}>{bribeExpires}</Badge>
           {dateFormatter({
             date: turnToDate(bribeExpires),
@@ -212,9 +224,11 @@ export const columns = ({
       const canCallRaid = officer.can_call_in_a_raid;
 
       return (
-        <Badge variant={canCallRaid ? "success" : "danger"}>
-          {canCallRaid ? "Yes" : "No"}
-        </Badge>
+        <div className="px-2">
+          <Badge variant={canCallRaid ? "success" : "danger"}>
+            {canCallRaid ? "Yes" : "No"}
+          </Badge>
+        </div>
       );
     },
   },
@@ -248,9 +262,11 @@ export const columns = ({
       const hasRivalRelative = officer.has_rival_hooligan_relative;
 
       return (
-        <Badge variant={hasRivalRelative ? "danger" : "success"}>
-          {hasRivalRelative ? "Yes" : "No"}
-        </Badge>
+        <div className="px-2">
+          <Badge variant={hasRivalRelative ? "danger" : "success"}>
+            {hasRivalRelative ? "Yes" : "No"}
+          </Badge>
+        </div>
       );
     },
   },
@@ -284,9 +300,11 @@ export const columns = ({
       const politicalContact = officer.political_contact_used;
 
       return (
-        <Badge variant={politicalContact ? "success" : "danger"}>
-          {politicalContact ? "Yes" : "No"}
-        </Badge>
+        <div className="px-2">
+          <Badge variant={politicalContact ? "success" : "danger"}>
+            {politicalContact ? "Yes" : "No"}
+          </Badge>
+        </div>
       );
     },
   },
@@ -319,7 +337,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,

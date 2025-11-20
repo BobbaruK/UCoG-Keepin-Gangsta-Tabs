@@ -7,7 +7,9 @@ import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { getLaws } from "@/features/laws/data/get-laws";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
+import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { DataTableTransitionWrapper } from "@/features/police-officers/components/tables/data-table-transition-wrapper";
 import { getPoliceOfficers } from "@/features/police-officers/data/get";
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
   title: policeOfficersTitle.label.plural,
 };
 
-const PolicePage = async ({ params, searchParams }: Props) => {
+const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
   const {
     // pagination
     pageIndex,
@@ -78,6 +80,7 @@ const PolicePage = async ({ params, searchParams }: Props) => {
   };
 
   const playthrough = await getPlaythrough(id);
+
   const policeOfficers = await getPoliceOfficers({
     pageNumber: pageIndex,
     perPage: pageSize,
@@ -116,6 +119,8 @@ const PolicePage = async ({ params, searchParams }: Props) => {
       </PageStructure>
     );
 
+  const laws = await getLaws();
+
   return (
     <PageStructure>
       <PageBreadcrumbs
@@ -141,14 +146,22 @@ const PolicePage = async ({ params, searchParams }: Props) => {
           policeOfficersTitle.label.plural.toLowerCase(),
         )}
         backBtnHref={`${playthroughTitle.href}/${playthrough.id}`}
-        addBtnHref={`${playthroughTitle.href}/${playthrough.id + policeOfficersTitle.href}/add`}
-        forceAddButton
+        addBtnHref={
+          !playthrough.is_finished
+            ? `${playthroughTitle.href}/${playthrough.id + policeOfficersTitle.href}/add`
+            : undefined
+        }
+        forceAddButton={!playthrough.is_finished}
         session={session}
       />
 
-      {/* <PlaythroughPresentation playthrough={playthrough} /> */}
-
       <PlaythroughMenu playthroughId={playthrough.id} />
+
+      <PlaythroughPresentation
+        type="default"
+        playthrough={playthrough}
+        laws={laws?.data}
+      />
 
       <DataTableTransitionWrapper
         data={policeOfficers?.data || []}
@@ -164,4 +177,4 @@ const PolicePage = async ({ params, searchParams }: Props) => {
   );
 };
 
-export default PolicePage;
+export default PoliceOfficersPage;

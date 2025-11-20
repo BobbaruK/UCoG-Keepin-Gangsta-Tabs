@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
+import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
@@ -21,7 +22,7 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deletePoliceOfficer } from "../../actions/delete";
-import { PoliceOfficer } from "../../types/police-officer";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -80,12 +81,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${policeOfficersTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: `${policeOfficersTitle.label.singular.toLowerCase()}(s)`,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

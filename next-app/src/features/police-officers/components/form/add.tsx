@@ -8,22 +8,24 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { formInputId } from "@/lib/utils/form-input-id";
+import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { addPoliceOfficer } from "../../actions/add";
 import { AddPoliceOfficerSchema } from "../../schemas/add";
-import { playthroughTitle } from "@/constants/page-title/playthrough";
 
 interface Props {
   playthroughId: string;
@@ -36,11 +38,16 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
     resolver: zodResolver(AddPoliceOfficerSchema),
     defaultValues: {
       name: "",
-      bribedTurn: 0,
+      bribedTurn: 1,
       can_call_in_a_raid: false,
       has_rival_hooligan_relative: false,
       political_contact_used: false,
     },
+  });
+
+  const turns = useWatch({
+    control: form.control,
+    name: "bribedTurn", // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
   });
 
   const { formId, inputId } = formInputId(
@@ -71,7 +78,11 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -102,7 +113,16 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={inputId(field.name)}>
-                  Bribed turn
+                  Bribed turn (
+                  {dateFormatter({
+                    date: turnToDate(turns),
+                    options: {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    },
+                  })}
+                  )
                 </FieldLabel>
                 <div className="flex items-center gap-2">
                   <Input
@@ -119,6 +139,8 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("bribedTurn", val)}
+                    minValue={1}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
@@ -151,10 +173,13 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
                   name={field.name}
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={isPending}
                 />
               </Field>
             )}
           />
+
+          <FieldSeparator />
 
           <Controller
             name="has_rival_hooligan_relative"
@@ -179,10 +204,13 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
                   name={field.name}
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={isPending}
                 />
               </Field>
             )}
           />
+
+          <FieldSeparator />
 
           <Controller
             name="political_contact_used"
@@ -207,20 +235,21 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
                   name={field.name}
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={isPending}
                 />
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Add ${policeOfficersTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <CustomButton
+        buttonLabel={`Add ${policeOfficersTitle.label.singular.toLowerCase()}`}
+        type="submit"
+        className="ms-auto"
+        disabled={isPending}
+        skeletonClassName="ms-auto w-32"
+      />
     </form>
   );
 };

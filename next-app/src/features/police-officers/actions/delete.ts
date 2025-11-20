@@ -2,13 +2,12 @@
 
 import { MESSAGES_FN } from "@/constants/messages";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
+import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { PoliceOfficer } from "../types/police-officer";
 
 export const deletePoliceOfficer = async (
   policeOfficer: PoliceOfficer,
@@ -73,8 +72,6 @@ export const deletePoliceOfficer = async (
     const data = await db.cog_police_officer.delete({
       where: { id: policeOfficer.id },
     });
-
-    revalidatePath(policeOfficersTitle.href);
 
     return {
       success: MESSAGES_FN({

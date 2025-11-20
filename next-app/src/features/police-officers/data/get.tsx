@@ -1,7 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { policeOfficerInclude } from "@/core/db/police-officer/constants/include";
+import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { PoliceOfficer } from "../types/police-officer";
 
 export const getPoliceOfficers = async ({
   where,
@@ -24,6 +25,7 @@ export const getPoliceOfficers = async ({
         ...(where ? { where } : {}),
         skip,
         take: perPage && Math.sign(perPage) === 1 ? pageSize : undefined,
+        include: policeOfficerInclude,
       }),
       db.cog_police_officer.count({
         ...(where ? { where } : {}),
@@ -46,6 +48,7 @@ export const getPoliceOfficer = async (id: string) => {
       where: {
         id,
       },
+      include: policeOfficerInclude,
     });
 
     return law;
