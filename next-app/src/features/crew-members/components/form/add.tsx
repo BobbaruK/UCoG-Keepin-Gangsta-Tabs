@@ -34,6 +34,7 @@ import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
 import { Trait } from "@/core/db/trait/types/trait";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -48,7 +49,6 @@ import { toast } from "sonner";
 import z from "zod";
 import { addCrewMember } from "../../actions/member/add";
 import { AddCrewMemberSchema } from "../../schemas/add";
-import { CaptainRole } from "../../types/captain-role";
 import { Nationality } from "../../types/nationality";
 
 interface Props {

@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +25,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
+import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
 import { cog_side_effect } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -36,9 +38,11 @@ import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { deleteCaptainRole } from "../../actions/delete";
 import { editCaptainRole } from "../../actions/edit";
 import { AddCaptainRoleSchema } from "../../schemas/add-captain-role";
-import { CaptainRole } from "../../types/roles";
+import ResponsiveDialog from "@/components/responsive-dialog";
+import { TrashIcon } from "@/components/icons/trash";
 
 interface Props {
   role: CaptainRole;
@@ -58,6 +62,7 @@ const EditCaptainRoleForm = ({ role, sideEffects }: Props) => {
     },
   });
   const [comboxSideEffect, setComboxSideEffect] = useState(false); // TODO: move this state in a separate component
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const { formId, inputId } = formInputId(
     `edit-${captainRolesTitle.label.singular.toLowerCase()}-form`,
@@ -72,7 +77,35 @@ const EditCaptainRoleForm = ({ role, sideEffects }: Props) => {
           }
           if (data.success) {
             toast.success(data.success);
-            router.push(captainRolesTitle.href);
+
+            setTimeout(() => {
+              revPath(captainRolesTitle.href);
+              router.push(captainRolesTitle.href);
+            }, 250);
+          }
+        })
+        .catch(() => {
+          toast.error(MESSAGES.SOMETHING_WRONG);
+        });
+    });
+  };
+
+  const handleDeleteCaptainRole = () => {
+    startTransition(async () => {
+      setOpenDeleteDialog(false);
+
+      await deleteCaptainRole(role.id)
+        .then(async (data) => {
+          if (data.error) {
+            toast.error(data.error);
+          }
+          if (data.success) {
+            toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(captainRolesTitle.href);
+              router.push(captainRolesTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -82,7 +115,11 @@ const EditCaptainRoleForm = ({ role, sideEffects }: Props) => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -176,7 +213,13 @@ const EditCaptainRoleForm = ({ role, sideEffects }: Props) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={comboxSideEffect}
-                      className="w-[200px] justify-between"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
                     >
                       {form.getValues("sideEffect")
                         ? sideEffects?.find(
@@ -240,16 +283,67 @@ const EditCaptainRoleForm = ({ role, sideEffects }: Props) => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Save ${captainRolesTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex items-center justify-end gap-4">
+        <ResponsiveDialog
+          open={openDeleteDialog}
+          setOpen={setOpenDeleteDialog}
+          trigger={{
+            type: "element",
+            element: (
+              <CustomButton
+                buttonLabel="Delete"
+                variant={"destructive"}
+                icon={TrashIcon}
+                iconPlacement="left"
+                className=""
+                disabled={isPending}
+                onClick={() => setOpenDeleteDialog(true)}
+                skeletonClassName="bg-destructive h-9 w-[89px]"
+              />
+            ),
+            hidden: false,
+          }}
+          header={
+            DIALOG_MESSAGES({
+              resource: captainRolesTitle.label.singular.toLowerCase(),
+              resourceName: role.name,
+            }).DELETE
+          }
+        >
+          <div className="flex items-center justify-end">
+            <CustomButton
+              buttonLabel="Delete"
+              variant={"destructive"}
+              icon={TrashIcon}
+              iconPlacement="left"
+              hideLabelOnMobile={false}
+              className="ms-auto max-sm:w-full"
+              onClick={handleDeleteCaptainRole}
+            />
+          </div>
+        </ResponsiveDialog>
+
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Save ${captainRolesTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="bg-accent h-9 w-[140px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

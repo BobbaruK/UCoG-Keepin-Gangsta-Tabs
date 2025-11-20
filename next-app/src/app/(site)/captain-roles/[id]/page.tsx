@@ -7,7 +7,6 @@ import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import RolePresentation from "@/features/captain-roles/components/role-presentation";
 import { getCaptainRole } from "@/features/captain-roles/data/get";
-import ResourcePresentation from "@/features/resources/components/resource-presentation";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
 import type { Metadata } from "next";
@@ -59,7 +58,11 @@ const CaptainRolePage = async ({ params }: Props) => {
         crumbs={breadCrumbsFn([
           {
             href: captainRolesTitle.href,
-            label: capitalizeFirstLetter(captainRolesTitle.label.plural),
+            label: capitalizeFirstLetter(
+              capitalizeFirstLetter(
+                captainRolesTitle.label.plural.toLowerCase(),
+              ),
+            ),
           },
           {
             href: `${captainRolesTitle.href}/${id}`,

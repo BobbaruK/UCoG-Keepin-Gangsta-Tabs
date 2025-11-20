@@ -6,7 +6,6 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const deleteCaptainRole = async (
@@ -52,8 +51,6 @@ export const deleteCaptainRole = async (
     const captainRole = await db.cog_captain_role.delete({
       where: { id: resourceId },
     });
-
-    revalidatePath(captainRolesTitle.href);
 
     return {
       success: MESSAGES_FN({

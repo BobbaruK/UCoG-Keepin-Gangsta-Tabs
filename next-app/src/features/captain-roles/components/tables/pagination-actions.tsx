@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
+import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
@@ -22,7 +24,6 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteCaptainRole } from "../../actions/delete";
-import { CaptainRole } from "../../types/roles";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -81,12 +82,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${captainRolesTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: captainRolesTitle.label.singular.toLowerCase(),
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

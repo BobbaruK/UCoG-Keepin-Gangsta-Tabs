@@ -80,7 +80,11 @@ const AddCaptainRoleForm = ({ sideEffects }: Props) => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -174,7 +178,13 @@ const AddCaptainRoleForm = ({ sideEffects }: Props) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={comboxSideEffect}
-                      className="w-[200px] justify-between"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
                     >
                       {form.getValues("sideEffect")
                         ? sideEffects?.find(
@@ -238,16 +248,28 @@ const AddCaptainRoleForm = ({ sideEffects }: Props) => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Add ${captainRolesTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${captainRolesTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[137px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

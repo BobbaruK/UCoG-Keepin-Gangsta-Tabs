@@ -4,6 +4,7 @@ import { CustomAvatar } from "@/components/custom-avatar";
 import { Badge } from "@/components/ui/badge";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -12,8 +13,9 @@ import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { CaptainRole } from "../../types/roles";
 import RowActions from "./row-actions";
+import { CustomButton } from "@/components/custom-button";
+import { StarIcon } from "@/components/icons/star";
 
 export const columns = ({
   isLoading,
@@ -58,6 +60,47 @@ export const columns = ({
       );
     },
   },
+  // Icon
+  {
+    ...columnId({ id: "icon" }),
+    meta: {
+      label: "Icon",
+    },
+    accessorFn: (originalRow) => originalRow.name.toLowerCase(),
+    enableHiding: true,
+    enableSorting: false,
+    enablePinning: true,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
+    header: ({ column }) => {
+      return (
+        <THeadDropdown
+          id="icon"
+          label={"Icon"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      );
+    },
+
+    cell: ({ row }) => (
+      <div className="px-2">
+        <Link
+          className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
+          href={`${captainRolesTitle.href}/${row.original.id}`}
+        >
+          <CustomAvatar
+            image={row.original.image}
+            className="size-12 rounded-sm border-none"
+            fit="contain"
+            icon={<StarIcon />}
+          />
+        </Link>
+      </div>
+    ),
+  },
   // Name
   {
     ...columnId({ id: "name" }),
@@ -83,27 +126,73 @@ export const columns = ({
       );
     },
 
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <CustomButton
+          buttonLabel={row.original.name}
+          size={"sm"}
+          linkHref={`${captainRolesTitle.href}/${row.original.id}`}
+          variant={"link"}
+          className=""
+          skeletonClassName="h-9 w-[232px]"
+          noEffect
+        />
+      </div>
+    ),
+  },
+  // Side effect
+  {
+    ...columnId({ id: "sideEffect" }),
+    meta: {
+      label: "Side Effect",
+    },
+    accessorFn: (originalRow) => originalRow.name.toLowerCase(),
+    enableHiding: false,
+    enableSorting: true,
+    enablePinning: true,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
+    header: ({ column }) => {
+      return (
+        <THeadDropdown
+          id="sideEffect"
+          label={"Side Effect"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      );
+    },
+
     cell: ({ row }) => {
-      const resourceType = row.original;
-      const name = resourceType.name;
-      const image = resourceType.image;
-      const id = resourceType.id;
+      const trait = row.original;
+      const sideEffect = trait.sideEffect;
+      const sideEffectName = sideEffect?.name;
+      const sideEffectId = sideEffect?.id;
+      const sideEffectValue = sideEffect?.value;
 
       return (
-        <div className="flex items-center gap-2">
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${captainRolesTitle.href}/${id}`}
-          >
-            {image && (
-              <CustomAvatar
-                image={image}
-                fit="contain"
-                className="rounded-md border-none"
-              />
-            )}
-            {name}
-          </Link>
+        <div className="px-2">
+          {sideEffect ? (
+            <Badge
+              asChild
+              variant={
+                sideEffectValue && Math.sign(sideEffectValue) === 1
+                  ? "success"
+                  : "danger"
+              }
+            >
+              <Link
+                className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
+                href={`${sideEffectsTitle.href}/${sideEffectId}`}
+              >
+                {sideEffectName}
+              </Link>
+            </Badge>
+          ) : (
+            "-"
+          )}
         </div>
       );
     },
@@ -139,59 +228,6 @@ export const columns = ({
       </pre>
     ),
   },
-  // Side effect
-  {
-    ...columnId({ id: "sideEffect" }),
-    meta: {
-      label: "Side Effect",
-    },
-    accessorFn: (originalRow) => originalRow.name.toLowerCase(),
-    enableHiding: false,
-    enableSorting: true,
-    enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="sideEffect"
-          label={"Side Effect"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => {
-      const trait = row.original;
-      const sideEffect = trait.sideEffect;
-      const sideEffectName = sideEffect?.name;
-      const sideEffectId = sideEffect?.id;
-      const sideEffectValue = sideEffect?.value;
-
-      return sideEffect ? (
-        <Badge
-          asChild
-          variant={
-            sideEffectValue && Math.sign(sideEffectValue) === 1
-              ? "success"
-              : "danger"
-          }
-        >
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${sideEffectsTitle.href}/${sideEffectId}`}
-          >
-            {sideEffectName}
-          </Link>
-        </Badge>
-      ) : (
-        "-"
-      );
-    },
-  },
   // Created At
   {
     ...columnId({ id: "createdAt" }),
@@ -221,7 +257,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,
@@ -250,20 +286,22 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center px-2">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => {
       const captainRole = row.original;
 
       return (
-        <div className="grid place-items-center p-2">
+        <div className="grid place-items-center px-2">
           <RowActions captainRole={captainRole} />
         </div>
       );

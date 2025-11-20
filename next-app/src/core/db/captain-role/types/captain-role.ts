@@ -1,5 +1,5 @@
 import { Prisma } from "@/generated/prisma";
-import { captainRoleInclude } from "@/lib/utils/db/captain-role-include";
+import { captainRoleInclude } from "../constants/include";
 
 export type CaptainRole = Prisma.cog_captain_roleGetPayload<{
   include: typeof captainRoleInclude;

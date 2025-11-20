@@ -1,5 +1,6 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
@@ -44,11 +45,15 @@ const AddCaptainRolePage = async () => {
         session={session}
       />
 
-      <AddCaptainRoleForm sideEffects={sideEffects?.data || []} />
+      <Card>
+        <CardContent>
+          <AddCaptainRoleForm sideEffects={sideEffects?.data || []} />
+        </CardContent>
+      </Card>
 
-      <div>
+      {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };

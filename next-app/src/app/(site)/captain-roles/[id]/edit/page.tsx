@@ -1,6 +1,7 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -70,7 +71,10 @@ const EditResourceTypePage = async ({ params }: Props) => {
           },
           {
             href: `${captainRolesTitle.href}/${id}`,
-            label: `Edit "${captainRole.name}"`,
+            label: captainRole.name,
+          },
+          {
+            label: `Edit ${captainRolesTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
@@ -80,7 +84,14 @@ const EditResourceTypePage = async ({ params }: Props) => {
         session={session}
       />
 
-      <EditCaptainRoleForm role={captainRole} sideEffects={sideEffects?.data} />
+      <Card>
+        <CardContent>
+          <EditCaptainRoleForm
+            role={captainRole}
+            sideEffects={sideEffects?.data}
+          />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

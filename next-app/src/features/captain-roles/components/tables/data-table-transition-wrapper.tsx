@@ -1,9 +1,9 @@
 "use client";
 
+import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";
-import { CaptainRole } from "../../types/roles";
 import { columns } from "./columns";
 import PaginationActions from "./pagination-actions";
 
