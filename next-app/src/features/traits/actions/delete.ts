@@ -6,7 +6,6 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const deleteTrait = async (
@@ -52,8 +51,6 @@ export const deleteTrait = async (
     const trait = await db.cog_trait.delete({
       where: { id: traitId },
     });
-
-    revalidatePath("/trait");
 
     return {
       success: MESSAGES_FN({

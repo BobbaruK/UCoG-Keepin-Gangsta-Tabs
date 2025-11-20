@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
@@ -26,7 +27,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { deleteTrait } from "@/features/traits/actions/delete";
 import { editTrait } from "@/features/traits/actions/edit";
@@ -85,9 +86,9 @@ const EditTraitForm = ({ trait, sideEffects }: Props) => {
   };
 
   const handleDeleteTraits = () => {
-    setOpenDeleteDialog(false);
-
     startTransition(async () => {
+      setOpenDeleteDialog(false);
+
       await deleteTrait(trait.id)
         .then(async (data) => {
           if (data.error) {
@@ -95,7 +96,11 @@ const EditTraitForm = ({ trait, sideEffects }: Props) => {
           }
           if (data.success) {
             toast.success(data.success);
-            router.push(traitsTitle.href);
+
+            setTimeout(() => {
+              revPath(traitsTitle.href);
+              router.push(traitsTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -105,7 +110,11 @@ const EditTraitForm = ({ trait, sideEffects }: Props) => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -199,7 +208,13 @@ const EditTraitForm = ({ trait, sideEffects }: Props) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={comboxSideEffect}
-                      className="w-[200px] justify-between"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
                     >
                       {form.getValues("sideEffect")
                         ? sideEffects?.find(
@@ -263,56 +278,66 @@ const EditTraitForm = ({ trait, sideEffects }: Props) => {
               </Field>
             )}
           />
-
-          <div className="flex items-center justify-end gap-4">
-            <ResponsiveDialog
-              open={openDeleteDialog}
-              setOpen={setOpenDeleteDialog}
-              trigger={{
-                type: "element",
-                element: (
-                  <CustomButton
-                    buttonLabel="Delete"
-                    variant={"destructive"}
-                    icon={TrashIcon}
-                    iconPlacement="left"
-                    className=""
-                    disabled={isPending}
-                    onClick={() => setOpenDeleteDialog(true)}
-                    skeletonClassName="bg-destructive h-9 w-[89px]"
-                  />
-                ),
-                hidden: false,
-              }}
-              header={{
-                title: {
-                  label: "Are you absolutely sure?",
-                },
-                description: `This action cannot be undone. This will permanently delete selected ${traitsTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-              }}
-            >
-              <div className="flex items-center justify-end">
-                <CustomButton
-                  buttonLabel="Delete"
-                  variant={"destructive"}
-                  icon={TrashIcon}
-                  iconPlacement="left"
-                  hideLabelOnMobile={false}
-                  className="ms-auto max-sm:w-full"
-                  onClick={handleDeleteTraits}
-                />
-              </div>
-            </ResponsiveDialog>
-            <CustomButton
-              buttonLabel={`Save ${traitsTitle.label.singular.toLowerCase()}`}
-              type="submit"
-              className="h-9 w-32"
-              disabled={isPending}
-              skeletonClassName="h-9 w-32"
-            />
-          </div>
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex items-center justify-end gap-4">
+        <ResponsiveDialog
+          open={openDeleteDialog}
+          setOpen={setOpenDeleteDialog}
+          trigger={{
+            type: "element",
+            element: (
+              <CustomButton
+                buttonLabel="Delete"
+                variant={"destructive"}
+                icon={TrashIcon}
+                iconPlacement="left"
+                className=""
+                disabled={isPending}
+                onClick={() => setOpenDeleteDialog(true)}
+                skeletonClassName="bg-destructive h-9 w-[89px]"
+              />
+            ),
+            hidden: false,
+          }}
+          header={
+            DIALOG_MESSAGES({
+              resource: traitsTitle.label.singular.toLowerCase(),
+              resourceName: trait.name,
+            }).DELETE
+          }
+        >
+          <div className="flex items-center justify-end">
+            <CustomButton
+              buttonLabel="Delete"
+              variant={"destructive"}
+              icon={TrashIcon}
+              iconPlacement="left"
+              hideLabelOnMobile={false}
+              className="ms-auto max-sm:w-full"
+              onClick={handleDeleteTraits}
+            />
+          </div>
+        </ResponsiveDialog>
+
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Save ${traitsTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className="h-9 w-32"
+          disabled={isPending}
+          skeletonClassName="h-9 w-32"
+        />
+      </div>
     </form>
   );
 };

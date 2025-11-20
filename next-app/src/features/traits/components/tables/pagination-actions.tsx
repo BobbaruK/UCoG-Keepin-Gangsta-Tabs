@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { Trait } from "@/core/db/trait/types/trait";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { deleteTrait } from "@/features/traits/actions/delete";
 import { UserRole } from "@/generated/prisma";
@@ -22,7 +24,6 @@ import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Trait } from "../../types/trait";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } = useTableContext<Trait>();
@@ -80,12 +81,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${traitsTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: traitsTitle.label.singular.toLowerCase(),
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

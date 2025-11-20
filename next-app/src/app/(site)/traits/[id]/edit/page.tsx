@@ -1,6 +1,7 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -70,7 +71,10 @@ const TraitEditPage = async ({ params }: Props) => {
           },
           {
             href: `${traitsTitle.href}/${id}`,
-            label: `Edit "${trait.name}"`,
+            label: trait.name,
+          },
+          {
+            label: `Edit ${traitsTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
@@ -80,7 +84,11 @@ const TraitEditPage = async ({ params }: Props) => {
         session={session}
       />
 
-      <EditTraitForm trait={trait} sideEffects={sideEffects?.data} />
+      <Card>
+        <CardContent>
+          <EditTraitForm trait={trait} sideEffects={sideEffects?.data} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

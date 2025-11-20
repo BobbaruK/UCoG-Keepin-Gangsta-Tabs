@@ -1,14 +1,14 @@
 "use client";
 
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Trait } from "@/core/db/trait/types/trait";
 import { useState } from "react";
 import { CaptainRole } from "../types/captain-role";
 import { CrewLevel } from "../types/level";
 import { Nationality } from "../types/nationality";
-import { Trait } from "../types/traits";
 import AddCrewMemberForm from "./form/add";
 import AddExperienceForm from "./form/experience/add";
-import { Card, CardContent } from "@/components/ui/card";
 
 type AllTabs = "create" | "experience";
 

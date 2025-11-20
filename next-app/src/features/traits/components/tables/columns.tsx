@@ -4,6 +4,7 @@ import { CustomAvatar } from "@/components/custom-avatar";
 import { Badge } from "@/components/ui/badge";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { Trait } from "@/core/db/trait/types/trait";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -12,8 +13,8 @@ import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { Trait } from "../../types/trait";
 import RowActions from "./row-actions";
+import { CustomButton } from "@/components/custom-button";
 
 export const columns = ({
   isLoading,
@@ -89,7 +90,7 @@ export const columns = ({
       const image = trait.image;
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="px-2">
           <Link
             className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
             href={`${traitsTitle.href}/${sideEffectId}`}
@@ -135,14 +136,14 @@ export const columns = ({
       const sideEffectId = trait.id;
 
       return (
-        <div className="flex items-center gap-2">
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${traitsTitle.href}/${sideEffectId}`}
-          >
-            {name}
-          </Link>
-        </div>
+        <CustomButton
+          buttonLabel={name}
+          linkHref={`${traitsTitle.href}/${sideEffectId}`}
+          size={"sm"}
+          variant={"link"}
+          skeletonClassName="h-9 w-[121px]"
+          noEffect
+        />
       );
     },
   },
@@ -178,24 +179,28 @@ export const columns = ({
       const sideEffectId = sideEffect?.id;
       const sideEffectValue = sideEffect?.value;
 
-      return sideEffect ? (
-        <Badge
-          asChild
-          variant={
-            sideEffectValue && Math.sign(sideEffectValue) === 1
-              ? "success"
-              : "danger"
-          }
-        >
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${sideEffectsTitle.href}/${sideEffectId}`}
-          >
-            {sideEffectName}
-          </Link>
-        </Badge>
-      ) : (
-        "-"
+      return (
+        <div className="px-2">
+          {sideEffect ? (
+            <Badge
+              asChild
+              variant={
+                sideEffectValue && Math.sign(sideEffectValue) === 1
+                  ? "success"
+                  : "danger"
+              }
+            >
+              <Link
+                className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
+                href={`${sideEffectsTitle.href}/${sideEffectId}`}
+              >
+                {sideEffectName}
+              </Link>
+            </Badge>
+          ) : (
+            "-"
+          )}
+        </div>
       );
     },
   },
@@ -259,7 +264,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,
@@ -288,20 +293,22 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center px-2">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => {
       const sideEffect = row.original;
 
       return (
-        <div className="grid place-items-center p-2">
+        <div className="grid place-items-center px-2">
           <RowActions trait={sideEffect} />
         </div>
       );

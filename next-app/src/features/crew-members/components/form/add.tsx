@@ -3,6 +3,7 @@
 import Counter from "@/components/counter";
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
+import { StarIcon } from "@/components/icons/star";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -33,9 +34,11 @@ import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { Trait } from "@/core/db/trait/types/trait";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
+import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -47,10 +50,6 @@ import { addCrewMember } from "../../actions/member/add";
 import { AddCrewMemberSchema } from "../../schemas/add";
 import { CaptainRole } from "../../types/captain-role";
 import { Nationality } from "../../types/nationality";
-import { Trait } from "../../types/traits";
-import { TrashIcon } from "@/components/icons/trash";
-import { StarIcon } from "@/components/icons/star";
-import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 
 interface Props {
   playthroughId: string;

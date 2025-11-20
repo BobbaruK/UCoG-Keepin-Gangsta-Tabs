@@ -1,8 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { traitInclude } from "@/core/db/trait/constants/include";
+import { Trait } from "@/core/db/trait/types/trait";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { traitInclude } from "@/lib/utils/db/trait-include";
-import { Trait } from "../types/trait";
 
 export const getTraits = async ({
   where,

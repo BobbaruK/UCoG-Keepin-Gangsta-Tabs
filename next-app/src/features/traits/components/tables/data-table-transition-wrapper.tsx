@@ -1,9 +1,9 @@
 "use client";
 
+import { Trait } from "@/core/db/trait/types/trait";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { columns } from "@/features/traits/components/tables/columns";
-import { Trait } from "@/features/traits/types/trait";
 import { useTransition } from "react";
 import PaginationActions from "./pagination-actions";
 

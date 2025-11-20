@@ -38,6 +38,7 @@ import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { Trait } from "@/core/db/trait/types/trait";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
@@ -54,7 +55,6 @@ import { AddCrewMemberSchema } from "../../schemas/add";
 import { CaptainRole } from "../../types/captain-role";
 import { CrewMember } from "../../types/crew-member";
 import { Nationality } from "../../types/nationality";
-import { Trait } from "../../types/traits";
 
 interface Props {
   crewMember: CrewMember;

@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
@@ -14,8 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { Trait } from "@/core/db/trait/types/trait";
 import { deleteTrait } from "@/features/traits/actions/delete";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
@@ -23,7 +25,6 @@ import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Trait } from "../../types/trait";
 
 interface Props {
   trait: Trait;
@@ -37,14 +38,19 @@ const RowActions = ({ trait }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
+      setOpenDeleteDialog(false);
+
       await deleteTrait(trait.id)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
-            setOpenDeleteDialog(false);
           }
           if (data.success) {
             toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(traitsTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -71,12 +77,12 @@ const RowActions = ({ trait }: Props) => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${traitsTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: traitsTitle.label.singular.toLowerCase(),
+            resourceName: trait.name,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

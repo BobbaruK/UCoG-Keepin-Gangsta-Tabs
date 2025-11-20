@@ -3,11 +3,7 @@
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";
-import { CaptainRole } from "../../types/captain-role";
 import { CrewMember } from "../../types/crew-member";
-import { CrewLevel } from "../../types/level";
-import { Nationality } from "../../types/nationality";
-import { Trait } from "../../types/traits";
 import { columns } from "./columns";
 import PaginationActions from "./pagination-actions";
 
