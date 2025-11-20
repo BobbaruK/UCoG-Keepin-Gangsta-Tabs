@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CarIcon } from "@/components/icons/car";
 import { CopyIcon } from "@/components/icons/copy";
@@ -14,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { cog_vehicle_type, UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
@@ -36,14 +37,19 @@ const RowActions = ({ vehicleType }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
+      setOpenDeleteDialog(false);
+
       await deleteVehicleType(vehicleType.id)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
-            setOpenDeleteDialog(false);
           }
           if (data.success) {
             toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(vehicleTypesTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -70,12 +76,12 @@ const RowActions = ({ vehicleType }: Props) => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${vehicleTypesTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: vehicleTypesTitle.label.singular.toLowerCase(),
+            resourceName: vehicleType.name,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

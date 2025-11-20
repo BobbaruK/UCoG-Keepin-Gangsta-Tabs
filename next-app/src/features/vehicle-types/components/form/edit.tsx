@@ -1,7 +1,10 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
+import { TrashIcon } from "@/components/icons/trash";
+import ResponsiveDialog from "@/components/responsive-dialog";
 import {
   Field,
   FieldError,
@@ -10,16 +13,17 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { cog_vehicle_type } from "@/generated/prisma";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { deleteVehicleType } from "../../actions/delete";
 import { editVehicleType } from "../../actions/edit";
 import { AddVehicleTypeSchema } from "../../schemas/add-vehicle-type";
 
@@ -30,6 +34,7 @@ interface Props {
 const EditVehicleTypeForm = ({ vehicleType }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const form = useForm<z.infer<typeof AddVehicleTypeSchema>>({
     resolver: zodResolver(AddVehicleTypeSchema),
     defaultValues: {
@@ -60,8 +65,36 @@ const EditVehicleTypeForm = ({ vehicleType }: Props) => {
     });
   };
 
+  const handleDelete = () => {
+    startTransition(async () => {
+      setOpenDeleteDialog(false);
+
+      await deleteVehicleType(vehicleType.id)
+        .then(async (data) => {
+          if (data.error) {
+            toast.error(data.error);
+          }
+          if (data.success) {
+            toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(vehicleTypesTitle.href);
+              router.push(vehicleTypesTitle.href);
+            }, 250);
+          }
+        })
+        .catch(() => {
+          toast.error(MESSAGES.SOMETHING_WRONG);
+        });
+    });
+  };
+
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -115,16 +148,64 @@ const EditVehicleTypeForm = ({ vehicleType }: Props) => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Save ${vehicleTypesTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <ResponsiveDialog
+          open={openDeleteDialog}
+          setOpen={setOpenDeleteDialog}
+          trigger={{
+            type: "element",
+            element: (
+              <CustomButton
+                buttonLabel="Delete"
+                variant={"destructive"}
+                icon={TrashIcon}
+                iconPlacement="left"
+                disabled={isPending}
+                onClick={() => setOpenDeleteDialog(true)}
+                skeletonClassName="w-[73px] h-9"
+              />
+            ),
+          }}
+          header={
+            DIALOG_MESSAGES({
+              resource: vehicleTypesTitle.label.singular.toLowerCase(),
+              resourceName: vehicleType.name,
+            }).DELETE
+          }
+        >
+          <div className="flex items-center justify-end">
+            <CustomButton
+              buttonLabel="Delete"
+              variant={"destructive"}
+              icon={TrashIcon}
+              iconPlacement="left"
+              hideLabelOnMobile={false}
+              className="ms-auto max-sm:w-full"
+              onClick={handleDelete}
+            />
+          </div>
+        </ResponsiveDialog>
+
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="w-[68px] h-9"
+          onClick={() => form.reset()}
+        />
+        <CustomButton
+          buttonLabel={`Save ${vehicleTypesTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="w-[141px] h-9"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

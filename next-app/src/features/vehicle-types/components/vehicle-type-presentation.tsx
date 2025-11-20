@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { VehicleType } from "../types/vehicle-type";
+import { VehicleType } from "@/core/db/vehicle-type/types/vehicle-type";
 
 interface Props {
   vehicleType: VehicleType;

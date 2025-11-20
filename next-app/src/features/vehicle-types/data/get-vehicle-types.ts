@@ -1,7 +1,7 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { VehicleType } from "@/core/db/vehicle-type/types/vehicle-type";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { VehicleType } from "../types/vehicle-type";
 
 export const getVehicleTypes = async ({
   where,

@@ -1,9 +1,9 @@
 "use client";
 
+import { VehicleType } from "@/core/db/vehicle-type/types/vehicle-type";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";
-import { VehicleType } from "../../types/vehicle-type";
 import { columns } from "./columns";
 import PaginationActions from "./pagination-actions";
 

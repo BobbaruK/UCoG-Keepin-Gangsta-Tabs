@@ -58,7 +58,9 @@ const VehicleTypePage = async ({ params }: Props) => {
         crumbs={breadCrumbsFn([
           {
             href: vehicleTypesTitle.href,
-            label: capitalizeFirstLetter(vehicleTypesTitle.label.plural),
+            label: capitalizeFirstLetter(
+              vehicleTypesTitle.label.plural.toLowerCase(),
+            ),
           },
           {
             href: `${vehicleTypesTitle.href}/${id}`,

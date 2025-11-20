@@ -6,7 +6,6 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const deleteVehicleType = async (
@@ -53,7 +52,7 @@ export const deleteVehicleType = async (
       where: { id: traitId },
     });
 
-    revalidatePath(vehicleTypesTitle.href);
+    // revalidatePath(vehicleTypesTitle.href);
 
     return {
       success: MESSAGES_FN({

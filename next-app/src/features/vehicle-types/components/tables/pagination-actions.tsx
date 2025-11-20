@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
+import { VehicleType } from "@/core/db/vehicle-type/types/vehicle-type";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
@@ -22,7 +23,7 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteVehicleType } from "../../actions/delete";
-import { VehicleType } from "../../types/vehicle-type";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -34,7 +35,7 @@ const PaginationActions = () => {
 
   const lawIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
 
-  const handleDeleteLaws = () => {
+  const handleDeleteVehicleTypes = () => {
     setOpenDeleteDialog(false);
 
     startTransition(async () => {
@@ -54,7 +55,7 @@ const PaginationActions = () => {
           if (result.value.success) toast.success(result.value.success);
         }
 
-        await new Promise((r) => setTimeout(r, 200));
+        await new Promise((r) => setTimeout(r, 250));
       }
 
       setSearchParams({
@@ -81,12 +82,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${vehicleTypesTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: vehicleTypesTitle.label.singular.toLowerCase(),
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton
@@ -96,7 +96,7 @@ const PaginationActions = () => {
             iconPlacement="left"
             hideLabelOnMobile={false}
             className="ms-auto max-sm:w-full"
-            onClick={handleDeleteLaws}
+            onClick={handleDeleteVehicleTypes}
           />
         </div>
       </ResponsiveDialog>

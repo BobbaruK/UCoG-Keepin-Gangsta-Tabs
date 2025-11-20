@@ -1,6 +1,7 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -44,7 +45,7 @@ const EditVehicleTypePage = async ({ params }: Props) => {
       <PageStructure>
         <PageTitle
           label={"unknown"}
-          backBtnHref={`/${vehicleTypesTitle.href}`}
+          backBtnHref={`${vehicleTypesTitle.href}`}
           session={session}
         />
         <CustomAlert
@@ -67,7 +68,10 @@ const EditVehicleTypePage = async ({ params }: Props) => {
           },
           {
             href: `${vehicleTypesTitle.href}/${id}`,
-            label: `Edit "${vehicleType.name}"`,
+            label: vehicleType.name,
+          },
+          {
+            label: `Edit ${vehicleTypesTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
@@ -77,7 +81,11 @@ const EditVehicleTypePage = async ({ params }: Props) => {
         session={session}
       />
 
-      <EditVehicleTypeForm vehicleType={vehicleType} />
+      <Card>
+        <CardContent>
+          <EditVehicleTypeForm vehicleType={vehicleType} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>
