@@ -22,6 +22,7 @@ interface Props
   hideLabelOnMobile?: boolean;
   target?: React.HTMLAttributeAnchorTarget;
   skeletonClassName?: React.HtmlHTMLAttributes<HTMLButtonElement>["className"];
+  noEffect?: boolean;
 }
 
 const CustomButton = React.forwardRef<
@@ -35,6 +36,7 @@ const CustomButton = React.forwardRef<
       hideLabelOnMobile = true,
       target,
       skeletonClassName,
+      noEffect,
       ...restProps
     },
     ref,
@@ -66,7 +68,7 @@ const CustomButton = React.forwardRef<
         }
         {...restProps}
         className={cn("cursor-pointer gap-2", restProps.className)}
-        effect={restProps.effect || BUTTON_EFFECT}
+        effect={noEffect ? null : restProps.effect || BUTTON_EFFECT}
         asChild={!!linkHref}
       >
         {linkHref ? (
