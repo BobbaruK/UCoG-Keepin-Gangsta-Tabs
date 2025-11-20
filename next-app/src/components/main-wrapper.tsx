@@ -11,9 +11,9 @@ interface Props {
 
 export const MainWrapper = ({ header, children, footer }: Props) => {
   return (
-    <SidebarInset>
+    <SidebarInset className="contain-inline-size">
       {header}
-      <main>{children}</main>
+      {children}
       {footer}
     </SidebarInset>
   );

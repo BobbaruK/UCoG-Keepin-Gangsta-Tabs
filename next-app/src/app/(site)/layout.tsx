@@ -2,7 +2,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { MainWrapper } from "@/components/main-wrapper";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
 
 interface Props {
