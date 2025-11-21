@@ -336,6 +336,7 @@ const EditTraitForm = ({ trait, sideEffects }: Props) => {
           className="h-9 w-32"
           disabled={isPending}
           skeletonClassName="h-9 w-32"
+          variant={"success"}
         />
       </div>
     </form>

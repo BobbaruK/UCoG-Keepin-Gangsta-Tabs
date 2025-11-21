@@ -267,6 +267,7 @@ const AddTraitForm = ({ sideEffects }: Props) => {
           className=""
           disabled={isPending}
           skeletonClassName="h-9 w-[88px]"
+          variant={'success'}
         />
       </div>
     </form>
