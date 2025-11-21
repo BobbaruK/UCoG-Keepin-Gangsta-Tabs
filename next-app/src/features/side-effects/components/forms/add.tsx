@@ -70,7 +70,11 @@ const AddSideEffectForm = () => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -131,6 +135,7 @@ const AddSideEffectForm = () => {
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
+                  disabled={isPending}
                 >
                   <SelectTrigger
                     id={inputId(field.name)}
@@ -184,16 +189,28 @@ const AddSideEffectForm = () => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Add ${sideEffectsTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${sideEffectsTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[128px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

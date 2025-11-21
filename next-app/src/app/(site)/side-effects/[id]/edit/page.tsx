@@ -1,6 +1,7 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -67,7 +68,10 @@ const SideEffectEditPage = async ({ params }: Props) => {
           },
           {
             href: `${sideEffectsTitle.href}/${id}`,
-            label: `Edit "${sideEffect.name}"`,
+            label: sideEffect.name,
+          },
+          {
+            label: `Edit ${sideEffectsTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
@@ -77,7 +81,11 @@ const SideEffectEditPage = async ({ params }: Props) => {
         session={session}
       />
 
-      <EditSideEffectForm sideEffect={sideEffect} />
+      <Card>
+        <CardContent>
+          <EditSideEffectForm sideEffect={sideEffect} />
+        </CardContent>
+      </Card>
     </PageStructure>
   );
 };

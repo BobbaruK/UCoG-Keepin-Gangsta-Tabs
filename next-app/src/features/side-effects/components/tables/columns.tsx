@@ -1,5 +1,6 @@
 "use client";
 
+import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { SelectCell } from "@/core/table/components/select-column/cell";
@@ -10,7 +11,6 @@ import { cog_side_effect } from "@/generated/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
 
@@ -81,21 +81,19 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const name = row.original.name;
-      const sideEffectId = row.original.id;
-
-      return (
-        <div className="flex flex-col gap-2">
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${sideEffectsTitle.href}/${sideEffectId}`}
-          >
-            {name}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <CustomButton
+          buttonLabel={row.original.name}
+          size={"sm"}
+          linkHref={`${sideEffectsTitle.href}/${row.original.id}`}
+          variant={"link"}
+          className=""
+          skeletonClassName="h-9 w-[232px]"
+          noEffect
+        />
+      </div>
+    ),
   },
   // Type
   {
@@ -122,7 +120,9 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => capitalizeFirstLetter(row.original.type),
+    cell: ({ row }) => (
+      <div className="px-2">{capitalizeFirstLetter(row.original.type)}</div>
+    ),
   },
   // Value
   {
@@ -154,11 +154,13 @@ export const columns = ({
       const sideEffectValue = sideEffect.value;
 
       return (
-        <Badge
-          variant={Math.sign(sideEffectValue) === 1 ? "success" : "danger"}
-        >
-          {sideEffectValue}
-        </Badge>
+        <div className="px-2">
+          <Badge
+            variant={Math.sign(sideEffectValue) === 1 ? "success" : "danger"}
+          >
+            {sideEffectValue}
+          </Badge>
+        </div>
       );
     },
   },
@@ -218,7 +220,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,
@@ -247,13 +249,15 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center px-2">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => {

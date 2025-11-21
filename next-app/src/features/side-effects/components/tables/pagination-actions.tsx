@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { SideEffect } from "@/core/db/side-effect/types/side-effect";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { deleteSideEffect } from "@/features/side-effects/actions/delete";
 import { UserRole } from "@/generated/prisma";
@@ -22,7 +24,6 @@ import { useSession } from "@/lib/auth-client";
 import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
-import { SideEffect } from "../../types/side-effect";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -81,12 +82,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${sideEffectsTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: sideEffectsTitle.label.singular.toLowerCase(),
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

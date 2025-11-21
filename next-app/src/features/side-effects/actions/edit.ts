@@ -63,7 +63,7 @@ export const editSideEffect = async (
         name,
         value,
         type,
-        description,
+        description: description || null,
       },
     });
 

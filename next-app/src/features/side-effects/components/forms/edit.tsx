@@ -1,7 +1,10 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
+import { TrashIcon } from "@/components/icons/trash";
+import ResponsiveDialog from "@/components/responsive-dialog";
 import {
   Field,
   FieldError,
@@ -18,20 +21,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { SideEffect } from "@/core/db/side-effect/types/side-effect";
 import { editSideEffect } from "@/features/side-effects/actions/edit";
 import { SideEffectSchema } from "@/features/side-effects/schemas/side-effect";
-import { SideEffect } from "@/features/side-effects/types/side-effect";
 import { SideEffectType } from "@/generated/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { deleteSideEffect } from "../../actions/delete";
 
 interface Props {
   sideEffect: SideEffect;
@@ -49,6 +53,7 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
       value: sideEffect.value,
     },
   });
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const { formId, inputId } = formInputId(
     `edit-${sideEffectsTitle.label.singular.toLowerCase()}-form`,
@@ -74,8 +79,36 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
     });
   };
 
+  const handleDelete = () => {
+    startTransition(async () => {
+      setOpenDeleteDialog(false);
+
+      await deleteSideEffect(sideEffect.id)
+        .then(async (data) => {
+          if (data.error) {
+            toast.error(data.error);
+          }
+          if (data.success) {
+            toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(sideEffectsTitle.href);
+              router.push(sideEffectsTitle.href);
+            }, 250);
+          }
+        })
+        .catch(() => {
+          toast.error(MESSAGES.SOMETHING_WRONG);
+        });
+    });
+  };
+
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -136,6 +169,7 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
+                  disabled={isPending}
                 >
                   <SelectTrigger
                     id={inputId(field.name)}
@@ -181,6 +215,7 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
                     value={field.value}
                     allowNegative
                     emitClick={(val) => form.setValue("value", val)}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
@@ -189,16 +224,67 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Save ${sideEffectsTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex items-center justify-end gap-4">
+        <ResponsiveDialog
+          open={openDeleteDialog}
+          setOpen={setOpenDeleteDialog}
+          trigger={{
+            type: "element",
+            element: (
+              <CustomButton
+                buttonLabel="Delete"
+                variant={"destructive"}
+                icon={TrashIcon}
+                iconPlacement="left"
+                className=""
+                disabled={isPending}
+                onClick={() => setOpenDeleteDialog(true)}
+                skeletonClassName="bg-destructive h-9 w-[89px]"
+              />
+            ),
+            hidden: false,
+          }}
+          header={
+            DIALOG_MESSAGES({
+              resource: sideEffectsTitle.label.singular.toLowerCase(),
+              resourceName: sideEffect.name,
+            }).DELETE
+          }
+        >
+          <div className="flex items-center justify-end">
+            <CustomButton
+              buttonLabel="Delete"
+              variant={"destructive"}
+              icon={TrashIcon}
+              iconPlacement="left"
+              hideLabelOnMobile={false}
+              className="ms-auto max-sm:w-full"
+              onClick={handleDelete}
+            />
+          </div>
+        </ResponsiveDialog>
+
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Save ${sideEffectsTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[140px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };
