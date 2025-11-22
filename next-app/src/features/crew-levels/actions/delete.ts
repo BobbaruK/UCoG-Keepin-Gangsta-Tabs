@@ -6,7 +6,6 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const deleteCrewLevel = async (
@@ -52,8 +51,6 @@ export const deleteCrewLevel = async (
     const level = await db.cog_crew_level.delete({
       where: { id: resourceId },
     });
-
-    revalidatePath(crewLevelsTitle.href);
 
     return {
       success: MESSAGES_FN({

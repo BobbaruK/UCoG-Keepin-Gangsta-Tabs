@@ -58,7 +58,9 @@ const CaptainRolePage = async ({ params }: Props) => {
         crumbs={breadCrumbsFn([
           {
             href: crewLevelsTitle.href,
-            label: capitalizeFirstLetter(crewLevelsTitle.label.plural),
+            label: capitalizeFirstLetter(
+              crewLevelsTitle.label.plural.toLowerCase(),
+            ),
           },
           {
             href: `${crewLevelsTitle.href}/${id}`,

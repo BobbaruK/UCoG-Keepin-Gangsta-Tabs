@@ -1,7 +1,9 @@
 "use client";
 
+import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
+import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -9,9 +11,7 @@ import { columnId } from "@/core/table/lib/utils/column-id";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { CrewLevel } from "../../types/level";
 import RowActions from "./row-actions";
 
 export const columns = ({
@@ -67,9 +67,9 @@ export const columns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -82,22 +82,16 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const resourceType = row.original;
-      const name = resourceType.name;
-      const id = resourceType.id;
-
-      return (
-        <div className="flex items-center gap-2 px-2">
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${crewLevelsTitle.href}/${id}`}
-          >
-            {name}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <CustomButton
+        buttonLabel={row.original.name}
+        linkHref={`${crewLevelsTitle.href}/${row.original.id}`}
+        size={"sm"}
+        variant={"link"}
+        skeletonClassName="h-9 w-[121px]"
+        noEffect
+      />
+    ),
   },
   // Type
   {
@@ -226,7 +220,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,
@@ -255,13 +249,15 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => {

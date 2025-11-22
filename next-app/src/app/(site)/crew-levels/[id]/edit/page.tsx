@@ -1,6 +1,7 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const EditResourceTypePage = async ({ params }: Props) => {
+const EditCrewLevelPage = async ({ params }: Props) => {
   const id = (await params).id;
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -45,7 +46,7 @@ const EditResourceTypePage = async ({ params }: Props) => {
       <PageStructure>
         <PageTitle
           label={"unknown"}
-          backBtnHref={`/${crewLevelsTitle.href}`}
+          backBtnHref={`${crewLevelsTitle.href}`}
           session={session}
         />
         <CustomAlert
@@ -68,7 +69,10 @@ const EditResourceTypePage = async ({ params }: Props) => {
           },
           {
             href: `${crewLevelsTitle.href}/${id}`,
-            label: `Edit "${level.name}"`,
+            label: level.name,
+          },
+          {
+            label: `Edit ${crewLevelsTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
@@ -78,7 +82,11 @@ const EditResourceTypePage = async ({ params }: Props) => {
         session={session}
       />
 
-      <EditCrewLevelForm level={level} />
+      <Card>
+        <CardContent>
+          <EditCrewLevelForm level={level} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>
@@ -87,4 +95,4 @@ const EditResourceTypePage = async ({ params }: Props) => {
   );
 };
 
-export default EditResourceTypePage;
+export default EditCrewLevelPage;
