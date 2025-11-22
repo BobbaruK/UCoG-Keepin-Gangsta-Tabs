@@ -21,5 +21,5 @@ export const AddResourceSchema = z.object({
     ResourceCategory.WEAPONS,
   ]),
   price: NONNEGATIVE_NUMBER("Price"),
-  type: z.string(),
+  type: z.string().nonempty({ error: "Please select a type" }),
 });

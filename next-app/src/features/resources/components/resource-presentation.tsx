@@ -2,10 +2,10 @@ import { CustomAvatar } from "@/components/custom-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
+import { Resource } from "@/core/db/resource/types/resource";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formatCurrency } from "@/lib/utils/format-currency";
 import Link from "next/link";
-import { Resource } from "../types/resource";
 
 interface Props {
   resource: Resource;

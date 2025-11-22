@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { resourcesTitle } from "@/constants/page-title/resources";
+import { Resource } from "@/core/db/resource/types/resource";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
@@ -22,7 +24,6 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteResource } from "../../actions/delete";
-import { Resource } from "../../types/resource";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -34,13 +35,13 @@ const PaginationActions = () => {
 
   const resourceIdBatches = chunkArray(dataSelected, BATCH_ITEMS);
 
-  const handleDeleteLaws = () => {
+  const handleDelete = () => {
     setOpenDeleteDialog(false);
 
     startTransition(async () => {
       for (const batch of resourceIdBatches) {
         const results = (await Promise.allSettled(
-          batch.map((resourceType) => deleteResource(resourceType.id)),
+          batch.map((resource) => deleteResource(resource.id)),
         )) as {
           status: string;
           value: {
@@ -81,12 +82,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${resourcesTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: resourcesTitle.label.singular.toLowerCase(),
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton
@@ -96,7 +96,7 @@ const PaginationActions = () => {
             iconPlacement="left"
             hideLabelOnMobile={false}
             className="ms-auto max-sm:w-full"
-            onClick={handleDeleteLaws}
+            onClick={handleDelete}
           />
         </div>
       </ResponsiveDialog>

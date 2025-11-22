@@ -53,6 +53,7 @@ interface Props {
 
 const AddResourceForm = ({ resourceTypes }: Props) => {
   const [comboxResourceType, setComboxResourceType] = useState(false);
+  const [comboxCategory, setComboxCategory] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<z.infer<typeof AddResourceSchema>>({
@@ -62,7 +63,7 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
       category: ResourceCategory.INGREDIENTS,
       image: "",
       type: "",
-      price: 0,
+      price: 1,
     },
   });
 
@@ -91,7 +92,11 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -144,10 +149,12 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={inputId(field.name)}>Category</FieldLabel>
+
                 <Select
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
+                  disabled={isPending}
                 >
                   <SelectTrigger
                     id={inputId(field.name)}
@@ -192,6 +199,8 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("price", val)}
+                    minValue={1}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
@@ -220,7 +229,13 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={comboxResourceType}
-                      className="w-[200px] justify-between"
+                      className={cn(
+                        "justify-between",
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
                     >
                       {form.getValues("type")
                         ? resourceTypes?.find(
@@ -282,16 +297,28 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Add ${resourcesTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${resourcesTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[116px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

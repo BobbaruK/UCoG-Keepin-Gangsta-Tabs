@@ -1,8 +1,11 @@
 "use client";
 
 import { CustomAvatar } from "@/components/custom-avatar";
+import { CustomButton } from "@/components/custom-button";
+import { Badge } from "@/components/ui/badge";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { resourcesTitle } from "@/constants/page-title/resources";
+import { Resource } from "@/core/db/resource/types/resource";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -13,8 +16,8 @@ import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { Resource } from "../../types/resource";
 import RowActions from "./row-actions";
+import { ft3m3 } from "@/lib/utils/ft3-m3";
 
 export const columns = ({
   isLoading,
@@ -59,6 +62,46 @@ export const columns = ({
       );
     },
   },
+  // Icon
+  {
+    ...columnId({ id: "icon" }),
+    meta: {
+      label: "Icon",
+    },
+    accessorFn: (originalRow) => originalRow.name.toLowerCase(),
+    enableHiding: true,
+    enableSorting: false,
+    enablePinning: true,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
+    header: ({ column }) => {
+      return (
+        <THeadDropdown
+          id="icon"
+          label={"Icon"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      );
+    },
+
+    cell: ({ row }) => (
+      <div className="px-2">
+        <Link
+          className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
+          href={`${resourcesTitle.href}/${row.original.id}`}
+        >
+          <CustomAvatar
+            image={row.original.image}
+            className="size-12 rounded-sm border-none"
+            fit="contain"
+          />
+        </Link>
+      </div>
+    ),
+  },
   // Name
   {
     ...columnId({ id: "name" }),
@@ -69,9 +112,9 @@ export const columns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -84,28 +127,16 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const resourceType = row.original;
-      const name = resourceType.name;
-      const image = resourceType.image;
-      const id = resourceType.id;
-
-      return (
-        <div className="flex items-center gap-2">
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${resourcesTitle.href}/${id}`}
-          >
-            <CustomAvatar
-              image={image}
-              fit="contain"
-              className="rounded-md border-none"
-            />
-            {name}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <CustomButton
+        buttonLabel={row.original.name}
+        linkHref={`${resourcesTitle.href}/${row.original.id}`}
+        size={"sm"}
+        variant={"link"}
+        skeletonClassName="h-9 w-[121px]"
+        noEffect
+      />
+    ),
   },
   // Category
   {
@@ -132,7 +163,9 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => capitalizeFirstLetter(row.original.category),
+    cell: ({ row }) => (
+      <div className="px-2">{capitalizeFirstLetter(row.original.category)}</div>
+    ),
   },
   // Price
   {
@@ -159,46 +192,13 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const resource = row.original;
-      const price = resource.price;
-
-      return formatCurrency({
-        value: price,
-      });
-    },
-  },
-  // Capacity
-  {
-    ...columnId({ id: "capacity" }),
-    meta: {
-      label: "Capacity",
-    },
-    accessorFn: (originalRow) => originalRow.resource_type.capacity,
-    enableHiding: true,
-    enableSorting: true,
-    enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
-    header: ({ column }) => {
-      return (
-        <THeadDropdown
-          id="capacity"
-          label={"Capacity"}
-          isLoading={isLoading}
-          startTransition={startTransition}
-          column={column}
-        />
-      );
-    },
-
-    cell: ({ row }) => {
-      const resource = row.original;
-      const typeCapacity = resource.resource_type.capacity;
-
-      return typeCapacity;
-    },
+    cell: ({ row }) => (
+      <div className="px-2">
+        {formatCurrency({
+          value: row.original.price,
+        })}
+      </div>
+    ),
   },
   // Type
   {
@@ -231,11 +231,49 @@ export const columns = ({
       const typeId = resource.resource_type.id;
 
       return (
-        <Link href={`${resourceTypesTitle.href}/${typeId}`}>
-          {capitalizeFirstLetter(type)}
-        </Link>
+        <CustomButton
+          buttonLabel={capitalizeFirstLetter(type)}
+          linkHref={`${resourceTypesTitle.href}/${typeId}`}
+          size={"sm"}
+          variant={"link"}
+          skeletonClassName="h-9 w-[121px]"
+          noEffect
+        />
       );
     },
+  },
+  // Capacity
+  {
+    ...columnId({ id: "capacity" }),
+    meta: {
+      label: "Capacity",
+    },
+    accessorFn: (originalRow) => originalRow.resource_type.capacity,
+    enableHiding: true,
+    enableSorting: true,
+    enablePinning: true,
+    // size: 110,
+    // minSize: 105,
+    // maxSize: 150,
+    header: ({ column }) => {
+      return (
+        <THeadDropdown
+          id="capacity"
+          label={"Capacity"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      );
+    },
+    cell: ({ row }) => (
+      <div
+        className="px-2"
+        dangerouslySetInnerHTML={{
+          __html: ft3m3(row.original.resource_type.capacity).html,
+        }}
+      />
+    ),
   },
   // Created At
   {
@@ -266,7 +304,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,
@@ -295,13 +333,15 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => {

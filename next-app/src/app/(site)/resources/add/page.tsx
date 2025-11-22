@@ -1,5 +1,6 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { resourcesTitle } from "@/constants/page-title/resources";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
@@ -44,7 +45,11 @@ const AddResourceTypePage = async () => {
         session={session}
       />
 
-      <AddResourceForm resourceTypes={resourceTypes?.data || []} />
+      <Card>
+        <CardContent>
+          <AddResourceForm resourceTypes={resourceTypes?.data || []} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

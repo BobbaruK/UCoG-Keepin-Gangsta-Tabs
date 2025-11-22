@@ -6,7 +6,6 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const deleteResource = async (
@@ -52,8 +51,6 @@ export const deleteResource = async (
     const resourceTypes = await db.cog_resource.delete({
       where: { id: resourceId },
     });
-
-    revalidatePath(resourcesTitle.href);
 
     return {
       success: MESSAGES_FN({

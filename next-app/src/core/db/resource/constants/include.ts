@@ -9,7 +9,3 @@ export const resourceInclude: Prisma.cog_resourceInclude = {
     },
   },
 };
-
-export type Resource = Prisma.cog_resourceGetPayload<{
-  include: typeof resourceInclude;
-}>;

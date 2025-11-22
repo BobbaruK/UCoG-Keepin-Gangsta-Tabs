@@ -1,7 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { resourceInclude } from "@/core/db/resource/constants/include";
+import { Resource } from "@/core/db/resource/types/resource";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Resource, resourceInclude } from "../types/resource";
 
 export const getResources = async ({
   where,
