@@ -35,6 +35,7 @@ import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { Nationality } from "@/core/db/nationality/types/nationality";
 import { Trait } from "@/core/db/trait/types/trait";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -49,7 +50,6 @@ import { toast } from "sonner";
 import z from "zod";
 import { addCrewMember } from "../../actions/member/add";
 import { AddCrewMemberSchema } from "../../schemas/add";
-import { Nationality } from "../../types/nationality";
 
 interface Props {
   playthroughId: string;
@@ -232,6 +232,7 @@ const AddCrewMemberForm = ({
                     value={field.value}
                     emitClick={(val) => form.setValue("turn_recruited", val)}
                     minValue={1}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
@@ -269,6 +270,7 @@ const AddCrewMemberForm = ({
                         "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
                         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
                       )}
+                      disabled={isPending}
                     >
                       {form.getValues("captain_role") ? (
                         <span className="flex items-center gap-2">
@@ -427,6 +429,7 @@ const AddCrewMemberForm = ({
                         "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
                         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
                       )}
+                      disabled={isPending}
                     >
                       {form.getValues("nationality") ? (
                         <span className="flex items-center gap-2">
@@ -592,7 +595,7 @@ const AddCrewMemberForm = ({
                 orientation={"horizontal"}
               >
                 <FieldContent>
-                  <FieldLabel htmlFor={inputId(field.name)}>Is dead</FieldLabel>
+                  <FieldLabel htmlFor={inputId(field.name)}>Is dead</FieldLabel>{" "}
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -604,6 +607,7 @@ const AddCrewMemberForm = ({
                   name={field.name}
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={isPending}
                 />
               </Field>
             )}
@@ -611,13 +615,25 @@ const AddCrewMemberForm = ({
         </FieldGroup>
       </FieldSet>
 
-      <CustomButton
-        buttonLabel={`Add ${crewMembersTitle.label.singular.toLowerCase()}`}
-        type="submit"
-        className="ms-auto"
-        disabled={isPending}
-        skeletonClassName="ms-auto w-32"
-      />
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${crewMembersTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[149px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

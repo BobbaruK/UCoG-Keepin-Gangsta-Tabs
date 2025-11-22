@@ -130,14 +130,16 @@ const EditCrewMemberPage = async ({ params }: Props) => {
             ),
           },
           {
+            href: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}/${crewMember.id}`,
+            label: setFullName({
+              firstName: crewMember.first_name,
+              lastName: crewMember.last_name,
+              alias: crewMember.alias,
+            }).outputFE,
+          },
+          {
             href: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}/${crewMember.id}/edit`,
-            label: `Edit "${
-              setFullName({
-                firstName: crewMember.first_name,
-                lastName: crewMember.last_name,
-                alias: crewMember.alias,
-              }).outputFE
-            }"`,
+            label: `Edit ${crewMembersTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />

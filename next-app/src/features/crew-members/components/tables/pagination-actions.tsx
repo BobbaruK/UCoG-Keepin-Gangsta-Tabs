@@ -14,6 +14,7 @@ import {
 import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSearchParams } from "@/hooks/use-search-params";
@@ -22,7 +23,6 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteCrewMember } from "../../actions/member/delete";
-import { CrewMember } from "../../types/crew-member";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -40,7 +40,7 @@ const PaginationActions = () => {
     startTransition(async () => {
       for (const batch of playthroughIdBatches) {
         const results = (await Promise.allSettled(
-          batch.map((crewMember) => deleteCrewMember(crewMember.id)),
+          batch.map((crewMember) => deleteCrewMember(crewMember)),
         )) as {
           status: string;
           value: {

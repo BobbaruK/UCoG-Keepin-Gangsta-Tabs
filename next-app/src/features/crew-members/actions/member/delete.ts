@@ -2,15 +2,15 @@
 
 import { MESSAGES_FN } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export const deleteCrewMember = async (
-  resourceId: string,
+  crewMember: CrewMember,
 ): Promise<
   | {
       error: string;
@@ -21,6 +21,12 @@ export const deleteCrewMember = async (
       error?: undefined;
     }
 > => {
+  if (crewMember.is_boss) {
+    return {
+      error: "You cannot delete the BOSS.",
+    };
+  }
+
   const dataSession = await auth.api.getSession({
     headers: await headers(),
   });
@@ -50,10 +56,8 @@ export const deleteCrewMember = async (
 
   try {
     const member = await db.cog_crew_member.delete({
-      where: { id: resourceId },
+      where: { id: crewMember.id },
     });
-
-    revalidatePath(crewMembersTitle.href);
 
     return {
       success: MESSAGES_FN({

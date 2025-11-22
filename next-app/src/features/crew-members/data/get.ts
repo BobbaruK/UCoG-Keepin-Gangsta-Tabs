@@ -1,7 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { crewMemberInclude } from "@/core/db/crew-member/constants/include";
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { CrewMember, crewMemberInclude } from "../types/crew-member";
 
 export const getCrewMembers = async ({
   where,

@@ -3,10 +3,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { Nationality } from "@/core/db/nationality/types/nationality";
 import { Trait } from "@/core/db/trait/types/trait";
 import { useState } from "react";
-import { CrewLevel } from "../types/level";
-import { Nationality } from "../types/nationality";
 import AddCrewMemberForm from "./form/add";
 import AddExperienceForm from "./form/experience/add";
 

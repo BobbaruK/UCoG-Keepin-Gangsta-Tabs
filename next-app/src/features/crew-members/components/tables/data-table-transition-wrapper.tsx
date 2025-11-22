@@ -1,9 +1,9 @@
 "use client";
 
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";
-import { CrewMember } from "../../types/crew-member";
 import { columns } from "./columns";
 import PaginationActions from "./pagination-actions";
 

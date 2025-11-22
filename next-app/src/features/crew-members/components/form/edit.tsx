@@ -5,6 +5,8 @@ import Counter from "@/components/counter";
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
 import { StarIcon } from "@/components/icons/star";
+import { TrashIcon } from "@/components/icons/trash";
+import ResponsiveDialog from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -32,17 +34,20 @@ import {
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
+import { Nationality } from "@/core/db/nationality/types/nationality";
 import { Trait } from "@/core/db/trait/types/trait";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
+import { setFullName } from "@/lib/utils/full-name";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { capitalizeFirstLetter } from "better-auth";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -51,10 +56,9 @@ import { useState, useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { deleteCrewMember } from "../../actions/member/delete";
 import { editCrewMember } from "../../actions/member/edit";
 import { AddCrewMemberSchema } from "../../schemas/add";
-import { CrewMember } from "../../types/crew-member";
-import { Nationality } from "../../types/nationality";
 
 interface Props {
   crewMember: CrewMember;
@@ -75,6 +79,7 @@ const EditCrewMemberForm = ({
 }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const form = useForm<z.infer<typeof AddCrewMemberSchema>>({
     resolver: zodResolver(AddCrewMemberSchema),
     defaultValues: {
@@ -136,6 +141,34 @@ const EditCrewMemberForm = ({
   const unassigned = roles.find(
     (role) => role.name.toLowerCase() === "unassigned",
   );
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      setOpenDeleteDialog(false);
+
+      await deleteCrewMember(crewMember.id)
+        .then(async (data) => {
+          if (data.error) {
+            toast.error(data.error);
+          }
+          if (data.success) {
+            toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(
+                `${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}`,
+              );
+              router.push(
+                `${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}`,
+              );
+            }, 250);
+          }
+        })
+        .catch(() => {
+          toast.error(MESSAGES.SOMETHING_WRONG);
+        });
+    });
+  };
 
   return (
     <form
@@ -248,6 +281,7 @@ const EditCrewMemberForm = ({
                     value={field.value}
                     emitClick={(val) => form.setValue("turn_recruited", val)}
                     minValue={1}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
@@ -285,6 +319,7 @@ const EditCrewMemberForm = ({
                         "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
                         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
                       )}
+                      disabled={isPending}
                     >
                       {form.getValues("captain_role") ? (
                         <span className="flex items-center gap-2">
@@ -443,6 +478,7 @@ const EditCrewMemberForm = ({
                         "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
                         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
                       )}
+                      disabled={isPending}
                     >
                       {form.getValues("nationality") ? (
                         <span className="flex items-center gap-2">
@@ -564,7 +600,7 @@ const EditCrewMemberForm = ({
                       // icon: React.createElement(CustomAvatar, {}),
                     })) || []
                   }
-                  defaultValue={field.value}
+                  value={field.value}
                   onValueChange={field.onChange}
                   placeholder={`Choose ${traitsTitle.label.plural.toLowerCase()}...`}
                   hideSelectAll
@@ -625,6 +661,7 @@ const EditCrewMemberForm = ({
                   name={field.name}
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={isPending}
                 />
               </Field>
             )}
@@ -632,13 +669,68 @@ const EditCrewMemberForm = ({
         </FieldGroup>
       </FieldSet>
 
-      <CustomButton
-        buttonLabel={`Save ${crewMembersTitle.label.singular.toLowerCase()}`}
-        type="submit"
-        className="ms-auto"
-        disabled={isPending}
-        skeletonClassName="ms-auto w-32"
-      />
+      <div className="flex items-center justify-end gap-4">
+        <ResponsiveDialog
+          open={openDeleteDialog}
+          setOpen={setOpenDeleteDialog}
+          trigger={{
+            type: "element",
+            element: (
+              <CustomButton
+                buttonLabel="Delete"
+                variant={"destructive"}
+                icon={TrashIcon}
+                iconPlacement="left"
+                className=""
+                disabled={isPending}
+                onClick={() => setOpenDeleteDialog(true)}
+                skeletonClassName="bg-destructive h-9 w-[89px]"
+              />
+            ),
+            hidden: false,
+          }}
+          header={
+            DIALOG_MESSAGES({
+              resource: crewMembersTitle.label.singular.toLowerCase(),
+              resourceName: setFullName({
+                firstName: crewMember.first_name,
+                lastName: crewMember.last_name,
+                alias: crewMember.alias,
+              }).outputFE,
+            }).DELETE
+          }
+        >
+          <div className="flex items-center justify-end">
+            <CustomButton
+              buttonLabel="Delete"
+              variant={"destructive"}
+              icon={TrashIcon}
+              iconPlacement="left"
+              hideLabelOnMobile={false}
+              className="ms-auto max-sm:w-full"
+              onClick={handleDelete}
+            />
+          </div>
+        </ResponsiveDialog>
+
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Save ${crewMembersTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[152px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

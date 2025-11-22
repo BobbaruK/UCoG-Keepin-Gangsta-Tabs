@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
-import { CrewLevel } from "@/features/crew-members/types/level";
+import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
 import { CrewLevelType } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";

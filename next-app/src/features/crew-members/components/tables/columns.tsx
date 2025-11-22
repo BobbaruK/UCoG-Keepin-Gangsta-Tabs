@@ -1,6 +1,7 @@
 "use client";
 
 import { CustomAvatar } from "@/components/custom-avatar";
+import { CustomButton } from "@/components/custom-button";
 import { BossIcon } from "@/components/icons/boss";
 import { StarIcon } from "@/components/icons/star";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { traitsTitle } from "@/constants/page-title/traits";
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -26,7 +28,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { SkullIcon } from "lucide-react";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { CrewMember } from "../../types/crew-member";
 import Points from "./points";
 import RowActions from "./row-actions";
 
@@ -174,12 +175,16 @@ export const columns = ({
               </Tooltip>
             )}
           </div>
-          <div className="my-auto flex items-center gap-2">
-            <Link
-              href={`${playthroughTitle.href}/${member.playthrough.id + crewMembersTitle.href}/${memberId}`}
-            >
-              {fullName}
-            </Link>
+          <div className="my-auto">
+            <CustomButton
+              buttonLabel={fullName}
+              size={"sm"}
+              variant={"link"}
+              noEffect
+              className="p-0"
+              linkHref={`${playthroughTitle.href}/${member.playthrough.id + crewMembersTitle.href}/${memberId}`}
+              skeletonClassName="h-8 w-[120px]"
+            />
           </div>
           {traits.length > 0 && (
             <div className="flex items-center gap-2">
@@ -347,7 +352,7 @@ export const columns = ({
       return (
         <div className="flex flex-col gap-2 px-2">
           {experience.length > 0 ? (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
@@ -355,9 +360,15 @@ export const columns = ({
 
                 return (
                   <li key={exp.id} className="flex items-center gap-2">
-                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
-                      {xpName}
-                    </Link>
+                    <CustomButton
+                      buttonLabel={xpName}
+                      size={"sm"}
+                      variant={"link"}
+                      noEffect
+                      className="p-0"
+                      linkHref={`${crewLevelsTitle.href}/${levelId}`}
+                      skeletonClassName="h-8 w-[120px]"
+                    />
 
                     <Badge>{xpValue}</Badge>
                   </li>
@@ -405,7 +416,7 @@ export const columns = ({
       return (
         <div className="flex flex-col gap-2 px-2">
           {experience.length > 0 ? (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
@@ -413,9 +424,15 @@ export const columns = ({
 
                 return (
                   <li key={exp.id} className="flex items-center gap-2">
-                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
-                      {xpName}
-                    </Link>
+                    <CustomButton
+                      buttonLabel={xpName}
+                      size={"sm"}
+                      variant={"link"}
+                      noEffect
+                      className="p-0"
+                      linkHref={`${crewLevelsTitle.href}/${levelId}`}
+                      skeletonClassName="h-8 w-[120px]"
+                    />
 
                     <Badge>{xpValue}</Badge>
                   </li>
@@ -463,7 +480,7 @@ export const columns = ({
       return (
         <div className="flex flex-col gap-2 px-2">
           {experience.length > 0 ? (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
@@ -471,9 +488,15 @@ export const columns = ({
 
                 return (
                   <li key={exp.id} className="flex items-center gap-2">
-                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
-                      {xpName}
-                    </Link>
+                    <CustomButton
+                      buttonLabel={xpName}
+                      size={"sm"}
+                      variant={"link"}
+                      noEffect
+                      className="p-0"
+                      linkHref={`${crewLevelsTitle.href}/${levelId}`}
+                      skeletonClassName="h-8 w-[120px]"
+                    />
 
                     <Badge>{xpValue}</Badge>
                   </li>
@@ -521,7 +544,7 @@ export const columns = ({
       return (
         <div className="flex flex-col gap-2 px-2">
           {experience.length > 0 ? (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
@@ -529,9 +552,15 @@ export const columns = ({
 
                 return (
                   <li key={exp.id} className="flex items-center gap-2">
-                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
-                      {xpName}
-                    </Link>
+                    <CustomButton
+                      buttonLabel={xpName}
+                      size={"sm"}
+                      variant={"link"}
+                      noEffect
+                      className="p-0"
+                      linkHref={`${crewLevelsTitle.href}/${levelId}`}
+                      skeletonClassName="h-8 w-[120px]"
+                    />
 
                     <Badge>{xpValue}</Badge>
                   </li>
@@ -579,7 +608,7 @@ export const columns = ({
       return (
         <div className="flex flex-col gap-2 px-2">
           {experience.length > 0 ? (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
                 const xpName = exp.level.name;
                 const xpValue = exp.value;
@@ -587,10 +616,15 @@ export const columns = ({
 
                 return (
                   <li key={exp.id} className="flex items-center gap-2">
-                    <Link href={`${crewLevelsTitle.href}/${levelId}`}>
-                      {xpName}
-                    </Link>
-
+                    <CustomButton
+                      buttonLabel={xpName}
+                      size={"sm"}
+                      variant={"link"}
+                      noEffect
+                      className="p-0"
+                      linkHref={`${crewLevelsTitle.href}/${levelId}`}
+                      skeletonClassName="h-8 w-[120px]"
+                    />
                     <Badge>{xpValue}</Badge>
                   </li>
                 );

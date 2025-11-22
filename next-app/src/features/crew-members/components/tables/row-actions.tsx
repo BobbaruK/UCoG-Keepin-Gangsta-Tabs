@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { CrewIcon } from "@/components/icons/crew";
@@ -17,15 +18,15 @@ import {
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
+import { setFullName } from "@/lib/utils/full-name";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteCrewMember } from "../../actions/member/delete";
-import { CrewMember } from "../../types/crew-member";
-import { setFullName } from "@/lib/utils/full-name";
 // const EditPoliceOfficerForm = lazy(() => import("../form/edit"));
 
 interface Props {
@@ -40,7 +41,9 @@ const RowActions = ({ crewMember }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
-      await deleteCrewMember(crewMember.id)
+      setOpenDeleteDialog(false);
+
+      await deleteCrewMember(crewMember)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
@@ -48,6 +51,12 @@ const RowActions = ({ crewMember }: Props) => {
           }
           if (data.success) {
             toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(
+                `${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}`,
+              );
+            }, 250);
           }
         })
         .catch(() => {

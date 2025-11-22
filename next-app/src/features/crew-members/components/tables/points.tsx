@@ -1,4 +1,3 @@
-import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -6,12 +5,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { BASE_ACTION_POINTS, BASE_MOVEMENT_POINTS } from "@/constants/misc";
-import { traitsTitle } from "@/constants/page-title/traits";
-import { SideEffectType } from "@/generated/prisma";
-import { CrewMember } from "../../types/crew-member";
-import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
-import { lawsTitle } from "@/constants/page-title/laws";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
+import { lawsTitle } from "@/constants/page-title/laws";
+import { traitsTitle } from "@/constants/page-title/traits";
+import { CrewMember } from "@/core/db/crew-member/types/crew-member";
+import { SideEffectType } from "@/generated/prisma";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import Link from "next/link";
 
 const basePoints = (type: SideEffectType) => {

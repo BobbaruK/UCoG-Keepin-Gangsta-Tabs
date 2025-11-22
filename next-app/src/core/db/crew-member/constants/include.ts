@@ -39,6 +39,7 @@ export const crewMemberInclude = {
       id: true,
       freight_rail_station: true,
       passenger_rail_station: true,
+      is_finished: true,
       laws: {
         select: {
           name: true,

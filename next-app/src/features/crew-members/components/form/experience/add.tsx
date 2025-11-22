@@ -7,21 +7,20 @@ import * as z from "zod";
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
 import { TrashIcon } from "@/components/icons/trash";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { MESSAGES } from "@/constants/messages";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
 import { addExperiences } from "@/features/crew-members/actions/experience/add";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
@@ -29,9 +28,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { experienceSchema } from "../../../schemas/experience";
-import { CrewLevel } from "../../../types/level";
 import Levels from "../experience/levels";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface Props {
   playthroughId: string;
@@ -261,6 +258,7 @@ const AddExperienceForm = ({ playthroughId, memberId, levels }: Props) => {
           type="submit"
           form={formId}
           disabled={isPending}
+          variant={"success"}
         />
       </div>
     </form>
