@@ -1,9 +1,9 @@
 "use client";
 
+import { Law } from "@/core/db/law/types/law";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";
-import { Law } from "../../types/law";
 import { columns } from "./columns";
 import PaginationActions from "./pagination-actions";
 

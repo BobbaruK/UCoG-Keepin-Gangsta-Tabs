@@ -1,5 +1,6 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
@@ -44,7 +45,11 @@ const AddLawPage = async () => {
         session={session}
       />
 
-      <AddLawForm sideEffects={sideEffects?.data} />
+      <Card>
+        <CardContent>
+          <AddLawForm sideEffects={sideEffects?.data} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

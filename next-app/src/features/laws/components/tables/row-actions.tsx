@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
@@ -14,8 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
+import { Law } from "@/core/db/law/types/law";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
@@ -23,7 +25,6 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteLaw } from "../../actions/delete";
-import { Law } from "../../types/law";
 
 interface Props {
   law: Law;
@@ -37,14 +38,18 @@ const RowActions = ({ law }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
+      setOpenDeleteDialog(false);
       await deleteLaw(law.id)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
-            setOpenDeleteDialog(false);
           }
           if (data.success) {
             toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(lawsTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -71,12 +76,12 @@ const RowActions = ({ law }: Props) => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${lawsTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: lawsTitle.label.singular.toLowerCase(),
+            resourceName: law.name,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

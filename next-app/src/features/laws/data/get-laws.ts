@@ -1,7 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { lawInclude } from "@/core/db/law/constants/include";
+import { Law } from "@/core/db/law/types/law";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Law, lawInclude } from "../types/law";
 
 export const getLaws = async ({
   where,

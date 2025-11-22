@@ -7,9 +7,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Law } from "@/core/db/law/types/law";
 import { LawType } from "@/generated/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
-import { Law } from "../types/law";
 
 interface Props {
   law: Law;

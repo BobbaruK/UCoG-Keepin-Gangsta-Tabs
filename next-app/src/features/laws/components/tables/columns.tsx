@@ -1,8 +1,10 @@
 "use client";
 
+import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
+import { Law } from "@/core/db/law/types/law";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -12,7 +14,6 @@ import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { Law } from "../../types/law";
 import RowActions from "./row-actions";
 
 export const columns = ({
@@ -83,22 +84,19 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const trait = row.original;
-      const name = trait.name;
-      const sideEffectId = trait.id;
-
-      return (
-        <div className="flex items-center gap-2">
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${lawsTitle.href}/${sideEffectId}`}
-          >
-            {name}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <CustomButton
+          buttonLabel={row.original.name}
+          size={"sm"}
+          linkHref={`${lawsTitle.href}/${row.original.id}`}
+          variant={"link"}
+          className=""
+          skeletonClassName="h-9 w-[213px]"
+          noEffect
+        />
+      </div>
+    ),
   },
   // Side effect
   {
@@ -125,33 +123,30 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const trait = row.original;
-      const sideEffect = trait.sideEffect;
-      const sideEffectName = sideEffect?.name;
-      const sideEffectId = sideEffect?.id;
-      const sideEffectValue = sideEffect?.value;
-
-      return sideEffect ? (
-        <Badge
-          asChild
-          variant={
-            sideEffectValue && Math.sign(sideEffectValue) === 1
-              ? "success"
-              : "danger"
-          }
-        >
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${sideEffectsTitle.href}/${sideEffectId}`}
+    cell: ({ row }) => (
+      <div className="px-2">
+        {row.original.sideEffect ? (
+          <Badge
+            asChild
+            variant={
+              row.original.sideEffect.value &&
+              Math.sign(row.original.sideEffect.value) === 1
+                ? "success"
+                : "danger"
+            }
           >
-            {sideEffectName}
-          </Link>
-        </Badge>
-      ) : (
-        "-"
-      );
-    },
+            <Link
+              className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
+              href={`${sideEffectsTitle.href}/${row.original.sideEffect.id}`}
+            >
+              {row.original.sideEffect.name}
+            </Link>
+          </Badge>
+        ) : (
+          "None"
+        )}
+      </div>
+    ),
   },
   // Type
   {
@@ -182,7 +177,7 @@ export const columns = ({
       const law = row.original;
       const type = law.type;
 
-      return capitalizeFirstLetter(type);
+      return <div className="px-2">{capitalizeFirstLetter(type)}</div>;
     },
   },
   // Enact
@@ -209,13 +204,9 @@ export const columns = ({
         />
       );
     },
-
-    cell: ({ row }) => {
-      const law = row.original;
-      const lawEnact = law.enact;
-
-      return lawEnact || "N/A";
-    },
+    cell: ({ row }) => (
+      <div className="px-2">{row.original.enact || "N/A"} </div>
+    ),
   },
   // Revoke
   {
@@ -241,13 +232,9 @@ export const columns = ({
         />
       );
     },
-
-    cell: ({ row }) => {
-      const law = row.original;
-      const lawRevoke = law.revoke;
-
-      return lawRevoke || "N/A";
-    },
+    cell: ({ row }) => (
+      <div className="px-2">{row.original.revoke || "N/A"} </div>
+    ),
   },
   // Description
   {
@@ -309,7 +296,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,
@@ -338,13 +325,15 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center px-2">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => {

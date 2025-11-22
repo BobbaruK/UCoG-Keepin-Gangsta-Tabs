@@ -53,8 +53,6 @@ export const deleteLaw = async (
       where: { id: traitId },
     });
 
-    revalidatePath(lawsTitle.href);
-
     return {
       success: MESSAGES_FN({
         resource: lawsTitle.label.singular.toLowerCase() + "(s)",

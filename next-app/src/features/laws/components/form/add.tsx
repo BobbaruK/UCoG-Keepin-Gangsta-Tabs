@@ -86,7 +86,11 @@ const AddLawForm = ({ sideEffects }: Props) => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -127,7 +131,13 @@ const AddLawForm = ({ sideEffects }: Props) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={comboxSideEffect}
-                      className="w-[200px] justify-between"
+                      className={cn(
+                        "justify-between",
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
                     >
                       {form.getValues("type")
                         ? capitalizeFirstLetter(
@@ -230,6 +240,8 @@ const AddLawForm = ({ sideEffects }: Props) => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("enact", val)}
+                    minValue={0}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
@@ -260,6 +272,8 @@ const AddLawForm = ({ sideEffects }: Props) => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("revoke", val)}
+                    minValue={0}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
@@ -290,7 +304,13 @@ const AddLawForm = ({ sideEffects }: Props) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={comboxSideEffect}
-                      className="w-[200px] justify-between"
+                      className={cn(
+                        "justify-between",
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
                     >
                       {form.getValues("sideEffect")
                         ? sideEffects?.find(
@@ -354,16 +374,28 @@ const AddLawForm = ({ sideEffects }: Props) => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Add ${lawsTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${lawsTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[84px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };
