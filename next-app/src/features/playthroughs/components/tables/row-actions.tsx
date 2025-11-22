@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CastleIcon } from "@/components/icons/castle";
 import { CopyIcon } from "@/components/icons/copy";
@@ -36,6 +37,8 @@ const RowActions = ({ playthrough }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
+      setOpenDeleteDialog(false);
+
       await deletePlaythrough(playthrough)
         .then(async (data) => {
           if (data.error) {
@@ -44,6 +47,10 @@ const RowActions = ({ playthrough }: Props) => {
           }
           if (data.success) {
             toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(playthroughTitle.href);
+            }, 250);
           }
         })
         .catch(() => {

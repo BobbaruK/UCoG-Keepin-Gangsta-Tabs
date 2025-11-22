@@ -1,6 +1,5 @@
 "use server";
 
-import { revPath } from "@/actions/revalidate";
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { UserRole } from "@/generated/prisma";
@@ -61,6 +60,7 @@ export const addPlaythrough = async (
       permissions: {
         playthrough: ["create"],
         crew_member: ["create"],
+        police_officers: ["create"],
       },
     },
   });
@@ -123,8 +123,6 @@ export const addPlaythrough = async (
         auth_userId: user.id,
       },
     });
-
-    revPath(playthroughTitle.href);
 
     return {
       success: MESSAGES_FN({

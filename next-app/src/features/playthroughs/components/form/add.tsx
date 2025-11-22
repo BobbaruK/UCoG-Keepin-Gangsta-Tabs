@@ -173,64 +173,6 @@ const AddPlaythroughForm = ({
                 />
 
                 <Controller
-                  name="passengerRailStation"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field
-                      data-invalid={fieldState.invalid}
-                      orientation={"horizontal"}
-                    >
-                      <FieldContent>
-                        <FieldLabel htmlFor={inputId(field.name)}>
-                          Passenger rail station
-                        </FieldLabel>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </FieldContent>
-
-                      <Switch
-                        id={inputId(field.name)}
-                        aria-invalid={fieldState.invalid}
-                        name={field.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </Field>
-                  )}
-                />
-
-                <Controller
-                  name="freightRailStation"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field
-                      data-invalid={fieldState.invalid}
-                      orientation={"horizontal"}
-                    >
-                      <FieldContent>
-                        <FieldLabel htmlFor={inputId(field.name)}>
-                          Freight rail station
-                        </FieldLabel>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </FieldContent>
-
-                      <Switch
-                        id={inputId(field.name)}
-                        aria-invalid={fieldState.invalid}
-                        name={field.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </Field>
-                  )}
-                />
-
-                <FieldSeparator />
-
-                <Controller
                   name="laws"
                   control={form.control}
                   render={({ field, fieldState }) => (
@@ -282,6 +224,36 @@ const AddPlaythroughForm = ({
                 />
 
                 <Controller
+                  name="passengerRailStation"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      orientation={"horizontal"}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor={inputId(field.name)}>
+                          Passenger rail station
+                        </FieldLabel>
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </FieldContent>
+
+                      <Switch
+                        id={inputId(field.name)}
+                        aria-invalid={fieldState.invalid}
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </Field>
+                  )}
+                />
+
+                <FieldSeparator />
+
+                <Controller
                   name="respectForTheLaw"
                   control={form.control}
                   render={({ field, fieldState }) => (
@@ -298,6 +270,36 @@ const AddPlaythroughForm = ({
                           the effective duration of each bribe by 60 days and
                           reduces the likelihood of a police raid.
                         </FieldDescription>
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </FieldContent>
+
+                      <Switch
+                        id={inputId(field.name)}
+                        aria-invalid={fieldState.invalid}
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </Field>
+                  )}
+                />
+
+                <FieldSeparator />
+
+                <Controller
+                  name="freightRailStation"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      orientation={"horizontal"}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor={inputId(field.name)}>
+                          Freight rail station
+                        </FieldLabel>
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
@@ -614,12 +616,23 @@ const AddPlaythroughForm = ({
           </CardContent>
         </Card>
 
-        <div className="flex items-center justify-end @2xl:col-span-2">
+        <div className="flex items-center justify-end gap-4 @2xl:col-span-2">
+          <CustomButton
+            buttonLabel={`Reset`}
+            type="reset"
+            variant={"outline"}
+            disabled={isPending}
+            skeletonClassName="h-9 w-[68px]"
+            onClick={() => form.reset()}
+          />
+
           <CustomButton
             buttonLabel={`Add ${playthroughTitle.label.singular.toLowerCase()}`}
             type="submit"
+            className=""
             disabled={isPending}
-            skeletonClassName="ms-auto w-32"
+            skeletonClassName="h-9 w-[140px]"
+            variant={"success"}
           />
         </div>
       </div>

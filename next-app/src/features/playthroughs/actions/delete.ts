@@ -58,7 +58,11 @@ export const deletePlaythrough = async (
     body: {
       userId: dataSession.user.id,
       role: dataSession.user.role as UserRole,
-      permissions: { playthrough: ["delete"] },
+      permissions: {
+        playthrough: ["create"],
+        crew_member: ["create"],
+        police_officers: ["create"],
+      },
     },
   });
 
@@ -73,8 +77,6 @@ export const deletePlaythrough = async (
     const data = await db.cog_playthrough.delete({
       where: { id: playthrough.id },
     });
-
-    revalidatePath(playthroughTitle.href);
 
     return {
       success: MESSAGES_FN({

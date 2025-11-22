@@ -1,6 +1,9 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
+import { TrashIcon } from "@/components/icons/trash";
+import ResponsiveDialog from "@/components/responsive-dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Field,
@@ -16,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
@@ -24,10 +27,11 @@ import { cog_law } from "@/generated/prisma";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { deletePlaythrough } from "../../actions/delete";
 import { editPlaythrough } from "../../actions/edit";
 import { EditPlaythroughSchema } from "../../schemas/edit-playthrough";
 
@@ -39,6 +43,7 @@ interface Props {
 const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const form = useForm<z.infer<typeof EditPlaythroughSchema>>({
     resolver: zodResolver(EditPlaythroughSchema),
     defaultValues: {
@@ -68,6 +73,30 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
           if (data.success) {
             toast.success(data.success);
             router.push(playthroughTitle.href);
+          }
+        })
+        .catch(() => {
+          toast.error(MESSAGES.SOMETHING_WRONG);
+        });
+    });
+  };
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      setOpenDeleteDialog(false);
+
+      await deletePlaythrough(playthrough)
+        .then(async (data) => {
+          if (data.error) {
+            toast.error(data.error);
+          }
+          if (data.success) {
+            toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(playthroughTitle.href);
+              router.push(playthroughTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -365,13 +394,64 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
         </CardContent>
       </Card>
 
-      <CustomButton
-        buttonLabel={`Save ${playthroughTitle.label.singular.toLowerCase()}`}
-        type="submit"
-        className="ms-auto"
-        disabled={isPending}
-        skeletonClassName="ms-auto w-32"
-      />
+      <div className="flex items-center justify-end gap-4">
+        <ResponsiveDialog
+          open={openDeleteDialog}
+          setOpen={setOpenDeleteDialog}
+          trigger={{
+            type: "element",
+            element: (
+              <CustomButton
+                buttonLabel="Delete"
+                variant={"destructive"}
+                icon={TrashIcon}
+                iconPlacement="left"
+                className=""
+                disabled={isPending}
+                onClick={() => setOpenDeleteDialog(true)}
+                skeletonClassName="bg-destructive h-9 w-[89px]"
+              />
+            ),
+            hidden: false,
+          }}
+          header={
+            DIALOG_MESSAGES({
+              resource: playthroughTitle.label.singular.toLowerCase(),
+              resourceName: playthrough.name,
+            }).DELETE
+          }
+        >
+          <div className="flex items-center justify-end">
+            <CustomButton
+              buttonLabel="Delete"
+              variant={"destructive"}
+              icon={TrashIcon}
+              iconPlacement="left"
+              hideLabelOnMobile={false}
+              className="ms-auto max-sm:w-full"
+              onClick={handleDelete}
+            />
+          </div>
+        </ResponsiveDialog>
+
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Save ${playthroughTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className="h-9 w-32"
+          disabled={isPending}
+          skeletonClassName="h-9 w-32"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

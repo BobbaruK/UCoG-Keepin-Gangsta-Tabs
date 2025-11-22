@@ -67,7 +67,10 @@ const EditPlaythroughPage = async ({ params }: Props) => {
           },
           {
             href: `${playthroughTitle.href}/${id}`,
-            label: `Edit "${playthrough.name}"`,
+            label: playthrough.name,
+          },
+          {
+            label: `Edit ${playthroughTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
