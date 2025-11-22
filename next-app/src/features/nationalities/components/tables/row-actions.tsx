@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
@@ -14,8 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
+import { Nationality } from "@/core/db/nationality/types/nationality";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
@@ -23,7 +25,6 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteNationality } from "../../actions/delete";
-import { Nationality } from "../../types/nationality";
 
 interface Props {
   nationality: Nationality;
@@ -37,14 +38,19 @@ const RowActions = ({ nationality }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
+      setOpenDeleteDialog(false);
+
       await deleteNationality(nationality.id)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
-            setOpenDeleteDialog(false);
           }
           if (data.success) {
             toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(nationalitiesTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -71,12 +77,12 @@ const RowActions = ({ nationality }: Props) => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${nationalitiesTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: nationalitiesTitle.label.singular.toLowerCase(),
+            resourceName: nationality.name,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

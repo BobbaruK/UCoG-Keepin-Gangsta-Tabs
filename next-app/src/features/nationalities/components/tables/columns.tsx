@@ -1,7 +1,9 @@
 "use client";
 
 import { CustomAvatar } from "@/components/custom-avatar";
+import { CustomButton } from "@/components/custom-button";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
+import { Nationality } from "@/core/db/nationality/types/nationality";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
@@ -10,7 +12,6 @@ import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { Nationality } from "../../types/nationality";
 import RowActions from "./row-actions";
 
 export const columns = ({
@@ -56,6 +57,46 @@ export const columns = ({
       );
     },
   },
+  // Flag
+  {
+    ...columnId({ id: "flag" }),
+    meta: {
+      label: "Flag",
+    },
+    // accessorFn: (originalRow) => originalRow.flag.toLowerCase(),
+    enableHiding: true,
+    enableSorting: false,
+    enablePinning: true,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
+    header: ({ column }) => {
+      return (
+        <THeadDropdown
+          id="flag"
+          label={"Flag"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      );
+    },
+
+    cell: ({ row }) => (
+      <div className="px-2">
+        <Link
+          className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
+          href={`${nationalitiesTitle.href}/${row.original.id}`}
+        >
+          <CustomAvatar
+            image={row.original.flag}
+            className="size-12 rounded-sm border-none"
+            fit="contain"
+          />
+        </Link>
+      </div>
+    ),
+  },
   // Name
   {
     ...columnId({ id: "name" }),
@@ -66,9 +107,9 @@ export const columns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -81,30 +122,16 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const nationality = row.original;
-      const nationalityName = nationality.name;
-      const nationalityId = nationality.id;
-      const nationalityFlag = nationality.flag;
-
-      return (
-        <div className="flex items-center gap-2">
-          {nationalityFlag && (
-            <CustomAvatar
-              image={nationalityFlag}
-              className="rounded-md border-none"
-              fit="contain"
-            />
-          )}
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${nationalitiesTitle.href}/${nationalityId}`}
-          >
-            {nationalityName}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <CustomButton
+        buttonLabel={row.original.name}
+        linkHref={`${nationalitiesTitle.href}/${row.original.id}`}
+        size={"sm"}
+        variant={"link"}
+        skeletonClassName="h-9 w-[121px]"
+        noEffect
+      />
+    ),
   },
   // Description
   {
@@ -166,7 +193,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,

@@ -1,5 +1,6 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
@@ -41,7 +42,11 @@ const AddNationalityPage = async () => {
         session={session}
       />
 
-      <AddNationalityForm />
+      <Card>
+        <CardContent>
+          <AddNationalityForm />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

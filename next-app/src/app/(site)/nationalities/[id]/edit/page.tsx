@@ -1,6 +1,7 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -67,7 +68,10 @@ const EditLawPage = async ({ params }: Props) => {
           },
           {
             href: `${nationalitiesTitle.href}/${id}`,
-            label: `Edit "${nationality.name}"`,
+            label: nationality.name,
+          },
+          {
+            label: `Edit ${nationalitiesTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
@@ -77,7 +81,11 @@ const EditLawPage = async ({ params }: Props) => {
         session={session}
       />
 
-      <EditNationalityForm nationality={nationality} />
+      <Card>
+        <CardContent>
+          <EditNationalityForm nationality={nationality} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

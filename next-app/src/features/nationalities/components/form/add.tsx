@@ -57,7 +57,11 @@ const AddNationalityForm = () => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -129,16 +133,28 @@ const AddNationalityForm = () => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Add ${nationalitiesTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${nationalitiesTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[88px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

@@ -1,7 +1,7 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { Nationality } from "@/core/db/nationality/types/nationality";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { Nationality } from "../types/nationality";
 
 export const getNationalities = async ({
   where,

@@ -53,8 +53,6 @@ export const deleteNationality = async (
       where: { id: traitId },
     });
 
-    revalidatePath(nationalitiesTitle.href);
-
     return {
       success: MESSAGES_FN({
         resource: nationalitiesTitle.label.singular.toLowerCase() + "(s)",
