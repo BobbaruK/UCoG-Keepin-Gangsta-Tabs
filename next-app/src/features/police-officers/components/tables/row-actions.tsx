@@ -39,6 +39,8 @@ const RowActions = ({ policeOfficer }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
+      setOpenDeleteDialog(false);
+
       await deletePoliceOfficer(policeOfficer)
         .then(async (data) => {
           if (data.error) {

@@ -2,6 +2,8 @@
 
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
+import { TrashIcon } from "@/components/icons/trash";
+import ResponsiveDialog from "@/components/responsive-dialog";
 import {
   Field,
   FieldContent,
@@ -14,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
@@ -23,12 +25,14 @@ import { formInputId } from "@/lib/utils/form-input-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { editPoliceOfficer } from "../../actions/edit";
 import { AddPoliceOfficerSchema } from "../../schemas/add";
+import { deletePoliceOfficer } from "../../actions/delete";
+import { revPath } from "@/actions/revalidate";
 
 interface Props {
   policeOfficer: PoliceOfficer;
@@ -37,6 +41,7 @@ interface Props {
 const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const form = useForm<z.infer<typeof AddPoliceOfficerSchema>>({
     resolver: zodResolver(AddPoliceOfficerSchema),
     defaultValues: {
@@ -69,6 +74,34 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
             router.push(
               `${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}`,
             );
+          }
+        })
+        .catch(() => {
+          toast.error(MESSAGES.SOMETHING_WRONG);
+        });
+    });
+  };
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      setOpenDeleteDialog(false);
+
+      await deletePoliceOfficer(policeOfficer)
+        .then(async (data) => {
+          if (data.error) {
+            toast.error(data.error);
+          }
+          if (data.success) {
+            toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(
+                `${playthroughTitle.href}/${policeOfficer.cogPlaythrough.id}/${policeOfficersTitle.href}`,
+              );
+              router.push(
+                `${playthroughTitle.href}/${policeOfficer.cogPlaythrough.id}/${policeOfficersTitle.href}`,
+              );
+            }, 250);
           }
         })
         .catch(() => {
@@ -243,13 +276,64 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
         </FieldGroup>
       </FieldSet>
 
-      <CustomButton
-        buttonLabel={`Save ${policeOfficersTitle.label.singular.toLowerCase()}`}
-        type="submit"
-        className="ms-auto"
-        disabled={isPending}
-        skeletonClassName="ms-auto w-32"
-      />
+      <div className="flex items-center justify-end gap-4">
+        <ResponsiveDialog
+          open={openDeleteDialog}
+          setOpen={setOpenDeleteDialog}
+          trigger={{
+            type: "element",
+            element: (
+              <CustomButton
+                buttonLabel="Delete"
+                variant={"destructive"}
+                icon={TrashIcon}
+                iconPlacement="left"
+                className=""
+                disabled={isPending}
+                onClick={() => setOpenDeleteDialog(true)}
+                skeletonClassName="bg-destructive h-9 w-[89px]"
+              />
+            ),
+            hidden: false,
+          }}
+          header={
+            DIALOG_MESSAGES({
+              resource: policeOfficersTitle.label.singular.toLowerCase(),
+              resourceName: policeOfficer.name,
+            }).DELETE
+          }
+        >
+          <div className="flex items-center justify-end">
+            <CustomButton
+              buttonLabel="Delete"
+              variant={"destructive"}
+              icon={TrashIcon}
+              iconPlacement="left"
+              hideLabelOnMobile={false}
+              className="ms-auto max-sm:w-full"
+              onClick={handleDelete}
+            />
+          </div>
+        </ResponsiveDialog>
+
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Save ${policeOfficersTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className="h-9 w-32"
+          disabled={isPending}
+          skeletonClassName="h-9 w-32"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

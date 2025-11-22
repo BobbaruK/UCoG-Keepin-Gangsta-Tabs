@@ -243,13 +243,25 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
         </FieldGroup>
       </FieldSet>
 
-      <CustomButton
-        buttonLabel={`Add ${policeOfficersTitle.label.singular.toLowerCase()}`}
-        type="submit"
-        className="ms-auto"
-        disabled={isPending}
-        skeletonClassName="ms-auto w-32"
-      />
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${policeOfficersTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[145px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

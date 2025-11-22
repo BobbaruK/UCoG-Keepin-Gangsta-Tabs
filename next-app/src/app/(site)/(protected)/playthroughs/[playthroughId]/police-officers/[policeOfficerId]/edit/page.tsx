@@ -7,18 +7,11 @@ import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { getCaptainRoles } from "@/features/captain-roles/data/get";
-import { getCrewLevels } from "@/features/crew-levels/data/get";
-import EditMemberMultiStep from "@/features/crew-members/components/edit-member-multistep";
-import { getCrewMember } from "@/features/crew-members/data/get";
-import { getNationalities } from "@/features/nationalities/data/get-nationalities";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import EditPoliceOfficerForm from "@/features/police-officers/components/form/edit";
 import { getPoliceOfficer } from "@/features/police-officers/data/get";
-import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
-import { setFullName } from "@/lib/utils/full-name";
 import { capitalizeFirstLetter } from "better-auth";
 import { Metadata } from "next";
 import { headers } from "next/headers";
@@ -103,11 +96,6 @@ const EditCrewMemberPage = async ({ params }: Props) => {
       </PageStructure>
     );
 
-  const roles = await getCaptainRoles();
-  const nationalities = await getNationalities();
-  const traits = await getTraits();
-  const levels = await getCrewLevels();
-
   return (
     <PageStructure>
       <PageBreadcrumbs
@@ -127,8 +115,12 @@ const EditCrewMemberPage = async ({ params }: Props) => {
             ),
           },
           {
+            href: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}/${policeOfficer.id}`,
+            label: policeOfficer.name,
+          },
+          {
             href: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}/${policeOfficer.id}/edit`,
-            label: `Edit "${policeOfficer.name}"`,
+            label: `Edit ${policeOfficersTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />

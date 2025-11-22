@@ -1,5 +1,6 @@
 "use client";
 
+import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
@@ -10,7 +11,6 @@ import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import { bribeDuration } from "../../utils/bribe";
 import RowActions from "./row-actions";
@@ -70,9 +70,9 @@ export const columns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -85,21 +85,16 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const policeOfficer = row.original;
-      const id = policeOfficer.id;
-      const name = policeOfficer.name;
-
-      return (
-        <div className="flex items-center gap-2 px-2">
-          <Link
-            href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${id}`}
-          >
-            {name}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <CustomButton
+        buttonLabel={row.original.name}
+        linkHref={`${playthroughTitle.href}/${row.original.cogPlaythrough.id + policeOfficersTitle.href}/${row.original.id}`}
+        size={"sm"}
+        variant={"link"}
+        skeletonClassName="h-9 w-[121px]"
+        noEffect
+      />
+    ),
   },
   // Bribed turn
   {
@@ -366,13 +361,15 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => (
