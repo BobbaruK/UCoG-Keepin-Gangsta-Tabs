@@ -1,6 +1,7 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
+import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -67,7 +68,10 @@ const EditResourceTypePage = async ({ params }: Props) => {
           },
           {
             href: `${resourceTypesTitle.href}/${id}`,
-            label: `Edit "${resourceType.name}"`,
+            label: resourceType.name,
+          },
+          {
+            label: `Edit ${resourceTypesTitle.label.singular.toLowerCase()}`,
           },
         ])}
       />
@@ -77,7 +81,11 @@ const EditResourceTypePage = async ({ params }: Props) => {
         session={session}
       />
 
-      <EditResourceTypeForm resourceType={resourceType} />
+      <Card>
+        <CardContent>
+          <EditResourceTypeForm resourceType={resourceType} />
+        </CardContent>
+      </Card>
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

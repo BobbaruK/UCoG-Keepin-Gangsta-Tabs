@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { AnvilIcon } from "@/components/icons/anvil";
 import { CopyIcon } from "@/components/icons/copy";
@@ -14,8 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MESSAGES } from "@/constants/messages";
+import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
+import { ResourceType } from "@/core/db/resource-type/types/resource-type";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
@@ -23,7 +25,6 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteResourceType } from "../../actions/delete";
-import { ResourceType } from "../../types/resource-type";
 
 interface Props {
   resourceType: ResourceType;
@@ -37,14 +38,19 @@ const RowActions = ({ resourceType }: Props) => {
 
   const handleDelete = () => {
     startTransition(async () => {
+      setOpenDeleteDialog(false);
+
       await deleteResourceType(resourceType.id)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
-            setOpenDeleteDialog(false);
           }
           if (data.success) {
             toast.success(data.success);
+
+            setTimeout(() => {
+              revPath(resourceTypesTitle.href);
+            }, 250);
           }
         })
         .catch(() => {
@@ -71,12 +77,12 @@ const RowActions = ({ resourceType }: Props) => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete this ${resourceTypesTitle.label.singular.toLowerCase()} and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: resourceTypesTitle.label.singular.toLowerCase(),
+            resourceName: resourceType.name,
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

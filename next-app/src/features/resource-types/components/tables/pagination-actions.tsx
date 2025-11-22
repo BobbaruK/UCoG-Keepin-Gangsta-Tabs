@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
+import { ResourceType } from "@/core/db/resource-type/types/resource-type";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
@@ -22,7 +24,6 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteResourceType } from "../../actions/delete";
-import { ResourceType } from "../../types/resource-type";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -81,12 +82,11 @@ const PaginationActions = () => {
           ),
           hidden: true,
         }}
-        header={{
-          title: {
-            label: "Are you absolutely sure?",
-          },
-          description: `This action cannot be undone. This will permanently delete selected ${resourceTypesTitle.label.singular.toLowerCase()}(s) and remove it's data from our servers.`,
-        }}
+        header={
+          DIALOG_MESSAGES({
+            resource: resourceTypesTitle.label.singular.toLowerCase(),
+          }).DELETE
+        }
       >
         <div className="flex items-center justify-end">
           <CustomButton

@@ -29,7 +29,7 @@ const AddResourceTypeForm = () => {
     resolver: zodResolver(AddResourceTypeSchema),
     defaultValues: {
       name: "",
-      capacity: 0,
+      capacity: 1,
     },
   });
 
@@ -56,7 +56,11 @@ const AddResourceTypeForm = () => {
   };
 
   return (
-    <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-7"
+    >
       <FieldSet>
         <FieldGroup>
           <Controller
@@ -102,6 +106,7 @@ const AddResourceTypeForm = () => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("capacity", val)}
+                    minValue={1}
                     isPending={isPending}
                   />
                 </div>
@@ -111,16 +116,28 @@ const AddResourceTypeForm = () => {
               </Field>
             )}
           />
-
-          <CustomButton
-            buttonLabel={`Add ${resourceTypesTitle.label.singular.toLowerCase()}`}
-            type="submit"
-            className="ms-auto"
-            disabled={isPending}
-            skeletonClassName="ms-auto w-32"
-          />
         </FieldGroup>
       </FieldSet>
+
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <CustomButton
+          buttonLabel={`Reset`}
+          type="reset"
+          variant={"outline"}
+          disabled={isPending}
+          skeletonClassName="h-9 w-[68px]"
+          onClick={() => form.reset()}
+        />
+
+        <CustomButton
+          buttonLabel={`Add ${resourceTypesTitle.label.singular.toLowerCase()}`}
+          type="submit"
+          className=""
+          disabled={isPending}
+          skeletonClassName="h-9 w-[148px]"
+          variant={"success"}
+        />
+      </div>
     </form>
   );
 };

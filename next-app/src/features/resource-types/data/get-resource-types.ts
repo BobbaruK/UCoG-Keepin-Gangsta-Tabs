@@ -1,7 +1,8 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
+import { resourceTypeInclude } from "@/core/db/resource-type/constants/include";
+import { ResourceType } from "@/core/db/resource-type/types/resource-type";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
-import { ResourceType } from "../types/resource-type";
 
 export const getResourceTypes = async ({
   where,
@@ -24,6 +25,7 @@ export const getResourceTypes = async ({
         ...(where ? { where } : {}),
         skip,
         take: perPage && Math.sign(perPage) === 1 ? pageSize : undefined,
+        include: resourceTypeInclude,
       }),
       db.cog_resource_type.count(),
     ]);

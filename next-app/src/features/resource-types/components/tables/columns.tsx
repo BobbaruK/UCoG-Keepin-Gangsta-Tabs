@@ -1,16 +1,18 @@
 "use client";
 
+import { CustomButton } from "@/components/custom-button";
+import { Badge } from "@/components/ui/badge";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
+import { ResourceType } from "@/core/db/resource-type/types/resource-type";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
 import { dateFormatter } from "@/lib/utils/format-date";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import { TransitionStartFunction } from "react";
-import { ResourceType } from "../../types/resource-type";
 import RowActions from "./row-actions";
+import { ft3m3 } from "@/lib/utils/ft3-m3";
 
 export const columns = ({
   isLoading,
@@ -65,9 +67,9 @@ export const columns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    // size: 110,
-    // minSize: 105,
-    // maxSize: 150,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -80,22 +82,16 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const resourceType = row.original;
-      const name = resourceType.name;
-      const id = resourceType.id;
-
-      return (
-        <div className="flex items-center gap-2">
-          <Link
-            className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
-            href={`${resourceTypesTitle.href}/${id}`}
-          >
-            {name}
-          </Link>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <CustomButton
+        buttonLabel={row.original.name}
+        linkHref={`${resourceTypesTitle.href}/${row.original.id}`}
+        size={"sm"}
+        variant={"link"}
+        skeletonClassName="h-9 w-[121px]"
+        noEffect
+      />
+    ),
   },
   // Capacity
   {
@@ -122,12 +118,14 @@ export const columns = ({
       );
     },
 
-    cell: ({ row }) => {
-      const vehicleType = row.original;
-      const capacity = vehicleType.capacity;
-
-      return capacity;
-    },
+    cell: ({ row }) => (
+      <div
+        className="px-2"
+        dangerouslySetInnerHTML={{
+          __html: ft3m3(row.original.capacity).html,
+        }}
+      />
+    ),
   },
   // Created At
   {
@@ -158,7 +156,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2">
           {date
             ? dateFormatter({
                 date,
@@ -187,13 +185,15 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <THeadDropdown
-        id="actions"
-        label={"Actions"}
-        isLoading={isLoading}
-        startTransition={startTransition}
-        column={column}
-      />
+      <div className="grid place-items-center">
+        <THeadDropdown
+          id="actions"
+          label={"Actions"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      </div>
     ),
     enablePinning: true,
     cell: ({ row }) => {

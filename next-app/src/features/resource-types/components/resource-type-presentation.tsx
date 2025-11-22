@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ResourceType } from "../types/resource-type";
+import { ResourceType } from "@/core/db/resource-type/types/resource-type";
 
 interface Props {
   resourceType: ResourceType;
