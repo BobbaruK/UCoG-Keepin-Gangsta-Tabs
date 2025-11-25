@@ -23,8 +23,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const resource = await getResource(id);
 
+  if (!resource)
+    return {
+      title: "Unknown",
+    };
+
   return {
-    title: resource?.name,
+    title: resource.name,
   };
 }
 
@@ -39,11 +44,28 @@ const VehicleTypePage = async ({ params }: Props) => {
   if (!resource)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: resourcesTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  resourcesTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
           label={"unknown"}
           backBtnHref={resourcesTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}

@@ -92,6 +92,7 @@ const ResourceTypesPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={resourcesTitle.label.plural}
         addBtnHref={`${resourcesTitle.href}/add`}

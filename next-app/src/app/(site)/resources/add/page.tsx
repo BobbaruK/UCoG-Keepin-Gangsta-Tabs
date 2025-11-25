@@ -1,12 +1,11 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { resourcesTitle } from "@/constants/page-title/resources";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getResourceTypes } from "@/features/resource-types/data/get-resource-types";
-import AddResourceForm from "@/features/resources/components/form/add";
+import FormCardWrapper from "@/features/resources/components/form-card-wrapper";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -39,17 +38,19 @@ const AddResourceTypePage = async () => {
           },
         ])}
       />
+
       <PageTitle
         label={`Add ${resourcesTitle.label.singular.toLowerCase()}`}
         backBtnHref={resourcesTitle.href}
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <AddResourceForm resourceTypes={resourceTypes?.data || []} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+          resourceTypes: resourceTypes?.data || [],
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

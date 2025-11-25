@@ -2,7 +2,7 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
-import { Badge } from "@/components/ui/badge";
+import { DrillIcon } from "@/components/icons/drill";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { resourcesTitle } from "@/constants/page-title/resources";
 import { Resource } from "@/core/db/resource/types/resource";
@@ -13,11 +13,11 @@ import { columnId } from "@/core/table/lib/utils/column-id";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formatCurrency } from "@/lib/utils/format-currency";
 import { dateFormatter } from "@/lib/utils/format-date";
+import { ft3m3 } from "@/lib/utils/ft3-m3";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
-import { ft3m3 } from "@/lib/utils/ft3-m3";
 
 export const columns = ({
   isLoading,
@@ -97,6 +97,7 @@ export const columns = ({
             image={row.original.image}
             className="size-12 rounded-sm border-none"
             fit="contain"
+            icon={<DrillIcon />}
           />
         </Link>
       </div>

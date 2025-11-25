@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddResourceSchema } from "../schemas/add-resource";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: resourcesTitle.label.singular.toLowerCase(),
+}).RESOURCE_EDIT_UNAUTHORIZED;
+
 export const editResource = async (
   id: string,
   values: z.infer<typeof AddResourceSchema>,
@@ -33,9 +37,7 @@ export const editResource = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: resourcesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -49,9 +51,7 @@ export const editResource = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: resourcesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, image, category, price: pri, type } = validatedFields.data;
@@ -65,7 +65,7 @@ export const editResource = async (
         id,
       },
       data: {
-        name,
+        name: name || "Noname",
         image: image || null,
         category,
         price,
