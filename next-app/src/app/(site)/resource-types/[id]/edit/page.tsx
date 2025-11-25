@@ -7,6 +7,7 @@ import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import FormCardWrapper from "@/features/resource-types/components/form-card-wrapper";
 import EditResourceTypeForm from "@/features/resource-types/components/form/edit";
 import { getResourceType } from "@/features/resource-types/data/get-resource-types";
 import { auth } from "@/lib/auth";
@@ -25,8 +26,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const resourceType = await getResourceType(id);
 
+  if (!resourceType) return { title: "Unknown" };
+
   return {
-    title: `Edit ${resourceType?.name}`,
+    title: `Edit ${resourceType.name}`,
   };
 }
 
@@ -43,11 +46,28 @@ const EditResourceTypePage = async ({ params }: Props) => {
   if (!resourceType)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: resourceTypesTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  resourceTypesTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
-          backBtnHref={`/${resourceTypesTitle.href}`}
+          label={"Unknown"}
+          backBtnHref={resourceTypesTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -81,11 +101,12 @@ const EditResourceTypePage = async ({ params }: Props) => {
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <EditResourceTypeForm resourceType={resourceType} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "edit",
+          resourceType,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

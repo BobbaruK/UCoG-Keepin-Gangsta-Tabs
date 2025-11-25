@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddResourceTypeSchema } from "../schemas/add-resource-type";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: resourceTypesTitle.label.singular.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addResourceType = async (
   values: z.infer<typeof AddResourceTypeSchema>,
 ): Promise<
@@ -32,9 +36,7 @@ export const addResourceType = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: resourceTypesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -48,9 +50,7 @@ export const addResourceType = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: resourceTypesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, capacity: ca } = validatedFields.data;
@@ -61,7 +61,7 @@ export const addResourceType = async (
   try {
     const resourceType = await db.cog_resource_type.create({
       data: {
-        name,
+        name: name || "Noname",
         capacity,
       },
     });

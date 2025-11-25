@@ -23,12 +23,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const resourceType = await getResourceType(id);
 
+  if (!resourceType)
+    return {
+      title: "Unknown",
+    };
+
   return {
-    title: resourceType?.name,
+    title: resourceType.name,
   };
 }
 
-const VehicleTypePage = async ({ params }: Props) => {
+const ResourceTypePage = async ({ params }: Props) => {
   const id = (await params).id;
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -39,11 +44,28 @@ const VehicleTypePage = async ({ params }: Props) => {
   if (!resourceType)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: resourceTypesTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  resourceTypesTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
+          label={"Unknown"}
           backBtnHref={resourceTypesTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -82,4 +104,4 @@ const VehicleTypePage = async ({ params }: Props) => {
   );
 };
 
-export default VehicleTypePage;
+export default ResourceTypePage;
