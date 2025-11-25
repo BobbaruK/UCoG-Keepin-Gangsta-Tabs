@@ -1,14 +1,12 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import FormCardWrapper from "@/features/side-effects/components/form-card-wrapper";
-import EditSideEffectForm from "@/features/side-effects/components/forms/edit";
 import { getSideEffect } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -26,10 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const sideEffect = await getSideEffect(id);
 
-  if (!sideEffect) return { title: "Unknown" };
+  if (!sideEffect)
+    return {
+      title: `Edit ${sideEffectsTitle.label.singular.toLowerCase()}: "Unknown"`,
+    };
 
   return {
-    title: `Edit ${sideEffect?.name}`,
+    title: `Edit ${sideEffectsTitle.label.singular.toLowerCase()}: "${sideEffect.name}"`,
   };
 }
 

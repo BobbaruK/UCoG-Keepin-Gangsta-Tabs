@@ -12,7 +12,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 
 export const metadata: Metadata = {
-  title: `Add ${lawsTitle.label.singular}`,
+  title: `Add ${lawsTitle.label.singular.toLowerCase()}`,
 };
 
 const AddLawPage = async () => {

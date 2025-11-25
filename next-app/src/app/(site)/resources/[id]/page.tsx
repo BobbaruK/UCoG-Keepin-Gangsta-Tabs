@@ -25,11 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!resource)
     return {
-      title: "Unknown",
+      title: `${capitalizeFirstLetter(
+        resourcesTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
     };
 
   return {
-    title: resource.name,
+    title: `${capitalizeFirstLetter(
+      resourcesTitle.label.singular.toLowerCase(),
+    )}: "${resource.name}"`,
   };
 }
 

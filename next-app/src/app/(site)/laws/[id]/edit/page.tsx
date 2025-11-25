@@ -1,14 +1,12 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import FormCardWrapper from "@/features/laws/components/form-card-wrapper";
-import EditLawForm from "@/features/laws/components/form/edit";
 import { getLaw } from "@/features/laws/data/get-laws";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
@@ -27,10 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const law = await getLaw(id);
 
-  if (!law) return { title: "Unknown" };
+  if (!law)
+    return {
+      title: `Edit ${lawsTitle.label.singular.toLowerCase()}: "Unknown"`,
+    };
 
   return {
-    title: `Edit ${law.name}`,
+    title: `Edit ${lawsTitle.label.singular.toLowerCase()}: "${law.name}"`,
   };
 }
 

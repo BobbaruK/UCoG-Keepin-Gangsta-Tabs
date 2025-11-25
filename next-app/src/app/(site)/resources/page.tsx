@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: resourcesTitle.label.plural,
+  title: capitalizeFirstLetter(resourcesTitle.label.plural.toLowerCase()),
 };
 
 const ResourceTypesPage = async ({ searchParams }: Props) => {

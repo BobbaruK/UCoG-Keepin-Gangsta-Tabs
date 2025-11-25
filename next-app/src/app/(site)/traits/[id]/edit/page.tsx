@@ -27,11 +27,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!trait)
     return {
-      title: "Unknown",
+      title: `Edit ${traitsTitle.label.singular.toLowerCase()}: "Unknown"`,
     };
 
   return {
-    title: `Edit ${trait.name}`,
+    title: `Edit ${traitsTitle.label.singular.toLowerCase()}: "${trait.name}"`,
   };
 }
 

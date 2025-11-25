@@ -1,14 +1,12 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import FormCardWrapper from "@/features/resource-types/components/form-card-wrapper";
-import EditResourceTypeForm from "@/features/resource-types/components/form/edit";
 import { getResourceType } from "@/features/resource-types/data/get-resource-types";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -26,10 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const resourceType = await getResourceType(id);
 
-  if (!resourceType) return { title: "Unknown" };
+  if (!resourceType)
+    return {
+      title: `Edit ${resourceTypesTitle.label.singular.toLowerCase()}: "Unknown"`,
+    };
 
   return {
-    title: `Edit ${resourceType.name}`,
+    title: `Edit ${resourceTypesTitle.label.singular.toLowerCase()}: "${resourceType.name}"`,
   };
 }
 

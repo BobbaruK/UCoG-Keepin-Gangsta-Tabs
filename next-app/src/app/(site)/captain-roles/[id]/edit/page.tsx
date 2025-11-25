@@ -25,10 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const captainRole = await getCaptainRole(id);
 
-  if (!captainRole) return { title: "Unknown" };
+  if (!captainRole)
+    return {
+      title: `Edit ${captainRolesTitle.label.singular.toLowerCase()}: "Unknown"`,
+    };
 
   return {
-    title: `Edit ${captainRole.name}`,
+    title: `Edit ${captainRolesTitle.label.singular.toLowerCase()}: "${captainRole.name}"`,
   };
 }
 

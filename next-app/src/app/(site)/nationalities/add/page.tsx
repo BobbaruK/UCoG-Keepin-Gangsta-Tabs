@@ -11,7 +11,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 
 export const metadata: Metadata = {
-  title: `Add ${nationalitiesTitle.label.singular}`,
+  title: `Add ${nationalitiesTitle.label.singular.toLowerCase()}`,
 };
 
 const AddNationalityPage = async () => {

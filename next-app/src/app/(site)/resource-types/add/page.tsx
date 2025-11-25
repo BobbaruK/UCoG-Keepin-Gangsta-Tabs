@@ -11,7 +11,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 
 export const metadata: Metadata = {
-  title: `Add ${resourceTypesTitle.label.singular}`,
+  title: `Add ${resourceTypesTitle.label.singular.toLowerCase()}`,
 };
 
 const AddResourceTypePage = async () => {

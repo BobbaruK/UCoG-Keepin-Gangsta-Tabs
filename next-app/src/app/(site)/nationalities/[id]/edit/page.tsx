@@ -1,14 +1,12 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import FormCardWrapper from "@/features/nationalities/components/form-card-wrapper";
-import EditNationalityForm from "@/features/nationalities/components/form/edit";
 import { getNationality } from "@/features/nationalities/data/get-nationalities";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -26,10 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const nationality = await getNationality(id);
 
-  if (!nationality) return { title: "Unknown" };
+  if (!nationality)
+    return {
+      title: `Edit ${nationalitiesTitle.label.singular.toLowerCase()}: "Unknown"`,
+    };
 
   return {
-    title: `Edit ${nationality.name}`,
+    title: `Edit ${nationalitiesTitle.label.singular.toLowerCase()}: "${nationality.name}"`,
   };
 }
 

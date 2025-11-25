@@ -23,10 +23,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const law = await getLaw(id);
 
-  if (!law) return { title: "Unknown" };
+  if (!law)
+    return {
+      title: `${capitalizeFirstLetter(
+        lawsTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
+    };
 
   return {
-    title: law.name,
+    title: `${capitalizeFirstLetter(
+      lawsTitle.label.singular.toLowerCase(),
+    )}: "${law.name}"`,
   };
 }
 

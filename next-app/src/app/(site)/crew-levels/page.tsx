@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: crewLevelsTitle.label.plural,
+  title: capitalizeFirstLetter(crewLevelsTitle.label.plural.toLowerCase()),
 };
 
 const CrewLevelsPage = async ({ searchParams }: Props) => {

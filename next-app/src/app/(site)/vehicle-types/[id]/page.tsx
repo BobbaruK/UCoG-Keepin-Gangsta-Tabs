@@ -25,11 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!vehicleType)
     return {
-      title: "Unknown",
+      title: `${capitalizeFirstLetter(
+        vehicleTypesTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
     };
 
   return {
-    title: vehicleType.name,
+    title: `${capitalizeFirstLetter(
+      vehicleTypesTitle.label.singular.toLowerCase(),
+    )}: "${vehicleType.name}"`,
   };
 }
 

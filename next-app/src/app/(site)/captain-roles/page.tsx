@@ -4,8 +4,8 @@ import { loadSearchParams } from "@/components/search-params";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import { DataTableTransitionWrapper } from "@/features/captain-roles/components/tables/data-table-transition-wrapper";
+import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: captainRolesTitle.label.plural,
+  title: capitalizeFirstLetter(captainRolesTitle.label.plural.toLowerCase()),
 };
 
 const CaptainRolesPage = async ({ searchParams }: Props) => {

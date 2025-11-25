@@ -26,12 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!level) {
     return {
-      title: "Unknown",
+      title: `Edit ${crewLevelsTitle.label.singular.toLowerCase()}: "Unknown"`,
     };
   }
 
   return {
-    title: `Edit ${level?.name}`,
+    title: `Edit ${crewLevelsTitle.label.singular.toLowerCase()}: "${level.name}"`,
   };
 }
 

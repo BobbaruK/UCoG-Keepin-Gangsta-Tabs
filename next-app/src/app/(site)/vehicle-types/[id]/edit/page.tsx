@@ -1,14 +1,12 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import FormCardWrapper from "@/features/vehicle-types/components/form-card-wrapper";
-import EditVehicleTypeForm from "@/features/vehicle-types/components/form/edit";
 import { getVehicleType } from "@/features/vehicle-types/data/get-vehicle-types";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -28,11 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!vehicleType)
     return {
-      title: "Unknown",
+      title: `Edit ${vehicleTypesTitle.label.singular.toLowerCase()}: "Unknown"`,
     };
 
   return {
-    title: `Edit ${vehicleType.name}`,
+    title: `Edit ${vehicleTypesTitle.label.singular.toLowerCase()}: "${vehicleType.name}"`,
   };
 }
 

@@ -1,7 +1,6 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { resourcesTitle } from "@/constants/page-title/resources";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
@@ -9,7 +8,6 @@ import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getResourceTypes } from "@/features/resource-types/data/get-resource-types";
 import FormCardWrapper from "@/features/resources/components/form-card-wrapper";
-import EditResourceForm from "@/features/resources/components/form/edit";
 import { getResource } from "@/features/resources/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -27,10 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const resource = await getResource(id);
 
-  if (!resource) return { title: "Unknown" };
+  if (!resource)
+    return {
+      title: `Edit ${resourcesTitle.label.singular.toLowerCase()}: "Unknown"`,
+    };
 
   return {
-    title: `Edit ${resource.name}`,
+    title: `Edit ${resourcesTitle.label.singular.toLowerCase()}: "${resource.name}"`,
   };
 }
 
