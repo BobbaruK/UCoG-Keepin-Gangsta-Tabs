@@ -36,6 +36,8 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { deleteSideEffect } from "../../actions/delete";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 interface Props {
   sideEffect: SideEffect;
@@ -290,3 +292,39 @@ const EditSideEffectForm = ({ sideEffect }: Props) => {
 };
 
 export default EditSideEffectForm;
+
+export function EditSideEffectFormSkeleton({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("space-y-7", className)} {...restProps}>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-16 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <Skeleton className="bg-destructive h-9 w-[89px]" />
+        <Skeleton className="bg-muted h-9 w-[68px] border" />
+        <Skeleton className="bg-success h-9 w-[131px]" />
+      </div>
+    </div>
+  );
+}

@@ -23,6 +23,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const sideEffect = await getSideEffect(id);
 
+  if (!sideEffect)
+    return {
+      title: "Unknown",
+    };
+
   return {
     title: sideEffect?.name,
   };
@@ -39,11 +44,28 @@ const SideEffectPage = async ({ params }: Props) => {
   if (!sideEffect)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: sideEffectsTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  sideEffectsTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
+          label={"Unknown"}
           backBtnHref={sideEffectsTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}

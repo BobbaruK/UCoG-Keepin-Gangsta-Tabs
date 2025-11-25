@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { SideEffectSchema } from "../schemas/side-effect";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: sideEffectsTitle.label.singular.toLowerCase(),
+}).RESOURCE_EDIT_UNAUTHORIZED;
+
 export const editSideEffect = async (
   id: string,
   values: z.infer<typeof SideEffectSchema>,
@@ -33,9 +37,7 @@ export const editSideEffect = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: sideEffectsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -49,9 +51,7 @@ export const editSideEffect = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: sideEffectsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, type, value, description } = validatedFields.data;
@@ -60,7 +60,7 @@ export const editSideEffect = async (
     const sideEffect = await db.cog_side_effect.update({
       where: { id },
       data: {
-        name,
+        name: name || "Noname",
         value,
         type,
         description: description || null,

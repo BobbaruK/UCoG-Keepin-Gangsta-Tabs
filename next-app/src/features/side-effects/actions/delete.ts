@@ -8,6 +8,10 @@ import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
 import { headers } from "next/headers";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: sideEffectsTitle.label.singular.toLowerCase(),
+}).RESOURCE_DELETE_UNAUTHORIZED;
+
 export const deleteSideEffect = async (
   id: string,
 ): Promise<
@@ -26,9 +30,7 @@ export const deleteSideEffect = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: sideEffectsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -42,9 +44,7 @@ export const deleteSideEffect = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: sideEffectsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   try {

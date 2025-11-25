@@ -71,6 +71,7 @@ const SideEffectsPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={sideEffectsTitle.label.plural}
         addBtnHref={`${sideEffectsTitle.href}/add`}

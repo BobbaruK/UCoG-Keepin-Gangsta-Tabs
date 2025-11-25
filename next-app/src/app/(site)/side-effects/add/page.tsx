@@ -5,6 +5,7 @@ import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import FormCardWrapper from "@/features/side-effects/components/form-card-wrapper";
 import AddSideEffectForm from "@/features/side-effects/components/forms/add";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -36,17 +37,18 @@ const SideEffectsPage = async () => {
           },
         ])}
       />
+
       <PageTitle
         label={`Add ${sideEffectsTitle.label.singular.toLowerCase()}`}
         backBtnHref={sideEffectsTitle.href}
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <AddSideEffectForm />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>
