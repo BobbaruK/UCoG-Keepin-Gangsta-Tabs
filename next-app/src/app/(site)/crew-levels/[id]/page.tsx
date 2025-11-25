@@ -23,13 +23,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const level = await getCrewLevel(id);
 
+  if (!level) {
+    return {
+      title: "Unknown",
+    };
+  }
+
   return {
-    title: level?.name,
+    title: level.name,
   };
 }
 
 const CaptainRolePage = async ({ params }: Props) => {
   const id = (await params).id;
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -39,11 +46,28 @@ const CaptainRolePage = async ({ params }: Props) => {
   if (!level)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: crewLevelsTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  crewLevelsTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
           label={"unknown"}
           backBtnHref={crewLevelsTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}

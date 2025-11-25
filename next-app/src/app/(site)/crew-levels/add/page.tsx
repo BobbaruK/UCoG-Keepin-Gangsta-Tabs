@@ -1,11 +1,10 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import AddCrewLevelForm from "@/features/crew-levels/components/form/add";
+import FormCardWrapper from "@/features/crew-levels/components/form-card-wrapper";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -42,11 +41,11 @@ const AddCrewLevelPage = async () => {
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <AddCrewLevelForm />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

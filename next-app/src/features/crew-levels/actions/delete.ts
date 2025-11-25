@@ -8,6 +8,10 @@ import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
 import { headers } from "next/headers";
 
+const UNAUTHORIZE = MESSAGES_FN({
+  resource: crewLevelsTitle.label.singular.toLowerCase(),
+}).RESOURCE_DELETE_UNAUTHORIZED;
+
 export const deleteCrewLevel = async (
   resourceId: string,
 ): Promise<
@@ -26,9 +30,7 @@ export const deleteCrewLevel = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: crewLevelsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZE,
     };
   }
 
@@ -42,9 +44,7 @@ export const deleteCrewLevel = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: crewLevelsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZE,
     };
 
   try {

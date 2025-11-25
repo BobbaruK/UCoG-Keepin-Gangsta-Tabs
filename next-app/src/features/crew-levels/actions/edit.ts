@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddCrewLevelSchema } from "../schemas/add-level";
 
+const UNAUTHORIZE = MESSAGES_FN({
+  resource: crewLevelsTitle.label.singular.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const editCrewLevel = async (
   id: string,
   values: z.infer<typeof AddCrewLevelSchema>,
@@ -33,9 +37,7 @@ export const editCrewLevel = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: crewLevelsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZE,
     };
   }
 
@@ -49,9 +51,7 @@ export const editCrewLevel = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: crewLevelsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZE,
     };
 
   const { name, description, maxLevel, type } = validatedFields.data;
@@ -62,7 +62,7 @@ export const editCrewLevel = async (
         id,
       },
       data: {
-        name,
+        name: name || "Noname",
         description: description || null,
         max_level: maxLevel,
         type,
