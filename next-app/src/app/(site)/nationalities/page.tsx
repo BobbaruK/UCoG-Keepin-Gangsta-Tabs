@@ -50,7 +50,7 @@ const NationalitiesPage = async ({ searchParams }: Props) => {
     },
   });
 
-  const selectedLaws = await getNationalities({
+  const selectedNationalities = await getNationalities({
     where: {
       id: {
         in: selected || [],
@@ -69,6 +69,7 @@ const NationalitiesPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={nationalitiesTitle.label.plural}
         addBtnHref={`${nationalitiesTitle.href}/add`}
@@ -78,7 +79,7 @@ const NationalitiesPage = async ({ searchParams }: Props) => {
       <DataTableTransitionWrapper
         data={nationalities?.data || []}
         dataCount={nationalities?.count || 0}
-        dataSelected={selectedLaws?.data || []}
+        dataSelected={selectedNationalities?.data || []}
       />
 
       {/* <div>

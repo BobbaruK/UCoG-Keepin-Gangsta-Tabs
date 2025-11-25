@@ -7,6 +7,7 @@ import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import FormCardWrapper from "@/features/nationalities/components/form-card-wrapper";
 import EditNationalityForm from "@/features/nationalities/components/form/edit";
 import { getNationality } from "@/features/nationalities/data/get-nationalities";
 import { auth } from "@/lib/auth";
@@ -25,8 +26,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const nationality = await getNationality(id);
 
+  if (!nationality) return { title: "Unknown" };
+
   return {
-    title: `Edit ${nationality?.name}`,
+    title: `Edit ${nationality.name}`,
   };
 }
 
@@ -43,11 +46,28 @@ const EditLawPage = async ({ params }: Props) => {
   if (!nationality)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: nationalitiesTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  nationalitiesTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
-          backBtnHref={`/${nationalitiesTitle.href}`}
+          label={"Unknown"}
+          backBtnHref={nationalitiesTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -75,17 +95,19 @@ const EditLawPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={`Edit "${nationality.name}"`}
         backBtnHref={`${nationalitiesTitle.href}/${id}`}
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <EditNationalityForm nationality={nationality} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "edit",
+          nationality,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

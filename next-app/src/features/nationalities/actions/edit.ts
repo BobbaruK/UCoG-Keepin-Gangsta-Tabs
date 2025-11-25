@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddNationalitySchema } from "../schemas/add-nationality";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: nationalitiesTitle.label.singular.toLowerCase(),
+}).RESOURCE_EDIT_UNAUTHORIZED;
+
 export const editNationality = async (
   id: string,
   values: z.infer<typeof AddNationalitySchema>,
@@ -33,9 +37,7 @@ export const editNationality = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: nationalitiesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -49,9 +51,7 @@ export const editNationality = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: nationalitiesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, flag, description } = validatedFields.data;

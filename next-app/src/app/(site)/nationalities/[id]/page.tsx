@@ -23,8 +23,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const nationality = await getNationality(id);
 
+  if (!nationality)
+    return {
+      title: "Unknown",
+    };
+
   return {
-    title: nationality?.name,
+    title: nationality.name,
   };
 }
 
@@ -39,11 +44,28 @@ const LawPage = async ({ params }: Props) => {
   if (!nationality)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: nationalitiesTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  nationalitiesTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
+          label={"Unknown"}
           backBtnHref={nationalitiesTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -66,6 +88,7 @@ const LawPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={nationality.name}
         backBtnHref={nationalitiesTitle.href}

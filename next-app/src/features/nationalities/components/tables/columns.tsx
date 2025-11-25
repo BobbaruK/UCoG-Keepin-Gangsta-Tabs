@@ -2,6 +2,7 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
+import { FlagIcon } from "@/components/icons/flag";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { Nationality } from "@/core/db/nationality/types/nationality";
 import { SelectCell } from "@/core/table/components/select-column/cell";
@@ -92,6 +93,7 @@ export const columns = ({
             image={row.original.flag}
             className="size-12 rounded-sm border-none"
             fit="contain"
+            icon={<FlagIcon />}
           />
         </Link>
       </div>

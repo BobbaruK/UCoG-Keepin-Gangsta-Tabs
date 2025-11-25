@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddNationalitySchema } from "../schemas/add-nationality";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: nationalitiesTitle.label.singular.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addNationality = async (
   values: z.infer<typeof AddNationalitySchema>,
 ): Promise<
@@ -32,9 +36,7 @@ export const addNationality = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: nationalitiesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -48,9 +50,7 @@ export const addNationality = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: nationalitiesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, flag, description } = validatedFields.data;
@@ -58,7 +58,7 @@ export const addNationality = async (
   try {
     const nationality = await db.cog_nationality.create({
       data: {
-        name,
+        name: name || "Noname",
         flag: flag || null,
         description: description || null,
       },
