@@ -5,6 +5,7 @@ import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import FormCardWrapper from "@/features/vehicle-types/components/form-card-wrapper";
 import AddVehicleTypeForm from "@/features/vehicle-types/components/form/add";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -36,17 +37,18 @@ const AddVehicleTypePage = async () => {
           },
         ])}
       />
+
       <PageTitle
         label={`Add ${vehicleTypesTitle.label.singular.toLowerCase()}`}
         backBtnHref={vehicleTypesTitle.href}
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <AddVehicleTypeForm />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

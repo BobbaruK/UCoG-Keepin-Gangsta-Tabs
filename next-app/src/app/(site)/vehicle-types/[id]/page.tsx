@@ -23,8 +23,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const vehicleType = await getVehicleType(id);
 
+  if (!vehicleType)
+    return {
+      title: "Unknown",
+    };
+
   return {
-    title: vehicleType?.name,
+    title: vehicleType.name,
   };
 }
 
@@ -39,8 +44,22 @@ const VehicleTypePage = async ({ params }: Props) => {
   if (!vehicleType)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: vehicleTypesTitle.href,
+              label: capitalizeFirstLetter(
+                vehicleTypesTitle.label.plural.toLowerCase(),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
+          label={"Unknown"}
           backBtnHref={vehicleTypesTitle.href}
           session={session}
         />
@@ -68,6 +87,7 @@ const VehicleTypePage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={vehicleType.name}
         backBtnHref={vehicleTypesTitle.href}

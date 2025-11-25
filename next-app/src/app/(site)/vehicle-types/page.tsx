@@ -69,6 +69,7 @@ const VehicleTypesPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={vehicleTypesTitle.label.plural}
         addBtnHref={`${vehicleTypesTitle.href}/add`}

@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddVehicleTypeSchema } from "../schemas/add-vehicle-type";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: vehicleTypesTitle.label.singular.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addVehicleType = async (
   values: z.infer<typeof AddVehicleTypeSchema>,
 ): Promise<
@@ -32,9 +36,7 @@ export const addVehicleType = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: vehicleTypesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -48,9 +50,7 @@ export const addVehicleType = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: vehicleTypesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, capacity } = validatedFields.data;
@@ -58,7 +58,7 @@ export const addVehicleType = async (
   try {
     const vehicleType = await db.cog_vehicle_type.create({
       data: {
-        name,
+        name: name || "Noname",
         capacity,
       },
     });

@@ -8,6 +8,10 @@ import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
 import { headers } from "next/headers";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: vehicleTypesTitle.label.singular.toLowerCase(),
+}).RESOURCE_DELETE_UNAUTHORIZED;
+
 export const deleteVehicleType = async (
   traitId: string,
 ): Promise<
@@ -26,9 +30,7 @@ export const deleteVehicleType = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: vehicleTypesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -42,17 +44,13 @@ export const deleteVehicleType = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: vehicleTypesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   try {
     const vehicleTypes = await db.cog_vehicle_type.delete({
       where: { id: traitId },
     });
-
-    // revalidatePath(vehicleTypesTitle.href);
 
     return {
       success: MESSAGES_FN({

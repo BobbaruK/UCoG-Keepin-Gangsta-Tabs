@@ -13,9 +13,11 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { cog_vehicle_type } from "@/generated/prisma";
+import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -211,3 +213,31 @@ const EditVehicleTypeForm = ({ vehicleType }: Props) => {
 };
 
 export default EditVehicleTypeForm;
+
+export function EditVehicleTypeFormSkeleton({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("space-y-7", className)} {...restProps}>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <Skeleton className="bg-destructive h-9 w-[89px]" />
+        <Skeleton className="bg-muted h-9 w-[68px] border" />
+        <Skeleton className="bg-success h-9 w-[141px]" />
+      </div>
+    </div>
+  );
+}

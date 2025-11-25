@@ -7,6 +7,7 @@ import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import FormCardWrapper from "@/features/vehicle-types/components/form-card-wrapper";
 import EditVehicleTypeForm from "@/features/vehicle-types/components/form/edit";
 import { getVehicleType } from "@/features/vehicle-types/data/get-vehicle-types";
 import { auth } from "@/lib/auth";
@@ -25,8 +26,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const vehicleType = await getVehicleType(id);
 
+  if (!vehicleType)
+    return {
+      title: "Unknown",
+    };
+
   return {
-    title: `Edit ${vehicleType?.name}`,
+    title: `Edit ${vehicleType.name}`,
   };
 }
 
@@ -43,8 +49,22 @@ const EditVehicleTypePage = async ({ params }: Props) => {
   if (!vehicleType)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: vehicleTypesTitle.href,
+              label: capitalizeFirstLetter(
+                vehicleTypesTitle.label.plural.toLowerCase(),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
+          label={"Unknown"}
           backBtnHref={`${vehicleTypesTitle.href}`}
           session={session}
         />
@@ -75,17 +95,19 @@ const EditVehicleTypePage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={`Edit "${vehicleType.name}"`}
         backBtnHref={`${vehicleTypesTitle.href}/${id}`}
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <EditVehicleTypeForm vehicleType={vehicleType} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "edit",
+          vehicleType,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>
