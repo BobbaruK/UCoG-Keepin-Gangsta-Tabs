@@ -77,6 +77,7 @@ const LawsPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={lawsTitle.label.plural}
         addBtnHref={`${lawsTitle.href}/add`}

@@ -6,8 +6,11 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: lawsTitle.label.singular.toLowerCase(),
+}).RESOURCE_DELETE_UNAUTHORIZED;
 
 export const deleteLaw = async (
   traitId: string,
@@ -27,9 +30,7 @@ export const deleteLaw = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: lawsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -43,9 +44,7 @@ export const deleteLaw = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: lawsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   try {

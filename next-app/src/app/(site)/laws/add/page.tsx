@@ -1,11 +1,10 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import AddLawForm from "@/features/laws/components/form/add";
+import FormCardWrapper from "@/features/laws/components/form-card-wrapper";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -45,11 +44,12 @@ const AddLawPage = async () => {
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <AddLawForm sideEffects={sideEffects?.data} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+          sideEffects: sideEffects?.data,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

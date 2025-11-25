@@ -23,8 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const law = await getLaw(id);
 
+  if (!law) return { title: "Unknown" };
+
   return {
-    title: law?.name,
+    title: law.name,
   };
 }
 
@@ -39,11 +41,26 @@ const LawPage = async ({ params }: Props) => {
   if (!law)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: lawsTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(lawsTitle.label.plural.toLowerCase()),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
           label={"unknown"}
           backBtnHref={lawsTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}

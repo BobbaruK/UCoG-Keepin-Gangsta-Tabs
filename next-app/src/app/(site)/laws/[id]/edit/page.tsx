@@ -7,6 +7,7 @@ import { lawsTitle } from "@/constants/page-title/laws";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import FormCardWrapper from "@/features/laws/components/form-card-wrapper";
 import EditLawForm from "@/features/laws/components/form/edit";
 import { getLaw } from "@/features/laws/data/get-laws";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
@@ -26,8 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const law = await getLaw(id);
 
+  if (!law) return { title: "Unknown" };
+
   return {
-    title: `Edit ${law?.name}`,
+    title: `Edit ${law.name}`,
   };
 }
 
@@ -46,11 +49,26 @@ const EditLawPage = async ({ params }: Props) => {
   if (!law)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: lawsTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(lawsTitle.label.plural.toLowerCase()),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
           label={"unknown"}
-          backBtnHref={`/${lawsTitle.href}`}
+          backBtnHref={lawsTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -82,11 +100,13 @@ const EditLawPage = async ({ params }: Props) => {
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <EditLawForm law={law} sideEffects={sideEffects?.data} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "edit",
+          law,
+          sideEffects: sideEffects?.data,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

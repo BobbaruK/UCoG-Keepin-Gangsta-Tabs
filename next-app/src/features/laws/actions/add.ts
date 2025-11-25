@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddLawSchema } from "../schemas/add-law";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: lawsTitle.label.singular.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addLaw = async (
   values: z.infer<typeof AddLawSchema>,
 ): Promise<
@@ -32,9 +36,7 @@ export const addLaw = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: lawsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -48,9 +50,7 @@ export const addLaw = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: lawsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const {
@@ -69,7 +69,7 @@ export const addLaw = async (
   try {
     const law = await db.cog_law.create({
       data: {
-        name,
+        name: name || "Noname",
         description: description || null,
         enact,
         revoke,

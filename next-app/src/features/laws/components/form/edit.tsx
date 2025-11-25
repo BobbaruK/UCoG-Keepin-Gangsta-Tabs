@@ -1,5 +1,6 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
 import { TrashIcon } from "@/components/icons/trash";
@@ -26,6 +27,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
@@ -43,7 +45,6 @@ import z from "zod";
 import { deleteLaw } from "../../actions/delete";
 import { editLaw } from "../../actions/edit";
 import { AddLawSchema } from "../../schemas/add-law";
-import { revPath } from "@/actions/revalidate";
 
 interface Props {
   law: cog_law;
@@ -453,7 +454,6 @@ const EditLawForm = ({ law, sideEffects }: Props) => {
             <CustomButton
               buttonLabel={`Save ${lawsTitle.label.singular.toLowerCase()}`}
               type="submit"
-              className="h-9 w-32"
               disabled={isPending}
               skeletonClassName="h-9 w-32"
               variant={"success"}
@@ -466,3 +466,52 @@ const EditLawForm = ({ law, sideEffects }: Props) => {
 };
 
 export default EditLawForm;
+
+export function EditLawFormSkeleton({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("space-y-7", className)} {...restProps}>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-16 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+        </div>
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+        </div>
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <Skeleton className="bg-destructive h-9 w-[89px]" />
+        <Skeleton className="bg-muted h-9 w-[68px] border" />
+        <Skeleton className="bg-success h-9 w-[87px]" />
+      </div>
+    </div>
+  );
+}
