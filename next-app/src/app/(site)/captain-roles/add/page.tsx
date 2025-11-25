@@ -1,11 +1,10 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import AddCaptainRoleForm from "@/features/captain-roles/components/form/add";
+import FormCardWrapper from "@/features/captain-roles/components/form-card-wrapper";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -39,17 +38,19 @@ const AddCaptainRolePage = async () => {
           },
         ])}
       />
+
       <PageTitle
         label={`Add ${captainRolesTitle.label.singular.toLowerCase()}`}
         backBtnHref={captainRolesTitle.href}
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <AddCaptainRoleForm sideEffects={sideEffects?.data || []} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+          sideEffects: sideEffects?.data || [],
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

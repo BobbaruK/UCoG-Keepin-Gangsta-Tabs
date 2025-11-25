@@ -2,6 +2,8 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
+import { TrashIcon } from "@/components/icons/trash";
+import ResponsiveDialog from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -24,6 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
@@ -41,8 +44,6 @@ import z from "zod";
 import { deleteCaptainRole } from "../../actions/delete";
 import { editCaptainRole } from "../../actions/edit";
 import { AddCaptainRoleSchema } from "../../schemas/add-captain-role";
-import ResponsiveDialog from "@/components/responsive-dialog";
-import { TrashIcon } from "@/components/icons/trash";
 
 interface Props {
   role: CaptainRole;
@@ -349,3 +350,34 @@ const EditCaptainRoleForm = ({ role, sideEffects }: Props) => {
 };
 
 export default EditCaptainRoleForm;
+
+export function EditCaptainRoleFormSkeleton({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("space-y-7", className)} {...restProps}>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-16 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <Skeleton className="bg-destructive h-9 w-[89px]" />
+        <Skeleton className="bg-muted h-9 w-[68px] border" />
+        <Skeleton className="bg-success h-9 w-[140px]" />
+      </div>
+    </div>
+  );
+}

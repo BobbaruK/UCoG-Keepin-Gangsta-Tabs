@@ -23,6 +23,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const captainRole = await getCaptainRole(id);
 
+  if (!captainRole)
+    return {
+      title: "Unknown",
+    };
+
   return {
     title: captainRole?.name,
   };
@@ -39,11 +44,28 @@ const CaptainRolePage = async ({ params }: Props) => {
   if (!captainRole)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: captainRolesTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(
+                  captainRolesTitle.label.plural.toLowerCase(),
+                ),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
+          label={"Unknown"}
           backBtnHref={captainRolesTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}

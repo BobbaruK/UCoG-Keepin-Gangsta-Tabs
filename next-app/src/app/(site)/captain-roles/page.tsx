@@ -50,7 +50,7 @@ const CaptainRolesPage = async ({ searchParams }: Props) => {
     },
   });
 
-  const selectedResources = await getCaptainRoles({
+  const selectedCaptainRoles = await getCaptainRoles({
     where: {
       id: {
         in: selected || [],
@@ -69,6 +69,7 @@ const CaptainRolesPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={captainRolesTitle.label.plural}
         addBtnHref={`${captainRolesTitle.href}/add`}
@@ -78,7 +79,7 @@ const CaptainRolesPage = async ({ searchParams }: Props) => {
       <DataTableTransitionWrapper
         data={captainRoles?.data || []}
         dataCount={captainRoles?.count || 0}
-        dataSelected={selectedResources?.data || []}
+        dataSelected={selectedCaptainRoles?.data || []}
       />
 
       {/* <div>

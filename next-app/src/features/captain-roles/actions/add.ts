@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddCaptainRoleSchema } from "../schemas/add-captain-role";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: captainRolesTitle.label.plural.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addCaptainRole = async (
   values: z.infer<typeof AddCaptainRoleSchema>,
 ): Promise<
@@ -32,9 +36,7 @@ export const addCaptainRole = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: captainRolesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -48,9 +50,7 @@ export const addCaptainRole = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: captainRolesTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, image, description, sideEffect } = validatedFields.data;
@@ -58,7 +58,7 @@ export const addCaptainRole = async (
   try {
     const role = await db.cog_captain_role.create({
       data: {
-        name,
+        name: name || "Noname",
         image: image || null,
         description: description || null,
         cog_side_effectId: sideEffect || null,
