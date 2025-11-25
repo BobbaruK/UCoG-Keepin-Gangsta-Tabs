@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddTraitSchema } from "../schemas/add-trait";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: traitsTitle.label.singular.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addTrait = async (
   values: z.infer<typeof AddTraitSchema>,
 ): Promise<
@@ -32,9 +36,7 @@ export const addTrait = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: traitsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -48,9 +50,7 @@ export const addTrait = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: traitsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, image, description, sideEffect } = validatedFields.data;
@@ -58,7 +58,7 @@ export const addTrait = async (
   try {
     const trait = await db.cog_trait.create({
       data: {
-        name,
+        name: name || "Noname",
         image: image || null,
         description: description || null,
         cog_side_effectId: sideEffect || null,

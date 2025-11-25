@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddTraitSchema } from "../schemas/add-trait";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: traitsTitle.label.singular.toLowerCase(),
+}).RESOURCE_EDIT_UNAUTHORIZED;
+
 export const editTrait = async (
   id: string,
   values: z.infer<typeof AddTraitSchema>,
@@ -33,9 +37,7 @@ export const editTrait = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: traitsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -49,9 +51,7 @@ export const editTrait = async (
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: traitsTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const { name, image, description, sideEffect } = validatedFields.data;

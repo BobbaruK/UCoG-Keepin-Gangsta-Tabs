@@ -77,6 +77,7 @@ const TraitsPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={traitsTitle.label.plural}
         addBtnHref={`${traitsTitle.href}/add`}

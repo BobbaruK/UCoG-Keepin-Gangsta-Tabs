@@ -1,6 +1,8 @@
 "use client";
 
 import { CustomAvatar } from "@/components/custom-avatar";
+import { CustomButton } from "@/components/custom-button";
+import { TraitsIcon } from "@/components/icons/traits";
 import { Badge } from "@/components/ui/badge";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { traitsTitle } from "@/constants/page-title/traits";
@@ -14,7 +16,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
-import { CustomButton } from "@/components/custom-button";
 
 export const columns = ({
   isLoading,
@@ -97,6 +98,7 @@ export const columns = ({
           >
             <CustomAvatar
               image={image}
+              icon={<TraitsIcon />}
               className="size-12 rounded-sm border-none"
               fit="contain"
             />

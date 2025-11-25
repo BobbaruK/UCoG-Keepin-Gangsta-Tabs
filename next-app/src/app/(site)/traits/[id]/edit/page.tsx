@@ -1,14 +1,13 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
-import EditTraitForm from "@/features/traits/components/forms/edit";
+import FormCardWrapper from "@/features/traits/components/form-card-wrapper";
 import { getTrait } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -26,8 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const trait = await getTrait(id);
 
+  if (!trait)
+    return {
+      title: "Unknown",
+    };
+
   return {
-    title: `Edit ${trait?.name}`,
+    title: `Edit ${trait.name}`,
   };
 }
 
@@ -46,11 +50,26 @@ const TraitEditPage = async ({ params }: Props) => {
   if (!trait)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: traitsTitle.href,
+              label: capitalizeFirstLetter(
+                traitsTitle.label.plural.toLowerCase(),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
-          backBtnHref={`/${traitsTitle.href}`}
+          label={"Unknown"}
+          backBtnHref={traitsTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -84,11 +103,13 @@ const TraitEditPage = async ({ params }: Props) => {
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <EditTraitForm trait={trait} sideEffects={sideEffects?.data} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "edit",
+          sideEffects: sideEffects?.data,
+          trait,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

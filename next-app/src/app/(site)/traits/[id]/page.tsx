@@ -23,8 +23,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const trait = await getTrait(id);
 
+  if (!trait)
+    return {
+      title: "Unknown",
+    };
+
   return {
-    title: trait?.name,
+    title: trait.name,
   };
 }
 
@@ -39,11 +44,26 @@ const TraitPage = async ({ params }: Props) => {
   if (!trait)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: traitsTitle.href,
+              label: capitalizeFirstLetter(
+                capitalizeFirstLetter(traitsTitle.label.plural.toLowerCase()),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
+          label={"Unknown"}
           backBtnHref={traitsTitle.href}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -66,6 +86,7 @@ const TraitPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={trait.name}
         backBtnHref={traitsTitle.href}

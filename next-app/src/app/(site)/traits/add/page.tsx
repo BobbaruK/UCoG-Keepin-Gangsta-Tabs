@@ -1,12 +1,11 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { redirectNonAdminUsers } from "@/core/admin/lib/redirect-non-admin-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getSideEffects } from "@/features/side-effects/data/get-side-effects";
-import AddTraitForm from "@/features/traits/components/forms/add";
+import FormCardWrapper from "@/features/traits/components/form-card-wrapper";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -39,17 +38,19 @@ const TraitsPage = async () => {
           },
         ])}
       />
+
       <PageTitle
         label={`Add ${traitsTitle.label.singular.toLowerCase()}`}
         backBtnHref={traitsTitle.href}
         session={session}
       />
 
-      <Card>
-        <CardContent>
-          <AddTraitForm sideEffects={sideEffects?.data} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+          sideEffects: sideEffects?.data,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>
