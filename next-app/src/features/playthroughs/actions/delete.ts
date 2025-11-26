@@ -7,8 +7,11 @@ import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { catchError } from "@/lib/utils/catch-error-action";
-import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: playthroughTitle.label.plural.toLowerCase(),
+}).RESOURCE_DELETE_UNAUTHORIZED;
 
 export const deletePlaythrough = async (
   playthrough: Playthrough,
@@ -28,9 +31,7 @@ export const deletePlaythrough = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -42,9 +43,7 @@ export const deletePlaythrough = async (
 
   if (!user)
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   if (playthrough.auth_userId !== user.id)
@@ -59,18 +58,16 @@ export const deletePlaythrough = async (
       userId: dataSession.user.id,
       role: dataSession.user.role as UserRole,
       permissions: {
-        playthrough: ["create"],
-        crew_member: ["create"],
-        police_officers: ["create"],
+        playthrough: ["delete"],
+        crew_member: ["delete"],
+        police_officers: ["delete"],
       },
     },
   });
 
   if (!permissions.success)
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   try {

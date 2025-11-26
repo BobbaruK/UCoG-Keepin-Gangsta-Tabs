@@ -73,6 +73,7 @@ const PlaythroughsPage = async ({ searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={playthroughTitle.label.plural}
         addBtnHref={`${playthroughTitle.href}/add`}
@@ -86,9 +87,9 @@ const PlaythroughsPage = async ({ searchParams }: Props) => {
         dataSelected={selectedPlaythroughs?.data || []}
       />
 
-      <div>
+      {/* <div>
         <pre>{JSON.stringify({ playthroughs }, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };

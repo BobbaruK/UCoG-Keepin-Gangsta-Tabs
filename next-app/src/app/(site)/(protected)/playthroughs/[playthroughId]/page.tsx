@@ -6,6 +6,7 @@ import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getCrewMembers } from "@/features/crew-members/data/get";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
@@ -25,12 +26,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const playthrough = await getPlaythrough(id);
 
+  if (!playthrough)
+    return {
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
+    };
+
   return {
-    title: playthrough?.name,
+    title: `${capitalizeFirstLetter(
+      playthroughTitle.label.singular.toLowerCase(),
+    )}: "${playthrough.name}"`,
   };
 }
 
-const LawPage = async ({ params }: Props) => {
+const PlaythroughPage = async ({ params }: Props) => {
   const id = (await params).playthroughId;
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -38,28 +48,14 @@ const LawPage = async ({ params }: Props) => {
 
   const playthrough = await getPlaythrough(id);
 
-  if (!playthrough)
-    return (
-      <PageStructure>
-        <PageTitle
-          label={"unknown"}
-          backBtnHref={playthroughTitle.href}
-          session={session}
-        />
-        <CustomAlert
-          title={"Error!"}
-          description={MESSAGES.RESOURCE_NOT_EXISTS}
-          variant="danger"
-        />
-      </PageStructure>
-    );
+  if (!playthrough) return <PlaythroughError session={session} />;
 
-  const boss = await getCrewMembers({
-    where: {
-      cog_playthroughId: playthrough.id,
-      is_boss: true,
-    },
-  });
+  // const boss = await getCrewMembers({
+  //   where: {
+  //     cog_playthroughId: playthrough.id,
+  //     is_boss: true,
+  //   },
+  // });
 
   return (
     <PageStructure>
@@ -94,4 +90,4 @@ const LawPage = async ({ params }: Props) => {
   );
 };
 
-export default LawPage;
+export default PlaythroughPage;

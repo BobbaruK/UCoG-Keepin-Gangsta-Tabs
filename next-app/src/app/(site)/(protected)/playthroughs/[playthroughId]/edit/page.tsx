@@ -1,12 +1,11 @@
-import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
-import EditPlaythroughForm from "@/features/playthroughs/components/form/edit";
+import EditPlaythroughFormWrapper from "@/features/playthroughs/components/edit-playthrough-form-wrapper";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -24,8 +23,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const playthrough = await getPlaythrough(id);
 
+  if (!playthrough)
+    return {
+      title: `Edit ${playthroughTitle.label.singular.toLowerCase()}: "Unknown"`,
+    };
+
   return {
-    title: `Edit ${playthrough?.name}`,
+    title: `Edit ${playthroughTitle.label.singular.toLowerCase()}: "${playthrough.name}"`,
   };
 }
 
@@ -37,21 +41,7 @@ const EditPlaythroughPage = async ({ params }: Props) => {
 
   const playthrough = await getPlaythrough(id);
 
-  if (!playthrough)
-    return (
-      <PageStructure>
-        <PageTitle
-          label={"unknown"}
-          backBtnHref={`/${playthroughTitle.href}`}
-          session={session}
-        />
-        <CustomAlert
-          title={"Error!"}
-          description={MESSAGES.RESOURCE_NOT_EXISTS}
-          variant="danger"
-        />
-      </PageStructure>
-    );
+  if (!playthrough) return <PlaythroughError session={session} />;
 
   const laws = await getLaws();
 
@@ -74,13 +64,16 @@ const EditPlaythroughPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={`Edit "${playthrough.name}"`}
         backBtnHref={`${playthroughTitle.href}/${id}`}
         session={session}
       />
 
-      <EditPlaythroughForm playthrough={playthrough} laws={laws?.data} />
+      <EditPlaythroughFormWrapper playthrough={playthrough} laws={laws?.data} />
+
+      {/* <EditPlaythroughForm playthrough={playthrough} laws={laws?.data} /> */}
 
       {/* <div>
         <pre>{JSON.stringify({ trait }, null, 2)}</pre>

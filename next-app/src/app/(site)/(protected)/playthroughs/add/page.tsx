@@ -5,7 +5,7 @@ import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
 import { getNationalities } from "@/features/nationalities/data/get-nationalities";
-import AddPlaythroughForm from "@/features/playthroughs/components/form/add";
+import AddPlaythroughFormWrapper from "@/features/playthroughs/components/add-playthrough-form-wrapper";
 import { getTraits } from "@/features/traits/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -13,7 +13,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 
 export const metadata: Metadata = {
-  title: `Add ${playthroughTitle.label.singular}`,
+  title: `Add ${playthroughTitle.label.singular.toLowerCase()}`,
 };
 
 const AddPlaythroughPage = async () => {
@@ -45,11 +45,17 @@ const AddPlaythroughPage = async () => {
         session={session}
       />
 
-      <AddPlaythroughForm
+      <AddPlaythroughFormWrapper
         laws={laws?.data}
         nationalities={nationalities?.data}
         traits={traits?.data}
       />
+
+      {/* <AddPlaythroughForm
+        laws={laws?.data}
+        nationalities={nationalities?.data}
+        traits={traits?.data}
+      /> */}
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

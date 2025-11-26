@@ -11,6 +11,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { EditPlaythroughSchema } from "../schemas/edit-playthrough";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: playthroughTitle.label.plural.toLowerCase(),
+}).RESOURCE_EDIT_UNAUTHORIZED;
+
 export const editPlaythrough = async (
   playthrough: Playthrough,
   values: z.infer<typeof EditPlaythroughSchema>,
@@ -34,9 +38,7 @@ export const editPlaythrough = async (
 
   if (!dataSession)
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const user = await db.auth_user.findUnique({
@@ -47,9 +49,7 @@ export const editPlaythrough = async (
 
   if (!user)
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   if (playthrough.auth_userId !== user.id)
@@ -63,15 +63,17 @@ export const editPlaythrough = async (
     body: {
       userId: dataSession.user.id,
       role: dataSession.user.role as UserRole,
-      permission: { playthrough: ["update"] },
+      permissions: {
+        playthrough: ["update"],
+        crew_member: ["update"],
+        police_officers: ["update"],
+      },
     },
   });
 
   if (!permission.success)
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const {

@@ -11,6 +11,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddPlaythroughSchema } from "../schemas/add-playthrough";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: playthroughTitle.label.plural.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addPlaythrough = async (
   values: z.infer<typeof AddPlaythroughSchema>,
 ): Promise<
@@ -33,9 +37,7 @@ export const addPlaythrough = async (
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -47,9 +49,7 @@ export const addPlaythrough = async (
 
   if (!user) {
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -67,9 +67,7 @@ export const addPlaythrough = async (
 
   if (!permissions.success)
     return {
-      error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const {
@@ -91,7 +89,7 @@ export const addPlaythrough = async (
   try {
     const playthrough = await db.cog_playthrough.create({
       data: {
-        name,
+        name: name || "Noname",
         seed: seed || null,
         is_public: isPublic,
         passenger_rail_station: passengerRailStation,

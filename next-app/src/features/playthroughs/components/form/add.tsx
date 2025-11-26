@@ -30,6 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
@@ -50,6 +51,11 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { addPlaythrough } from "../../actions/add";
+import {
+  PLAYTHROUGH_BOSS_CARD_INFO,
+  PLAYTHROUGH_CARD_INFO,
+  PLAYTHROUGH_SOCIAL_CARD_INFO,
+} from "../../constants/misc";
 import { AddPlaythroughSchema } from "../../schemas/add-playthrough";
 
 interface Props {
@@ -116,9 +122,9 @@ const AddPlaythroughForm = ({
         <Card>
           <CardContent>
             <FieldSet>
-              <FieldLegend>Playthrough information</FieldLegend>
+              <FieldLegend>{PLAYTHROUGH_CARD_INFO.title}</FieldLegend>
               <FieldDescription>
-                Set the name, seed and other options.
+                {PLAYTHROUGH_CARD_INFO.description}
               </FieldDescription>
 
               <FieldSeparator />
@@ -254,6 +260,36 @@ const AddPlaythroughForm = ({
                 <FieldSeparator />
 
                 <Controller
+                  name="freightRailStation"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      orientation={"horizontal"}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor={inputId(field.name)}>
+                          Freight rail station
+                        </FieldLabel>
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </FieldContent>
+
+                      <Switch
+                        id={inputId(field.name)}
+                        aria-invalid={fieldState.invalid}
+                        name={field.name}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </Field>
+                  )}
+                />
+
+                <FieldSeparator />
+
+                <Controller
                   name="respectForTheLaw"
                   control={form.control}
                   render={({ field, fieldState }) => (
@@ -285,36 +321,6 @@ const AddPlaythroughForm = ({
                     </Field>
                   )}
                 />
-
-                <FieldSeparator />
-
-                <Controller
-                  name="freightRailStation"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field
-                      data-invalid={fieldState.invalid}
-                      orientation={"horizontal"}
-                    >
-                      <FieldContent>
-                        <FieldLabel htmlFor={inputId(field.name)}>
-                          Freight rail station
-                        </FieldLabel>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </FieldContent>
-
-                      <Switch
-                        id={inputId(field.name)}
-                        aria-invalid={fieldState.invalid}
-                        name={field.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </Field>
-                  )}
-                />
               </FieldGroup>
             </FieldSet>
           </CardContent>
@@ -323,9 +329,9 @@ const AddPlaythroughForm = ({
         <Card>
           <CardContent>
             <FieldSet>
-              <FieldLegend>Boss information</FieldLegend>
+              <FieldLegend>{PLAYTHROUGH_BOSS_CARD_INFO.title}</FieldLegend>
               <FieldDescription>
-                Set boss&apos;s name, nationality and traits.
+                {PLAYTHROUGH_BOSS_CARD_INFO.description}
               </FieldDescription>
 
               <FieldSeparator />
@@ -573,8 +579,10 @@ const AddPlaythroughForm = ({
         <Card className="@2xl:col-span-2">
           <CardContent>
             <FieldSet>
-              <FieldLegend>Social options</FieldLegend>
-              <FieldDescription>Set app related options</FieldDescription>
+              <FieldLegend>{PLAYTHROUGH_SOCIAL_CARD_INFO.title}</FieldLegend>
+              <FieldDescription>
+                {PLAYTHROUGH_SOCIAL_CARD_INFO.description}
+              </FieldDescription>
 
               <FieldSeparator />
 
@@ -641,3 +649,115 @@ const AddPlaythroughForm = ({
 };
 
 export default AddPlaythroughForm;
+
+export function AddPlaythroughFormSkeleton({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("@container space-y-7", className)} {...restProps}>
+      <div className={cn("grid grid-cols-1 gap-6 @2xl:grid-cols-2")}>
+        <Card>
+          <CardContent className="flex flex-col gap-6">
+            <div className="flex flex-col">
+              <FieldLegend>{PLAYTHROUGH_CARD_INFO.title}</FieldLegend>
+              <FieldDescription>
+                {PLAYTHROUGH_CARD_INFO.description}
+              </FieldDescription>
+            </div>
+            <FieldSeparator />
+            <div className="flex flex-col gap-7">
+              <div className="flex flex-col justify-end gap-3">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+              <div className="flex flex-col justify-end gap-3">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+              <div className="flex flex-col justify-end gap-3">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+              </div>
+              <FieldSeparator />
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+              </div>
+              <FieldSeparator />
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-[19.25px] w-28" />
+                  <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+                </div>
+                <div className="space-y-0.5">
+                  <Skeleton className="h-5 w-full max-w-3/4" />
+                  <Skeleton className="h-5 w-full max-w-3/4" />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="flex flex-col gap-6">
+            <div className="flex flex-col">
+              <FieldLegend>{PLAYTHROUGH_BOSS_CARD_INFO.title}</FieldLegend>
+              <FieldDescription>
+                {PLAYTHROUGH_BOSS_CARD_INFO.description}
+              </FieldDescription>
+            </div>
+            <FieldSeparator />
+            <div className="flex flex-col gap-7">
+              <div className="flex flex-col justify-end gap-3">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+              <div className="flex flex-col justify-end gap-3">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+              <div className="flex flex-col justify-end gap-3">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+              <div className="flex flex-col justify-end gap-3">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-9 w-full" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="@2xl:col-span-2">
+          <CardContent className="flex flex-col gap-6">
+            <div className="flex flex-col">
+              <FieldLegend>{PLAYTHROUGH_SOCIAL_CARD_INFO.title}</FieldLegend>
+              <FieldDescription>
+                {PLAYTHROUGH_SOCIAL_CARD_INFO.description}
+              </FieldDescription>
+            </div>
+            <FieldSeparator />
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-[19.25px] w-28" />
+                <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+              </div>
+              <div className="space-y-0.5">
+                <Skeleton className="h-[21px] w-full max-w-3/4" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <div className="flex flex-wrap items-center justify-end gap-4 @2xl:col-span-2">
+          <Skeleton className="bg-muted h-9 w-[68px] border" />
+          <Skeleton className="bg-success h-9 w-[140px]" />
+        </div>
+      </div>
+    </div>
+  );
+}

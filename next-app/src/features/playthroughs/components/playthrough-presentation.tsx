@@ -22,6 +22,7 @@ import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Law } from "@/core/db/law/types/law";
 import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -37,6 +38,7 @@ const PlaythroughPresentation = ({
   laws = [],
 }: Props) => {
   const [minimalSeeMore, setMinimalSeeMore] = useState(false);
+  const { data: session } = useSession();
 
   const boss = playthrough.crew_members.find(
     (member) => member.is_boss === true,
@@ -157,15 +159,17 @@ const PlaythroughPresentation = ({
             {boss?.full_name}
           </Link>
         </CardDescription>
-        <CardAction>
-          <CustomButton
-            buttonLabel="Edit"
-            variant={"outline"}
-            linkHref={`${playthroughTitle.href}/${playthrough.id}/edit`}
-            size="sm"
-            skeletonClassName="h-8 w-[50px]"
-          />
-        </CardAction>
+        {playthrough.auth_userId === session?.user.id && (
+          <CardAction>
+            <CustomButton
+              buttonLabel="Edit"
+              variant={"outline"}
+              linkHref={`${playthroughTitle.href}/${playthrough.id}/edit`}
+              size="sm"
+              skeletonClassName="h-8 w-[50px]"
+            />
+          </CardAction>
+        )}
       </CardHeader>
       <CardContent>
         <Collapsible open={minimalSeeMore} onOpenChange={setMinimalSeeMore}>
