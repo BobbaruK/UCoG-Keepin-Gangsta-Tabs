@@ -600,7 +600,7 @@ const EditCrewMemberForm = ({
                       // icon: React.createElement(CustomAvatar, {}),
                     })) || []
                   }
-                  value={field.value}
+                  defaultValue={field.value}
                   onValueChange={field.onChange}
                   placeholder={`Choose ${traitsTitle.label.plural.toLowerCase()}...`}
                   hideSelectAll
