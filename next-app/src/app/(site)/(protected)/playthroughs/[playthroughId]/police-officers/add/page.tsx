@@ -1,13 +1,13 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
-import AddPoliceOfficerForm from "@/features/police-officers/components/form/add";
+import FormCardWrapper from "@/features/police-officers/components/form-card-wrapper";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -19,9 +19,22 @@ interface Props {
   }>;
 }
 
-export const metadata: Metadata = {
-  title: `Add ${policeOfficersTitle.label.singular}`,
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { playthroughId } = await params;
+
+  const playthrough = await getPlaythrough(playthroughId);
+
+  if (!playthrough)
+    return {
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
+    };
+
+  return {
+    title: `Add ${policeOfficersTitle.label.singular.toLowerCase()}`,
+  };
+}
 
 const AddPoliceOfficerPage = async ({ params }: Props) => {
   const playthroughId = (await params).playthroughId;
@@ -31,6 +44,8 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
   });
 
   const playthrough = await getPlaythrough(playthroughId);
+
+  if (!playthrough) return <PlaythroughError session={session} />;
 
   return (
     <PageStructure>
@@ -56,6 +71,7 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={`Add ${policeOfficersTitle.label.singular.toLowerCase()}`}
         backBtnHref={`${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`}
@@ -64,11 +80,12 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
 
       <PlaythroughMenu playthroughId={playthroughId} />
 
-      <Card>
-        <CardContent>
-          <AddPoliceOfficerForm playthroughId={playthroughId} />
-        </CardContent>
-      </Card>
+      <FormCardWrapper
+        data={{
+          type: "add",
+          playthroughId,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify({ sideEffects }, null, 2)}</pre>

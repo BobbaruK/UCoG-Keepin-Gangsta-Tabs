@@ -1,15 +1,15 @@
 import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { Card, CardContent } from "@/components/ui/card";
 import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
-import EditPoliceOfficerForm from "@/features/police-officers/components/form/edit";
+import FormCardWrapper from "@/features/police-officers/components/form-card-wrapper";
 import { getPoliceOfficer } from "@/features/police-officers/data/get";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "better-auth";
@@ -31,7 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!playthrough) {
     return {
-      title: "Error",
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
     };
   }
 
@@ -39,12 +41,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!policeOfficer) {
     return {
-      title: "Error",
+      title: `Edit ${policeOfficersTitle.label.singular.toLowerCase()}: "Unknown"`,
     };
   }
 
   return {
-    title: policeOfficer.name,
+    title: `Edit ${policeOfficersTitle.label.singular.toLowerCase()}: "${policeOfficer.name}"`,
   };
 }
 
@@ -57,25 +59,11 @@ const EditCrewMemberPage = async ({ params }: Props) => {
 
   const playthrough = await getPlaythrough(playthroughId);
 
+  if (!playthrough) return <PlaythroughError session={session} />;
+
   if (playthrough?.is_finished)
     redirect(
       `${playthroughTitle.href}/${playthrough.id + policeOfficersTitle.href}/${policeOfficerId}`,
-    );
-
-  if (!playthrough)
-    return (
-      <PageStructure>
-        <PageTitle
-          label={"unknown"}
-          backBtnHref={playthroughTitle.href}
-          session={session}
-        />
-        <CustomAlert
-          title={"Error!"}
-          description={MESSAGES.RESOURCE_NOT_EXISTS}
-          variant="danger"
-        />
-      </PageStructure>
     );
 
   const policeOfficer = await getPoliceOfficer(policeOfficerId);
@@ -83,11 +71,34 @@ const EditCrewMemberPage = async ({ params }: Props) => {
   if (!policeOfficer)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: playthroughTitle.href,
+              label: capitalizeFirstLetter(playthroughTitle.label.plural),
+            },
+            {
+              href: `${playthroughTitle.href}/${playthroughId}`,
+              label: playthrough.name,
+            },
+            {
+              href: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
+              label: capitalizeFirstLetter(
+                policeOfficersTitle.label.plural.toLowerCase(),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
-          backBtnHref={policeOfficersTitle.href}
+          label={"Unknown"}
+          backBtnHref={`${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -124,6 +135,7 @@ const EditCrewMemberPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={`Edit "${policeOfficer.name}"`}
         backBtnHref={`${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}/${policeOfficer.id}`}
@@ -132,20 +144,12 @@ const EditCrewMemberPage = async ({ params }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <Card>
-        <CardContent>
-          <EditPoliceOfficerForm policeOfficer={policeOfficer} />
-        </CardContent>
-      </Card>
-
-      {/* <EditMemberMultiStep
-        crewMember={policeOfficer}
-        playthroughId={playthrough.id}
-        roles={roles?.data}
-        nationalities={nationalities?.data}
-        traits={traits?.data}
-        levels={levels?.data}
-      /> */}
+      <FormCardWrapper
+        data={{
+          type: "edit",
+          policeOfficer,
+        }}
+      />
 
       {/* <div>
         <pre>{JSON.stringify(crewMember, null, 2)}</pre>

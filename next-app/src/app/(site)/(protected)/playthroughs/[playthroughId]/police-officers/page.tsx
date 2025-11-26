@@ -1,13 +1,12 @@
-import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { loadSearchParams } from "@/components/search-params";
-import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
@@ -27,11 +26,28 @@ interface Props {
   searchParams: Promise<SearchParams>;
 }
 
-export const metadata: Metadata = {
-  title: policeOfficersTitle.label.plural,
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { playthroughId } = await params;
+
+  const playthrough = await getPlaythrough(playthroughId);
+
+  if (!playthrough)
+    return {
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
+    };
+
+  return {
+    title: capitalizeFirstLetter(
+      policeOfficersTitle.label.plural.toLowerCase(),
+    ),
+  };
+}
 
 const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
+  const id = (await params).playthroughId;
+
   const {
     // pagination
     pageIndex,
@@ -45,7 +61,6 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
     selected,
   } = await loadSearchParams(searchParams);
 
-  const id = (await params).playthroughId;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -103,21 +118,7 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
     perPage: -1,
   });
 
-  if (!playthrough)
-    return (
-      <PageStructure>
-        <PageTitle
-          label={"unknown"}
-          backBtnHref={playthroughTitle.href}
-          session={session}
-        />
-        <CustomAlert
-          title={"Error!"}
-          description={MESSAGES.RESOURCE_NOT_EXISTS}
-          variant="danger"
-        />
-      </PageStructure>
-    );
+  if (!playthrough) return <PlaythroughError session={session} />;
 
   const laws = await getLaws();
 
@@ -141,6 +142,7 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={capitalizeFirstLetter(
           policeOfficersTitle.label.plural.toLowerCase(),
@@ -157,11 +159,7 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <PlaythroughPresentation
-        type="default"
-        playthrough={playthrough}
-        laws={laws?.data}
-      />
+      <PlaythroughPresentation playthrough={playthrough} laws={laws?.data} />
 
       <DataTableTransitionWrapper
         data={policeOfficers?.data || []}
@@ -170,9 +168,9 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
         respectForTheLaw={playthrough.respect_for_the_law}
       />
 
-      <div>
+      {/* <div>
         <pre>{JSON.stringify({ policeOfficers }, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };

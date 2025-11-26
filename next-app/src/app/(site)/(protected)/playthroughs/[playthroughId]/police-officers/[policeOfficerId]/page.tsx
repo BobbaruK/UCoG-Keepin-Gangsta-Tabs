@@ -7,6 +7,7 @@ import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
@@ -30,7 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!playthrough) {
     return {
-      title: "Error",
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
     };
   }
 
@@ -38,12 +41,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!policeOfficer) {
     return {
-      title: "Error",
+      title: `${capitalizeFirstLetter(
+        policeOfficersTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
     };
   }
 
   return {
-    title: policeOfficer.name,
+    title: `${capitalizeFirstLetter(
+      policeOfficersTitle.label.singular.toLowerCase(),
+    )}: "${policeOfficer.name}"`,
   };
 }
 
@@ -57,32 +64,41 @@ const CrewMemberPage = async ({ params }: Props) => {
 
   const playthrough = await getPlaythrough(playthroughId);
 
-  if (!playthrough)
-    return (
-      <PageStructure>
-        <PageTitle
-          label={"unknown"}
-          backBtnHref={playthroughTitle.href}
-          session={session}
-        />
-        <CustomAlert
-          title={"Error!"}
-          description={MESSAGES.RESOURCE_NOT_EXISTS}
-          variant="danger"
-        />
-      </PageStructure>
-    );
+  if (!playthrough) return <PlaythroughError session={session} />;
 
   const policeOfficer = await getPoliceOfficer(policeOfficerId);
 
   if (!policeOfficer)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: playthroughTitle.href,
+              label: capitalizeFirstLetter(playthroughTitle.label.plural),
+            },
+            {
+              href: `${playthroughTitle.href}/${playthroughId}`,
+              label: playthrough.name,
+            },
+            {
+              href: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
+              label: capitalizeFirstLetter(
+                policeOfficersTitle.label.plural.toLowerCase(),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
-          backBtnHref={policeOfficersTitle.href}
+          label={"Unknown"}
+          backBtnHref={`${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}

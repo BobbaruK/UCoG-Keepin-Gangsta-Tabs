@@ -11,6 +11,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddPoliceOfficerSchema } from "../schemas/add";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
+}).RESOURCE_EDIT_UNAUTHORIZED;
+
 export const editPoliceOfficer = async (
   policeOfficer: PoliceOfficer,
   values: z.infer<typeof AddPoliceOfficerSchema>,
@@ -34,9 +38,7 @@ export const editPoliceOfficer = async (
 
   if (!dataSession)
     return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const user = await db.auth_user.findUnique({
@@ -47,9 +49,7 @@ export const editPoliceOfficer = async (
 
   if (!user)
     return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   if (policeOfficer.auth_userId !== user.id)
@@ -69,9 +69,7 @@ export const editPoliceOfficer = async (
 
   if (!permission.success)
     return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const {
@@ -88,7 +86,7 @@ export const editPoliceOfficer = async (
         id: policeOfficer.id,
       },
       data: {
-        name,
+        name: name || "Noname",
         bribed_turn: bribedTurn,
         can_call_in_a_raid,
         has_rival_hooligan_relative,

@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddPoliceOfficerSchema } from "../schemas/add";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addPoliceOfficer = async ({
   playthroughId,
   values,
@@ -36,9 +40,7 @@ export const addPoliceOfficer = async ({
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -50,9 +52,7 @@ export const addPoliceOfficer = async ({
 
   if (!user) {
     return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -66,9 +66,7 @@ export const addPoliceOfficer = async ({
 
   if (!permissions.success)
     return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   const {
@@ -82,7 +80,7 @@ export const addPoliceOfficer = async ({
   try {
     const policeOfficer = await db.cog_police_officer.create({
       data: {
-        name,
+        name: name || "Noname",
         bribed_turn: bribedTurn,
         can_call_in_a_raid,
         has_rival_hooligan_relative,
