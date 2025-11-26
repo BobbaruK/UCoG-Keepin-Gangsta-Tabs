@@ -1,8 +1,6 @@
-import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { loadSearchParams } from "@/components/search-params";
-import { MESSAGES } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
@@ -10,6 +8,7 @@ import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { DataTableTransitionWrapper } from "@/features/crew-members/components/tables/data-table-transition-wrapper";
 import { getCrewMembers } from "@/features/crew-members/data/get";
 import { getLaws } from "@/features/laws/data/get-laws";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
@@ -26,9 +25,22 @@ interface Props {
   searchParams: Promise<SearchParams>;
 }
 
-export const metadata: Metadata = {
-  title: capitalizeFirstLetter(crewMembersTitle.label.plural.toLowerCase()),
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { playthroughId } = await params;
+
+  const playthrough = await getPlaythrough(playthroughId);
+
+  if (!playthrough)
+    return {
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
+    };
+
+  return {
+    title: capitalizeFirstLetter(crewMembersTitle.label.plural.toLowerCase()),
+  };
+}
 
 const CrewMembersPage = async ({ params, searchParams }: Props) => {
   const id = (await params).playthroughId;
@@ -50,6 +62,9 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
   } = await loadSearchParams(searchParams);
 
   const playthrough = await getPlaythrough(id);
+
+  if (!playthrough) return <PlaythroughError session={session} />;
+
   const crewMembers = await getCrewMembers({
     pageNumber: pageIndex,
     perPage: pageSize,
@@ -73,22 +88,6 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
   });
 
   const laws = await getLaws();
-
-  if (!playthrough)
-    return (
-      <PageStructure>
-        <PageTitle
-          label={"unknown"}
-          backBtnHref={playthroughTitle.href}
-          session={session}
-        />
-        <CustomAlert
-          title={"Error!"}
-          description={MESSAGES.RESOURCE_NOT_EXISTS}
-          variant="danger"
-        />
-      </PageStructure>
-    );
 
   return (
     <PageStructure>

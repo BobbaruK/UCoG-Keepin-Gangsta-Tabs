@@ -30,7 +30,7 @@ const PlaythroughError = ({ session }: Props) => {
       />
 
       <PageTitle
-        label={"unknown"}
+        label={"Unknown"}
         backBtnHref={playthroughTitle.href}
         session={session}
       />

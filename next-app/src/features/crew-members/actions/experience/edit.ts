@@ -10,6 +10,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { experienceSchema } from "../../schemas/experience";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
+}).RESOURCE_EDIT_UNAUTHORIZED;
+
 export const editExperiences = async ({
   memberId,
   values,
@@ -38,9 +42,19 @@ export const editExperiences = async ({
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
+    };
+  }
+
+  const member = await db.cog_crew_member.findUnique({
+    where: {
+      id: memberId,
+    },
+  });
+
+  if (member?.is_dead) {
+    return {
+      error: `You cannot add or edit experiences for a dead ${crewMembersTitle.label.singular.toLowerCase()}`,
     };
   }
 
@@ -48,15 +62,13 @@ export const editExperiences = async ({
     body: {
       userId: dataSession.user.id,
       role: dataSession.user.role as UserRole,
-      permission: { crew_experience: ["update"] },
+      permission: { crew_experience: ["update", "delete"] },
     },
   });
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   try {
@@ -79,7 +91,7 @@ export const editExperiences = async ({
     return {
       success: MESSAGES_FN({
         resource: "experiences",
-      }).RESOURCE_CREATE_SUCCESS,
+      }).RESOURCE_EDIT_SUCCESS,
     };
   } catch (error) {
     return catchError(error);

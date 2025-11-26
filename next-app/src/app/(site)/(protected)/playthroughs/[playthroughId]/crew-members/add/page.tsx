@@ -8,6 +8,7 @@ import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import AddMemberMultiStep from "@/features/crew-members/components/add-member-multistep";
 import { getCrewLevels } from "@/features/crew-members/data/get-levels";
 import { getNationalities } from "@/features/nationalities/data/get-nationalities";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { getTraits } from "@/features/traits/data/get";
@@ -23,9 +24,22 @@ interface Props {
   }>;
 }
 
-export const metadata: Metadata = {
-  title: `Add ${crewMembersTitle.label.singular}`,
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { playthroughId } = await params;
+
+  const playthrough = await getPlaythrough(playthroughId);
+
+  if (!playthrough)
+    return {
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
+    };
+
+  return {
+    title: `Add ${crewMembersTitle.label.singular.toLowerCase()}`,
+  };
+}
 
 const AddCrewMemberPage = async ({ params }: Props) => {
   const playthroughId = (await params).playthroughId;
@@ -36,7 +50,9 @@ const AddCrewMemberPage = async ({ params }: Props) => {
 
   const playthrough = await getPlaythrough(playthroughId);
 
-  if (playthrough?.is_finished)
+  if (!playthrough) return <PlaythroughError session={session} />;
+
+  if (playthrough.is_finished)
     redirect(
       `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}`,
     );
@@ -56,7 +72,7 @@ const AddCrewMemberPage = async ({ params }: Props) => {
           },
           {
             href: `${playthroughTitle.href}/${playthroughId}`,
-            label: playthrough?.name || "",
+            label: playthrough.name || "",
           },
           {
             href: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
@@ -70,6 +86,7 @@ const AddCrewMemberPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={`Add ${crewMembersTitle.label.singular.toLowerCase()}`}
         backBtnHref={`${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`}

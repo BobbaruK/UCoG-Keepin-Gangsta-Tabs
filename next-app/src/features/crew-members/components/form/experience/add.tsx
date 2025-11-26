@@ -16,12 +16,14 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { MESSAGES } from "@/constants/messages";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
 import { addExperiences } from "@/features/crew-members/actions/experience/add";
+import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { useRouter } from "next/navigation";
@@ -57,7 +59,7 @@ const AddExperienceForm = ({ playthroughId, memberId, levels }: Props) => {
 
   function onSubmit(values: z.infer<typeof experienceSchema>) {
     startTransition(async () => {
-      addExperiences({ values, memberId })
+      addExperiences({ values })
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
@@ -266,3 +268,21 @@ const AddExperienceForm = ({ playthroughId, memberId, levels }: Props) => {
 };
 
 export default AddExperienceForm;
+
+export function AddExperienceFormSkeleton({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("flex flex-col gap-6", className)} {...restProps}>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[38px] w-full rounded-xl" />
+      </div>
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <Skeleton className="bg-muted h-9 w-[69px] border" />
+        <Skeleton className="bg-muted h-9 w-[68px] border" />
+        <Skeleton className="bg-success h-9 w-[134px]" />
+      </div>
+    </div>
+  );
+}

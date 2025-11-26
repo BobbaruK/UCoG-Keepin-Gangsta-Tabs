@@ -10,11 +10,13 @@ import { headers } from "next/headers";
 import z from "zod";
 import { experienceSchema } from "../../schemas/experience";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addExperiences = async ({
-  memberId,
   values,
 }: {
-  memberId: string;
   values: z.infer<typeof experienceSchema>;
 }): Promise<
   | {
@@ -38,9 +40,7 @@ export const addExperiences = async ({
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -54,35 +54,8 @@ export const addExperiences = async ({
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
-
-  // const existingExperiences = await db.cog_crew_experience.findMany({
-  //   where: {
-  //     cog_crew_memberId: memberId,
-  //   },
-  // });
-
-  // const existingExperiencesMapped = existingExperiences.map((experience) => ({
-  //   levelId: experience.cog_crew_levelId,
-  //   memberId,
-  //   value: experience.value,
-  // }));
-
-  // const mergedExperiences = formExperience.concat(existingExperiencesMapped);
-
-  // const diffExperiences = existingExperiencesMapped.filter((experience) =>
-  //   formExperience.includes({ ...experience }),
-  // );
-
-  // console.log({
-  //   // existingExperiences,
-  //   existingExperiencesMapped,
-  //   formExperience,
-  //   diffExperiences,
-  // });
 
   try {
     await db.cog_crew_experience.createMany({

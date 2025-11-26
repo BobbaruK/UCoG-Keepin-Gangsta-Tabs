@@ -7,9 +7,18 @@ import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
 import { CrewMember } from "@/core/db/crew-member/types/crew-member";
 import { Nationality } from "@/core/db/nationality/types/nationality";
 import { Trait } from "@/core/db/trait/types/trait";
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import EditCrewMemberForm from "./form/edit";
-import EditExperienceForm from "./form/experience/edit";
+import { EditCrewMemberFormSkeleton } from "./form/edit";
+import { EditExperienceFormSkeleton } from "./form/experience/edit";
+const EditCrewMemberForm = dynamic(() => import("./form/edit"), {
+  ssr: false,
+  loading: () => <EditCrewMemberFormSkeleton />,
+});
+const EditExperienceForm = dynamic(() => import("./form/experience/edit"), {
+  ssr: false,
+  loading: () => <EditExperienceFormSkeleton />,
+});
 
 type AllTabs = "edit" | "experience";
 
@@ -46,6 +55,7 @@ const EditMemberMultiStep = ({
           <TabsTrigger
             value="experience"
             className="data-[state=active]:shadow-xs"
+            // disabled={crewMember.is_dead}
           >
             Experience
           </TabsTrigger>

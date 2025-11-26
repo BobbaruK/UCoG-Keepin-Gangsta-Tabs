@@ -11,6 +11,7 @@ import { getCrewLevels } from "@/features/crew-levels/data/get";
 import EditMemberMultiStep from "@/features/crew-members/components/edit-member-multistep";
 import { getCrewMember } from "@/features/crew-members/data/get";
 import { getNationalities } from "@/features/nationalities/data/get-nationalities";
+import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { getTraits } from "@/features/traits/data/get";
@@ -35,7 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!playthrough) {
     return {
-      title: "Error",
+      title: `${capitalizeFirstLetter(
+        playthroughTitle.label.singular.toLowerCase(),
+      )}: "Unknown"`,
     };
   }
 
@@ -43,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!crewMember) {
     return {
-      title: "Error",
+      title: `Edit ${crewMembersTitle.label.singular.toLowerCase()}: "Unknown"`,
     };
   }
 
@@ -67,25 +70,11 @@ const EditCrewMemberPage = async ({ params }: Props) => {
 
   const playthrough = await getPlaythrough(playthroughId);
 
-  if (playthrough?.is_finished)
+  if (!playthrough) return <PlaythroughError session={session} />;
+
+  if (playthrough.is_finished)
     redirect(
       `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}/${crewMemberId}`,
-    );
-
-  if (!playthrough)
-    return (
-      <PageStructure>
-        <PageTitle
-          label={"unknown"}
-          backBtnHref={playthroughTitle.href}
-          session={session}
-        />
-        <CustomAlert
-          title={"Error!"}
-          description={MESSAGES.RESOURCE_NOT_EXISTS}
-          variant="danger"
-        />
-      </PageStructure>
     );
 
   const crewMember = await getCrewMember(crewMemberId);
@@ -93,11 +82,34 @@ const EditCrewMemberPage = async ({ params }: Props) => {
   if (!crewMember)
     return (
       <PageStructure>
+        <PageBreadcrumbs
+          crumbs={breadCrumbsFn([
+            {
+              href: playthroughTitle.href,
+              label: capitalizeFirstLetter(playthroughTitle.label.plural),
+            },
+            {
+              href: `${playthroughTitle.href}/${playthroughId}`,
+              label: playthrough.name,
+            },
+            {
+              href: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
+              label: capitalizeFirstLetter(
+                crewMembersTitle.label.plural.toLowerCase(),
+              ),
+            },
+            {
+              label: "Unknown",
+            },
+          ])}
+        />
+
         <PageTitle
-          label={"unknown"}
-          backBtnHref={crewMembersTitle.href}
+          label={"Unknown"}
+          backBtnHref={`${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`}
           session={session}
         />
+
         <CustomAlert
           title={"Error!"}
           description={MESSAGES.RESOURCE_NOT_EXISTS}
@@ -143,6 +155,7 @@ const EditCrewMemberPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={`Edit "${
           setFullName({

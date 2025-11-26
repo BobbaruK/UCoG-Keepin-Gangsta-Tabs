@@ -146,7 +146,7 @@ const EditCrewMemberForm = ({
     startTransition(async () => {
       setOpenDeleteDialog(false);
 
-      await deleteCrewMember(crewMember.id)
+      await deleteCrewMember(crewMember)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
@@ -737,12 +737,20 @@ const EditCrewMemberForm = ({
 
 export default EditCrewMemberForm;
 
-export function EditPoliceOfficerFormSkeleton({
+export function EditCrewMemberFormSkeleton({
   className,
   ...restProps
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("space-y-7", className)} {...restProps}>
+    <div className={cn("flex flex-col gap-7", className)} {...restProps}>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
       <div className="flex flex-col justify-end gap-3">
         <Skeleton className="h-[19.25px] w-28" />
         <Skeleton className="h-9 w-full" />
@@ -756,19 +764,27 @@ export function EditPoliceOfficerFormSkeleton({
           <Skeleton className="size-9 min-w-9" />
         </div>
       </div>
-      <div className="flex justify-between gap-3">
+      <div className="flex flex-col justify-end gap-3">
         <Skeleton className="h-[19.25px] w-28" />
-        <Skeleton className="h-[19.25px] w-8 rounded-4xl" />
+        <Skeleton className="h-9 w-full" />
       </div>
-      <div className="flex justify-between gap-3">
+      <div className="flex flex-col justify-end gap-3">
         <Skeleton className="h-[19.25px] w-28" />
-        <Skeleton className="h-[19.25px] w-8 rounded-4xl" />
+        <Skeleton className="h-9 w-full" />
       </div>
-      <div className="flex justify-between gap-3">
+      <div className="flex flex-col justify-end gap-3">
         <Skeleton className="h-[19.25px] w-28" />
-        <Skeleton className="h-[19.25px] w-8 rounded-4xl" />
+        <Skeleton className="h-9 w-full" />
       </div>
-      <Skeleton className="ms-auto h-9 w-[147px]" />
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+      </div>
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <Skeleton className="bg-destructive h-9 w-[89px]" />
+        <Skeleton className="bg-muted h-9 w-[68px] border" />
+        <Skeleton className="bg-success h-9 w-[152px]" />
+      </div>
     </div>
   );
 }

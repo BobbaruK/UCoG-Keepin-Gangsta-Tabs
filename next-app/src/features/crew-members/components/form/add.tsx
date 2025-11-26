@@ -28,6 +28,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
@@ -639,3 +640,54 @@ const AddCrewMemberForm = ({
 };
 
 export default AddCrewMemberForm;
+
+export function AddCrewMemberFormSkeleton({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("flex flex-col gap-7", className)} {...restProps}>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+          <Skeleton className="size-9 min-w-9" />
+        </div>
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex flex-col justify-end gap-3">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-9 w-full" />
+      </div>
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-[19.25px] w-28" />
+        <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+      </div>
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        <Skeleton className="bg-muted h-9 w-[68px] border" />
+        <Skeleton className="bg-success h-9 w-[149px]" />
+      </div>
+    </div>
+  );
+}

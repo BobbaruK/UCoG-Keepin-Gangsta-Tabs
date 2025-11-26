@@ -3,7 +3,9 @@
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
 import { BossIcon } from "@/components/icons/boss";
+import { FlagIcon } from "@/components/icons/flag";
 import { StarIcon } from "@/components/icons/star";
+import { TraitsIcon } from "@/components/icons/traits";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -130,6 +132,7 @@ export const columns = ({
                     <CustomAvatar
                       className="size-6 rounded-md border-none"
                       image={nationalityFlag}
+                      icon={<FlagIcon size={16} />}
                       fit="contain"
                     />
                   </Link>
@@ -197,6 +200,7 @@ export const columns = ({
                         <Link href={`${traitsTitle.href}/${trait.id}`}>
                           <CustomAvatar
                             image={trait.image}
+                            icon={<TraitsIcon size={16} />}
                             className="block size-6 rounded-md border-none"
                             fit="contain"
                           />

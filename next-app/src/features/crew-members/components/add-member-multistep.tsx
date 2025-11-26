@@ -6,9 +6,21 @@ import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
 import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
 import { Nationality } from "@/core/db/nationality/types/nationality";
 import { Trait } from "@/core/db/trait/types/trait";
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import AddCrewMemberForm from "./form/add";
-import AddExperienceForm from "./form/experience/add";
+import { AddCrewMemberFormSkeleton } from "./form/add";
+import { AddExperienceFormSkeleton } from "./form/experience/add";
+const AddCrewMemberForm = dynamic(() => import("./form/add"), {
+  ssr: false,
+  loading: () => <AddCrewMemberFormSkeleton />,
+});
+const AddCrewMemberExperienceForm = dynamic(
+  () => import("./form/experience/add"),
+  {
+    ssr: false,
+    loading: () => <AddExperienceFormSkeleton />,
+  },
+);
 
 type AllTabs = "create" | "experience";
 
@@ -70,7 +82,7 @@ const AddMemberMultiStep = ({
           </Card>
         </TabsContent>
         <TabsContent value="experience">
-          <AddExperienceForm
+          <AddCrewMemberExperienceForm
             playthroughId={playthroughId}
             memberId={crewMemberId}
             levels={levels}

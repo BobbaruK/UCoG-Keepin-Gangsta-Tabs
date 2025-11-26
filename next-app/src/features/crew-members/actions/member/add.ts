@@ -11,6 +11,10 @@ import { headers } from "next/headers";
 import z from "zod";
 import { AddCrewMemberSchema } from "../../schemas/add";
 
+const UNAUTHORIZED = MESSAGES_FN({
+  resource: crewMembersTitle.label.singular.toLowerCase(),
+}).RESOURCE_CREATE_UNAUTHORIZED;
+
 export const addCrewMember = async ({
   playthroughId,
   values,
@@ -56,9 +60,7 @@ export const addCrewMember = async ({
 
   if (!dataSession) {
     return {
-      error: MESSAGES_FN({
-        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
   }
 
@@ -72,20 +74,18 @@ export const addCrewMember = async ({
 
   if (!data.success)
     return {
-      error: MESSAGES_FN({
-        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_CREATE_UNAUTHORIZED,
+      error: UNAUTHORIZED,
     };
 
   try {
     const member = await db.cog_crew_member.create({
       data: {
-        first_name,
-        last_name,
+        first_name: first_name || "Noname",
+        last_name: last_name || "Noname",
         full_name: setFullName({
-          firstName: first_name,
-          lastName: last_name,
-          alias: alias,
+          firstName: first_name || "Noname",
+          lastName: last_name || "Noname",
+          alias: alias || null,
         }).outputDB,
         alias: alias || null,
         turn_recruited,
