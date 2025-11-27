@@ -10,6 +10,8 @@ import { setFullName } from "@/lib/utils/full-name";
 import { headers } from "next/headers";
 import z from "zod";
 import { AddCrewMemberSchema } from "../../schemas/add";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 
 const UNAUTHORIZED = MESSAGES_FN({
   resource: crewMembersTitle.label.singular.toLowerCase(),
@@ -79,6 +81,13 @@ export const editCrewMember = async ({
 
   const existingMember = await db.cog_crew_member.findUnique({
     where: { id: memberId },
+    include: {
+      playthrough: {
+        select: {
+          is_finished: true,
+        },
+      },
+    },
   });
 
   if (!existingMember)
@@ -86,6 +95,18 @@ export const editCrewMember = async ({
       error: MESSAGES_FN({
         resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
       }).RESOURCE_NOT_EXISTS,
+    };
+
+  if (existingMember.auth_userId !== dataSession.user.id)
+    return {
+      error: MESSAGES_FN({
+        resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
+      }).RESOURCE_EDIT_UNAUTHORIZED_OTHER,
+    };
+
+  if (existingMember.playthrough.is_finished)
+    return {
+      error: `You cannot edit data from a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
     };
 
   try {

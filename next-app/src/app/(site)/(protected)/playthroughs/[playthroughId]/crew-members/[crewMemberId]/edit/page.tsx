@@ -4,8 +4,10 @@ import { PageTitle } from "@/components/page-title";
 import { MESSAGES } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { redirectNonOwnerUsers } from "@/core/admin/lib/redirect-non-owner-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { redirectPlaythroughFinished } from "@/core/db/playthrough/utils/redirect-playthrough-finished";
 import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import { getCrewLevels } from "@/features/crew-levels/data/get";
 import EditMemberMultiStep from "@/features/crew-members/components/edit-member-multistep";
@@ -72,10 +74,10 @@ const EditCrewMemberPage = async ({ params }: Props) => {
 
   if (!playthrough) return <PlaythroughError session={session} />;
 
-  if (playthrough.is_finished)
-    redirect(
-      `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}/${crewMemberId}`,
-    );
+  redirectPlaythroughFinished({
+    isFinished: playthrough.is_finished,
+    to: `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}/${crewMemberId}`,
+  });
 
   const crewMember = await getCrewMember(crewMemberId);
 
@@ -117,6 +119,11 @@ const EditCrewMemberPage = async ({ params }: Props) => {
         />
       </PageStructure>
     );
+
+  redirectNonOwnerUsers({
+    isOwner: session?.user.id === playthrough.auth_userId,
+    to: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}/${crewMember.id}`,
+  });
 
   const roles = await getCaptainRoles();
   const nationalities = await getNationalities();

@@ -22,6 +22,7 @@ import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { addExperiences } from "@/features/crew-members/actions/experience/add";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
@@ -33,12 +34,12 @@ import { experienceSchema } from "../../../schemas/experience";
 import Levels from "../experience/levels";
 
 interface Props {
-  playthroughId: string;
+  playthrough: Playthrough;
   memberId: string;
   levels: CrewLevel[] | undefined;
 }
 
-const AddExperienceForm = ({ playthroughId, memberId, levels }: Props) => {
+const AddExperienceForm = ({ playthrough, memberId, levels }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<z.infer<typeof experienceSchema>>({
@@ -55,11 +56,11 @@ const AddExperienceForm = ({ playthroughId, memberId, levels }: Props) => {
 
   const { formId, inputId } = formInputId("edit-experience");
 
-  const crewMembersPath = `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`;
+  const crewMembersPath = `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}`;
 
   function onSubmit(values: z.infer<typeof experienceSchema>) {
     startTransition(async () => {
-      addExperiences({ values })
+      addExperiences({ values, playthrough })
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);

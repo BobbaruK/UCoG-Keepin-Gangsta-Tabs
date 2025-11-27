@@ -2,9 +2,12 @@
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { catchError } from "@/lib/utils/catch-error-action";
 import { setFullName } from "@/lib/utils/full-name";
 import { headers } from "next/headers";
@@ -16,10 +19,10 @@ const UNAUTHORIZED = MESSAGES_FN({
 }).RESOURCE_CREATE_UNAUTHORIZED;
 
 export const addCrewMember = async ({
-  playthroughId,
+  playthrough,
   values,
 }: {
-  playthroughId: string;
+  playthrough: Playthrough;
   values: z.infer<typeof AddCrewMemberSchema>;
 }): Promise<
   | {
@@ -77,6 +80,18 @@ export const addCrewMember = async ({
       error: UNAUTHORIZED,
     };
 
+  if (playthrough.auth_userId !== dataSession.user.id)
+    return {
+      error: MESSAGES_FN({
+        resource: playthroughTitle.label.singular.toLowerCase(),
+      }).RESOURCE_CREATE_UNAUTHORIZED_OTHER,
+    };
+
+  if (playthrough.is_finished)
+    return {
+      error: `You cannot add data to a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
+    };
+
   try {
     const member = await db.cog_crew_member.create({
       data: {
@@ -97,7 +112,7 @@ export const addCrewMember = async ({
         },
         is_boss: false,
         auth_userId: dataSession.user.id,
-        cog_playthroughId: playthroughId,
+        cog_playthroughId: playthrough.id,
       },
     });
 

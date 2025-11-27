@@ -154,7 +154,6 @@ const CrewMemberPage = async ({ params }: Props) => {
             ? `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}/${crewMember.id}/edit`
             : undefined
         }
-        forceEditButton={!playthrough.is_finished}
         session={session}
       />
 

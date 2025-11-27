@@ -109,6 +109,7 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={capitalizeFirstLetter(
           crewMembersTitle.label.plural.toLowerCase(),
@@ -119,7 +120,6 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
             ? `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}/add`
             : undefined
         }
-        forceAddButton={!playthrough.is_finished}
         session={session}
       />
 

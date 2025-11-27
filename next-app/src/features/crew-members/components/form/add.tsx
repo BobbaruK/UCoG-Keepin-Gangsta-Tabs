@@ -51,9 +51,10 @@ import { toast } from "sonner";
 import z from "zod";
 import { addCrewMember } from "../../actions/member/add";
 import { AddCrewMemberSchema } from "../../schemas/add";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 
 interface Props {
-  playthroughId: string;
+  playthrough: Playthrough;
   roles: CaptainRole[] | undefined;
   nationalities: Nationality[] | undefined;
   traits: Trait[] | undefined;
@@ -61,7 +62,7 @@ interface Props {
 }
 
 const AddCrewMemberForm = ({
-  playthroughId,
+  playthrough,
   roles = [],
   nationalities = [],
   traits = [],
@@ -97,7 +98,7 @@ const AddCrewMemberForm = ({
   const onSubmit = (values: z.infer<typeof AddCrewMemberSchema>) => {
     startTransition(async () => {
       addCrewMember({
-        playthroughId,
+        playthrough,
         values,
       })
         .then(async (data) => {

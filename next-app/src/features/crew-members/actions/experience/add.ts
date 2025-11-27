@@ -2,6 +2,8 @@
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -15,8 +17,10 @@ const UNAUTHORIZED = MESSAGES_FN({
 }).RESOURCE_CREATE_UNAUTHORIZED;
 
 export const addExperiences = async ({
+  playthrough,
   values,
 }: {
+  playthrough: Playthrough;
   values: z.infer<typeof experienceSchema>;
 }): Promise<
   | {
@@ -55,6 +59,11 @@ export const addExperiences = async ({
   if (!data.success)
     return {
       error: UNAUTHORIZED,
+    };
+
+  if (playthrough.is_finished)
+    return {
+      error: `You cannot add data to a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
     };
 
   try {

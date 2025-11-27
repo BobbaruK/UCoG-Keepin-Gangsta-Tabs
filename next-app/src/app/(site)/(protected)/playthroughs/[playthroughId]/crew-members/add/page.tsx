@@ -2,8 +2,10 @@ import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { redirectNonOwnerUsers } from "@/core/admin/lib/redirect-non-owner-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { redirectPlaythroughFinished } from "@/core/db/playthrough/utils/redirect-playthrough-finished";
 import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import AddMemberMultiStep from "@/features/crew-members/components/add-member-multistep";
 import { getCrewLevels } from "@/features/crew-members/data/get-levels";
@@ -16,7 +18,6 @@ import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 interface Props {
   params: Promise<{
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const AddCrewMemberPage = async ({ params }: Props) => {
-  const playthroughId = (await params).playthroughId;
+  const { playthroughId } = await params;
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -52,10 +53,15 @@ const AddCrewMemberPage = async ({ params }: Props) => {
 
   if (!playthrough) return <PlaythroughError session={session} />;
 
-  if (playthrough.is_finished)
-    redirect(
-      `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}`,
-    );
+  redirectNonOwnerUsers({
+    isOwner: session?.user.id === playthrough.auth_userId,
+    to: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
+  });
+
+  redirectPlaythroughFinished({
+    isFinished: playthrough.is_finished,
+    to: `${playthroughTitle.href}/${playthrough.id + crewMembersTitle.href}`,
+  });
 
   const roles = await getCaptainRoles();
   const nationalities = await getNationalities();
@@ -96,7 +102,7 @@ const AddCrewMemberPage = async ({ params }: Props) => {
       <PlaythroughMenu playthroughId={playthroughId} />
 
       <AddMemberMultiStep
-        playthroughId={playthroughId}
+        playthrough={playthrough}
         roles={roles?.data}
         nationalities={nationalities?.data}
         traits={traits?.data}

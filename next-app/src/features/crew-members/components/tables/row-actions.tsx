@@ -19,7 +19,6 @@ import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { CrewMember } from "@/core/db/crew-member/types/crew-member";
-import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import { setFullName } from "@/lib/utils/full-name";
@@ -131,33 +130,31 @@ const RowActions = ({ crewMember }: Props) => {
             </Link>
           </DropdownMenuItem>
 
-          {session && session.user.role !== UserRole.USER && (
-            <>
-              <DropdownMenuSeparator />
+          {session &&
+            crewMember.auth_userId === session.user.id &&
+            !crewMember.playthrough.is_finished && (
+              <>
+                <DropdownMenuSeparator />
 
-              {!crewMember.playthrough.is_finished && (
-                <>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}/${crewMember.id}/edit`}
-                    >
-                      <EditIcon />
-                      Edit {crewMembersTitle.label.singular.toLowerCase()}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                </>
-              )}
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={`${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}/${crewMember.id}/edit`}
+                  >
+                    <EditIcon />
+                    Edit {crewMembersTitle.label.singular.toLowerCase()}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
 
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {crewMembersTitle.label.singular.toLowerCase()}
-              </DropdownMenuItem>
-            </>
-          )}
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => setOpenDeleteDialog(true)}
+                >
+                  <TrashIcon />
+                  Delete {crewMembersTitle.label.singular.toLowerCase()}
+                </DropdownMenuItem>
+              </>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

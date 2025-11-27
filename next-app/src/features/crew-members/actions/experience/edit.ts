@@ -9,6 +9,7 @@ import { catchError } from "@/lib/utils/catch-error-action";
 import { headers } from "next/headers";
 import z from "zod";
 import { experienceSchema } from "../../schemas/experience";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 
 const UNAUTHORIZED = MESSAGES_FN({
   resource: crewMembersTitle.label.singular.toLowerCase() + "(s)",
@@ -50,9 +51,16 @@ export const editExperiences = async ({
     where: {
       id: memberId,
     },
+    include: {
+      playthrough: {
+        select: {
+          is_finished: true,
+        },
+      },
+    },
   });
 
-  if (member?.is_dead) {
+  if (member && member.is_dead) {
     return {
       error: `You cannot add or edit experiences for a dead ${crewMembersTitle.label.singular.toLowerCase()}`,
     };
@@ -69,6 +77,11 @@ export const editExperiences = async ({
   if (!data.success)
     return {
       error: UNAUTHORIZED,
+    };
+
+  if (member && member.playthrough.is_finished)
+    return {
+      error: `You cannot edit data from a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
     };
 
   try {

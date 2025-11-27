@@ -120,18 +120,20 @@ const PaginationActions = () => {
             <CopyIcon />
             Copy id(s)
           </DropdownMenuItem>
-          {session && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {crewMembersTitle.label.singular.toLowerCase()}(s)
-              </DropdownMenuItem>
-            </>
-          )}
+          {session &&
+            dataSelected[0]?.auth_userId === session.user.id &&
+            !dataSelected[0]?.playthrough.is_finished && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => setOpenDeleteDialog(true)}
+                >
+                  <TrashIcon />
+                  Delete {crewMembersTitle.label.singular.toLowerCase()}(s)
+                </DropdownMenuItem>
+              </>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

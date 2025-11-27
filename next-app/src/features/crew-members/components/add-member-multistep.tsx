@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { AddCrewMemberFormSkeleton } from "./form/add";
 import { AddExperienceFormSkeleton } from "./form/experience/add";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 const AddCrewMemberForm = dynamic(() => import("./form/add"), {
   ssr: false,
   loading: () => <AddCrewMemberFormSkeleton />,
@@ -25,7 +26,7 @@ const AddCrewMemberExperienceForm = dynamic(
 type AllTabs = "create" | "experience";
 
 interface Props {
-  playthroughId: string;
+  playthrough: Playthrough;
   roles: CaptainRole[] | undefined;
   nationalities: Nationality[] | undefined;
   traits: Trait[] | undefined;
@@ -33,13 +34,13 @@ interface Props {
 }
 
 const AddMemberMultiStep = ({
-  playthroughId,
+  playthrough,
   roles = [],
   nationalities = [],
   traits = [],
   levels = [],
 }: Props) => {
-  const [tabSelected, setTabSelected] = useState<AllTabs>("create");
+  const [tabSelected, setTabSelected] = useState<AllTabs>("experience");
   const [crewMemberId, setCrewMemberId] = useState("");
 
   return (
@@ -69,7 +70,7 @@ const AddMemberMultiStep = ({
           <Card>
             <CardContent>
               <AddCrewMemberForm
-                playthroughId={playthroughId}
+                playthrough={playthrough}
                 roles={roles}
                 nationalities={nationalities}
                 traits={traits}
@@ -83,7 +84,7 @@ const AddMemberMultiStep = ({
         </TabsContent>
         <TabsContent value="experience">
           <AddCrewMemberExperienceForm
-            playthroughId={playthroughId}
+            playthrough={playthrough}
             memberId={crewMemberId}
             levels={levels}
           />
