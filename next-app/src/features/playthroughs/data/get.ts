@@ -27,7 +27,7 @@ export const getPlaythroughs = async ({
         take: perPage && Math.sign(perPage) === 1 ? pageSize : undefined,
         include: playthroughInclude,
       }),
-      db.cog_playthrough.count(),
+      db.cog_playthrough.count({ ...(where ? { where } : {}) }),
     ]);
 
     const playthrough = data as Playthrough[];

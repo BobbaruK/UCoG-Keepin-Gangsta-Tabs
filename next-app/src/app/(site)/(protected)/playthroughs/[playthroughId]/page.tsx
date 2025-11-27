@@ -71,11 +71,12 @@ const PlaythroughPage = async ({ params }: Props) => {
           },
         ])}
       />
+
       <PageTitle
         label={playthrough.name}
         backBtnHref={playthroughTitle.href}
         editBtnHref={`${playthroughTitle.href}/${id}/edit`}
-        forceEditButton
+        forceEditButton={session?.user.id === playthrough.auth_userId}
         session={session}
       />
 

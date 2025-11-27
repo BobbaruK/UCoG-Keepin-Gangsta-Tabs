@@ -1,6 +1,7 @@
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { redirectNonOwnerUsers } from "@/core/admin/lib/redirect-non-owner-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
@@ -42,6 +43,14 @@ const EditPlaythroughPage = async ({ params }: Props) => {
   const playthrough = await getPlaythrough(id);
 
   if (!playthrough) return <PlaythroughError session={session} />;
+
+  redirectNonOwnerUsers({
+    isOwner: session?.user.id === playthrough.auth_userId,
+    to: `${playthroughTitle.href}/${id}`,
+  });
+
+  if (session?.user.id !== playthrough.auth_userId) {
+  }
 
   const laws = await getLaws();
 
