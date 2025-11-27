@@ -59,6 +59,9 @@ export const MESSAGES_FN = ({
     RESOURCE_CREATE_UNAUTHORIZED: resource
       ? `You are not authorized to create ${resource}.`
       : `You are not authorized to create this resource.`,
+    RESOURCE_CREATE_UNAUTHORIZED_OTHER: resource
+      ? `You are not authorized to create on other users ${resource}.`
+      : `You are not authorized to create on other users resources.`,
     RESOURCE_EDIT_SUCCESS: resource
       ? `You have successfully updated ${resource}${resourceName ? `: ${resourceName}.` : "."}`
       : `You have successfully updated this resource`,
