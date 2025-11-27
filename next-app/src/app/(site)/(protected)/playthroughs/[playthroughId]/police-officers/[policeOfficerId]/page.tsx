@@ -54,9 +54,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const CrewMemberPage = async ({ params }: Props) => {
-  const playthroughId = (await params).playthroughId;
-  const policeOfficerId = (await params).policeOfficerId;
+const PoliceOfficerPage = async ({ params }: Props) => {
+  const { playthroughId, policeOfficerId } = await params;
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -141,7 +140,6 @@ const CrewMemberPage = async ({ params }: Props) => {
             ? `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}/${policeOfficer.id}/edit`
             : undefined
         }
-        forceEditButton={!playthrough.is_finished}
         session={session}
       />
 
@@ -160,4 +158,4 @@ const CrewMemberPage = async ({ params }: Props) => {
   );
 };
 
-export default CrewMemberPage;
+export default PoliceOfficerPage;

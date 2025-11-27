@@ -1,6 +1,7 @@
 "use server";
 
 import { MESSAGES_FN } from "@/constants/messages";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
 import { UserRole } from "@/generated/prisma";
@@ -35,24 +36,6 @@ export const deletePoliceOfficer = async (
     };
   }
 
-  const user = await db.auth_user.findUnique({
-    where: {
-      id: dataSession.user.id,
-    },
-  });
-
-  if (!user)
-    return {
-      error: UNAUTHORIZED,
-    };
-
-  if (policeOfficer.auth_userId !== user.id)
-    return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_DELETE_UNAUTHORIZED_OTHER,
-    };
-
   const permissions = await auth.api.userHasPermission({
     body: {
       userId: dataSession.user.id,
@@ -64,6 +47,18 @@ export const deletePoliceOfficer = async (
   if (!permissions.success)
     return {
       error: UNAUTHORIZED,
+    };
+
+  if (policeOfficer.auth_userId !== dataSession.user.id)
+    return {
+      error: MESSAGES_FN({
+        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
+      }).RESOURCE_DELETE_UNAUTHORIZED_OTHER,
+    };
+
+  if (policeOfficer.cogPlaythrough.is_finished)
+    return {
+      error: `You cannot delete data from a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
     };
 
   try {

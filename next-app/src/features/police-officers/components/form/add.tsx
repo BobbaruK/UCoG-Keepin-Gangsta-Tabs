@@ -17,6 +17,7 @@ import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
@@ -30,10 +31,10 @@ import { addPoliceOfficer } from "../../actions/add";
 import { AddPoliceOfficerSchema } from "../../schemas/add";
 
 interface Props {
-  playthroughId: string;
+  playthrough: Playthrough;
 }
 
-const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
+const AddPoliceOfficerForm = ({ playthrough }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm<z.infer<typeof AddPoliceOfficerSchema>>({
@@ -59,7 +60,7 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
   const onSubmit = (values: z.infer<typeof AddPoliceOfficerSchema>) => {
     startTransition(async () => {
       addPoliceOfficer({
-        playthroughId,
+        playthrough,
         values,
       })
         .then(async (data) => {
@@ -69,7 +70,7 @@ const AddPoliceOfficerForm = ({ playthroughId }: Props) => {
           if (data.success) {
             toast.success(data.success);
             router.push(
-              `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
+              `${playthroughTitle.href}/${playthrough.id + policeOfficersTitle.href}`,
             );
           }
         })

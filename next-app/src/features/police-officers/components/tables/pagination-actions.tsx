@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DIALOG_MESSAGES } from "@/constants/messages";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
@@ -22,7 +23,6 @@ import { chunkArray } from "@/lib/utils/chunk-array";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deletePoliceOfficer } from "../../actions/delete";
-import { DIALOG_MESSAGES } from "@/constants/messages";
 
 const PaginationActions = () => {
   const { isLoading, startTransition, dataSelected } =
@@ -120,18 +120,20 @@ const PaginationActions = () => {
             <CopyIcon />
             Copy id(s)
           </DropdownMenuItem>
-          {session && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {policeOfficersTitle.label.singular.toLowerCase()}(s)
-              </DropdownMenuItem>
-            </>
-          )}
+          {session &&
+            dataSelected[0]?.auth_userId === session.user.id &&
+            !dataSelected[0]?.cogPlaythrough.is_finished && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => setOpenDeleteDialog(true)}
+                >
+                  <TrashIcon />
+                  Delete {policeOfficersTitle.label.singular.toLowerCase()}(s)
+                </DropdownMenuItem>
+              </>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

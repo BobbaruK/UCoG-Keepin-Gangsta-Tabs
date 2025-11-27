@@ -96,6 +96,8 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
 
   const playthrough = await getPlaythrough(id);
 
+  if (!playthrough) return <PlaythroughError session={session} />;
+
   const policeOfficers = await getPoliceOfficers({
     pageNumber: pageIndex,
     perPage: pageSize,
@@ -117,8 +119,6 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
     },
     perPage: -1,
   });
-
-  if (!playthrough) return <PlaythroughError session={session} />;
 
   const laws = await getLaws();
 
@@ -153,7 +153,6 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
             ? `${playthroughTitle.href}/${playthrough.id + policeOfficersTitle.href}/add`
             : undefined
         }
-        forceAddButton={!playthrough.is_finished}
         session={session}
       />
 

@@ -126,33 +126,31 @@ const RowActions = ({ policeOfficer }: Props) => {
             </Link>
           </DropdownMenuItem>
 
-          {session && session.user.role !== UserRole.USER && (
-            <>
-              <DropdownMenuSeparator />
+          {session &&
+            policeOfficer.auth_userId === session.user.id &&
+            !policeOfficer.cogPlaythrough.is_finished && (
+              <>
+                <DropdownMenuSeparator />
 
-              {!policeOfficer.cogPlaythrough.is_finished && (
-                <>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}/edit`}
-                    >
-                      <EditIcon />
-                      Edit {policeOfficersTitle.label.singular.toLowerCase()}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                </>
-              )}
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}/edit`}
+                  >
+                    <EditIcon />
+                    Edit {policeOfficersTitle.label.singular.toLowerCase()}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
 
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {policeOfficersTitle.label.singular.toLowerCase()}
-              </DropdownMenuItem>
-            </>
-          )}
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => setOpenDeleteDialog(true)}
+                >
+                  <TrashIcon />
+                  Delete {policeOfficersTitle.label.singular.toLowerCase()}
+                </DropdownMenuItem>
+              </>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

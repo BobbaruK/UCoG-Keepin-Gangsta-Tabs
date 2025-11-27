@@ -31,7 +31,7 @@ const FormCardWrapper = ({ data }: Props) => {
     <Card>
       <CardContent>
         {data.type === "add" && (
-          <AddPoliceOfficerForm playthroughId={data.playthroughId} />
+          <AddPoliceOfficerForm playthrough={data.playthroughId} />
         )}
         {data.type === "edit" && (
           <EditPoliceOfficerForm policeOfficer={data.policeOfficer} />

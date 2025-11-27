@@ -2,8 +2,10 @@ import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
+import { redirectNonOwnerUsers } from "@/core/admin/lib/redirect-non-owner-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
+import { redirectPlaythroughFinished } from "@/core/db/playthrough/utils/redirect-playthrough-finished";
 import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
@@ -46,6 +48,16 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
   const playthrough = await getPlaythrough(playthroughId);
 
   if (!playthrough) return <PlaythroughError session={session} />;
+
+  redirectNonOwnerUsers({
+    isOwner: session?.user.id === playthrough.auth_userId,
+    to: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
+  });
+
+  redirectPlaythroughFinished({
+    isFinished: playthrough.is_finished,
+    to: `${playthroughTitle.href}/${playthrough.id + policeOfficersTitle.href}`,
+  });
 
   return (
     <PageStructure>

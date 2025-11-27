@@ -1,6 +1,7 @@
 "use server";
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
 import { UserRole } from "@/generated/prisma";
@@ -32,6 +33,14 @@ export const editPoliceOfficer = async (
 
   if (!validatedFields.success) return { error: MESSAGES.INVALID_FIELDS };
 
+  const {
+    name,
+    bribedTurn,
+    can_call_in_a_raid,
+    has_rival_hooligan_relative,
+    political_contact_used,
+  } = validatedFields.data;
+
   const dataSession = await auth.api.getSession({
     headers: await headers(),
   });
@@ -39,24 +48,6 @@ export const editPoliceOfficer = async (
   if (!dataSession)
     return {
       error: UNAUTHORIZED,
-    };
-
-  const user = await db.auth_user.findUnique({
-    where: {
-      id: dataSession.user.id,
-    },
-  });
-
-  if (!user)
-    return {
-      error: UNAUTHORIZED,
-    };
-
-  if (policeOfficer.auth_userId !== user.id)
-    return {
-      error: MESSAGES_FN({
-        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
-      }).RESOURCE_EDIT_UNAUTHORIZED_OTHER,
     };
 
   const permission = await auth.api.userHasPermission({
@@ -72,13 +63,17 @@ export const editPoliceOfficer = async (
       error: UNAUTHORIZED,
     };
 
-  const {
-    name,
-    bribedTurn,
-    can_call_in_a_raid,
-    has_rival_hooligan_relative,
-    political_contact_used,
-  } = validatedFields.data;
+  if (policeOfficer.auth_userId !== dataSession.user.id)
+    return {
+      error: MESSAGES_FN({
+        resource: policeOfficersTitle.label.singular.toLowerCase() + "(s)",
+      }).RESOURCE_EDIT_UNAUTHORIZED_OTHER,
+    };
+
+  if (policeOfficer.cogPlaythrough.is_finished)
+    return {
+      error: `You cannot edit data from a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
+    };
 
   try {
     const data = await db.cog_police_officer.update({

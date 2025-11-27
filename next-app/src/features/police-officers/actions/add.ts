@@ -1,7 +1,9 @@
 "use server";
 
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
+import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
+import { Playthrough } from "@/core/db/playthrough/types/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -15,10 +17,10 @@ const UNAUTHORIZED = MESSAGES_FN({
 }).RESOURCE_CREATE_UNAUTHORIZED;
 
 export const addPoliceOfficer = async ({
-  playthroughId,
+  playthrough,
   values,
 }: {
-  playthroughId: string;
+  playthrough: Playthrough;
   values: z.infer<typeof AddPoliceOfficerSchema>;
 }): Promise<
   | {
@@ -34,6 +36,14 @@ export const addPoliceOfficer = async ({
 
   if (!validatedFields.success) return { error: MESSAGES.INVALID_FIELDS };
 
+  const {
+    name,
+    bribedTurn,
+    can_call_in_a_raid,
+    has_rival_hooligan_relative,
+    political_contact_used,
+  } = validatedFields.data;
+
   const dataSession = await auth.api.getSession({
     headers: await headers(),
   });
@@ -44,22 +54,10 @@ export const addPoliceOfficer = async ({
     };
   }
 
-  const user = await db.auth_user.findUnique({
-    where: {
-      id: dataSession.user.id,
-    },
-  });
-
-  if (!user) {
-    return {
-      error: UNAUTHORIZED,
-    };
-  }
-
   const permissions = await auth.api.userHasPermission({
     body: {
-      userId: user.id,
-      role: user.role as UserRole,
+      userId: dataSession.user.id,
+      role: dataSession.user.role as UserRole,
       permission: { police_officers: ["create"] },
     },
   });
@@ -69,13 +67,17 @@ export const addPoliceOfficer = async ({
       error: UNAUTHORIZED,
     };
 
-  const {
-    name,
-    bribedTurn,
-    can_call_in_a_raid,
-    has_rival_hooligan_relative,
-    political_contact_used,
-  } = validatedFields.data;
+  if (playthrough.auth_userId !== dataSession.user.id)
+    return {
+      error: MESSAGES_FN({
+        resource: playthroughTitle.label.singular.toLowerCase(),
+      }).RESOURCE_CREATE_UNAUTHORIZED_OTHER,
+    };
+
+  if (playthrough.is_finished)
+    return {
+      error: `You cannot add data to a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
+    };
 
   try {
     const policeOfficer = await db.cog_police_officer.create({
@@ -85,8 +87,8 @@ export const addPoliceOfficer = async ({
         can_call_in_a_raid,
         has_rival_hooligan_relative,
         political_contact_used,
-        cog_playthroughId: playthroughId,
-        auth_userId: user.id,
+        cog_playthroughId: playthrough.id,
+        auth_userId: dataSession.user.id,
       },
     });
 
