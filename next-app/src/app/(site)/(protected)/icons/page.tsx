@@ -4,6 +4,7 @@ import { AdminIcon } from "@/components/icons/admin";
 import { AirplayIcon } from "@/components/icons/airplay";
 import { AnvilIcon } from "@/components/icons/anvil";
 import { ArrowLeftIcon } from "@/components/icons/arrow-left";
+import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { BanIcon } from "@/components/icons/ban";
 import { BossIcon } from "@/components/icons/boss";
 import { CalendarIcon } from "@/components/icons/calendar";
@@ -315,6 +316,10 @@ const icons: {
   {
     name: "LevelIcon",
     icon: LevelIcon,
+  },
+  {
+    name: "AutoRouteTypesIcon",
+    icon: AutoRouteTypesIcon,
   },
 ];
 
