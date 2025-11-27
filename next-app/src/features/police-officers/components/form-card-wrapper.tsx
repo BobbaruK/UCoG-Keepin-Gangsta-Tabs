@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import dynamic from "next/dynamic";
 import { AddPoliceOfficerFormSkeleton } from "./form/add";
 import { EditPoliceOfficerFormSkeleton } from "./form/edit";

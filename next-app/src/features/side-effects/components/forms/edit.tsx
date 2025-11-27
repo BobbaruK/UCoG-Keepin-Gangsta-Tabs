@@ -23,7 +23,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
-import { SideEffect } from "@/core/db/side-effect/types/side-effect";
+import { SideEffect } from "@/core/cog/side-effect/types/side-effect";
 import { editSideEffect } from "@/features/side-effects/actions/edit";
 import { SideEffectSchema } from "@/features/side-effects/schemas/side-effect";
 import { SideEffectType } from "@/generated/prisma";

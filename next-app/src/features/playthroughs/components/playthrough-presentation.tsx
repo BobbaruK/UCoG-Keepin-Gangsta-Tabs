@@ -20,8 +20,8 @@ import {
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { Law } from "@/core/db/law/types/law";
-import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { Law } from "@/core/cog/law/types/law";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Trait } from "@/core/db/trait/types/trait";
+import { Trait } from "@/core/cog/trait/types/trait";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { columns } from "@/features/traits/components/tables/columns";

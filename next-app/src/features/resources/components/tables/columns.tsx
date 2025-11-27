@@ -5,7 +5,7 @@ import { CustomButton } from "@/components/custom-button";
 import { DrillIcon } from "@/components/icons/drill";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { resourcesTitle } from "@/constants/page-title/resources";
-import { Resource } from "@/core/db/resource/types/resource";
+import { Resource } from "@/core/cog/resource/types/resource";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

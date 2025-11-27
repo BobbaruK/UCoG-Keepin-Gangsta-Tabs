@@ -1,6 +1,6 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { captainRoleInclude } from "@/core/db/captain-role/constants/include";
-import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { captainRoleInclude } from "@/core/cog/captain-role/constants/include";
+import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

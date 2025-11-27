@@ -1,7 +1,7 @@
 "use client";
 
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
-import { VehicleType } from "@/core/db/vehicle-type/types/vehicle-type";
+import { VehicleType } from "@/core/cog/vehicle-type/types/vehicle-type";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

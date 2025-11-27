@@ -18,7 +18,7 @@ import {
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { CrewMember } from "@/core/db/crew-member/types/crew-member";
+import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import { setFullName } from "@/lib/utils/full-name";

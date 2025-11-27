@@ -1,6 +1,6 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { resourceTypeInclude } from "@/core/db/resource-type/constants/include";
-import { ResourceType } from "@/core/db/resource-type/types/resource-type";
+import { resourceTypeInclude } from "@/core/cog/resource-type/constants/include";
+import { ResourceType } from "@/core/cog/resource-type/types/resource-type";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

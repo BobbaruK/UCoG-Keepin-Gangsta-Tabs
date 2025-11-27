@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
 import dynamic from "next/dynamic";
 import { AddCrewLevelFormSkeleton } from "./form/add";
 import { EditCrewLevelFormSkeleton } from "./form/edit";

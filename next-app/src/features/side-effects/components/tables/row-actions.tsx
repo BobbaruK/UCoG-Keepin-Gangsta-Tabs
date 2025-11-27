@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
-import { SideEffect } from "@/core/db/side-effect/types/side-effect";
+import { SideEffect } from "@/core/cog/side-effect/types/side-effect";
 import { deleteSideEffect } from "@/features/side-effects/actions/delete";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";

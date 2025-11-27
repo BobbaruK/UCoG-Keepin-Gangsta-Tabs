@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { lawsTitle } from "@/constants/page-title/laws";
-import { Law } from "@/core/db/law/types/law";
+import { Law } from "@/core/cog/law/types/law";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";

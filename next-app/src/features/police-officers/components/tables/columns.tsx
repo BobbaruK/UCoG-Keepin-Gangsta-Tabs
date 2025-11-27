@@ -4,7 +4,7 @@ import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
-import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

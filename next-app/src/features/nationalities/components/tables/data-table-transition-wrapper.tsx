@@ -1,6 +1,6 @@
 "use client";
 
-import { Nationality } from "@/core/db/nationality/types/nationality";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";

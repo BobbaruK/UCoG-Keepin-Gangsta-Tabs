@@ -8,7 +8,7 @@ import { BASE_ACTION_POINTS, BASE_MOVEMENT_POINTS } from "@/constants/misc";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { traitsTitle } from "@/constants/page-title/traits";
-import { CrewMember } from "@/core/db/crew-member/types/crew-member";
+import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { SideEffectType } from "@/generated/prisma";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import Link from "next/link";

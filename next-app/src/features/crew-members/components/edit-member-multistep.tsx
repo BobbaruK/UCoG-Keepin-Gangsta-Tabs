@@ -2,11 +2,11 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
-import { CrewMember } from "@/core/db/crew-member/types/crew-member";
-import { Nationality } from "@/core/db/nationality/types/nationality";
-import { Trait } from "@/core/db/trait/types/trait";
+import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
+import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
+import { Trait } from "@/core/cog/trait/types/trait";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { EditCrewMemberFormSkeleton } from "./form/edit";

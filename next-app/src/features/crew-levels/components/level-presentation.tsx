@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 
 interface Props {

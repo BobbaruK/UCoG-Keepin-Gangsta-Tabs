@@ -3,7 +3,7 @@
 import { MESSAGES_FN } from "@/constants/messages";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { CrewMember } from "@/core/db/crew-member/types/crew-member";
+import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";

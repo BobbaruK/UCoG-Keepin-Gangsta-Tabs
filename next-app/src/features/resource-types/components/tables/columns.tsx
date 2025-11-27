@@ -3,7 +3,7 @@
 import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
-import { ResourceType } from "@/core/db/resource-type/types/resource-type";
+import { ResourceType } from "@/core/cog/resource-type/types/resource-type";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

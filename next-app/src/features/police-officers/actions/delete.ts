@@ -3,7 +3,7 @@
 import { MESSAGES_FN } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
-import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";

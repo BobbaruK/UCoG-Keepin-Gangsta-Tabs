@@ -1,5 +1,5 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { Nationality } from "@/core/db/nationality/types/nationality";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

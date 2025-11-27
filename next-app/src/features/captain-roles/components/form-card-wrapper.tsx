@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
 import { cog_side_effect } from "@/generated/prisma";
 import dynamic from "next/dynamic";
 import { AddCaptainRoleFormSkeleton } from "./form/add";

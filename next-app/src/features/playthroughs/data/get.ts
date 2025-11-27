@@ -1,6 +1,6 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { playthroughInclude } from "@/core/db/playthrough/constants/include";
-import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { playthroughInclude } from "@/core/cog/playthrough/constants/include";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

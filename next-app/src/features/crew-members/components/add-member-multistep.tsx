@@ -2,15 +2,15 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
-import { Nationality } from "@/core/db/nationality/types/nationality";
-import { Trait } from "@/core/db/trait/types/trait";
+import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
+import { Trait } from "@/core/cog/trait/types/trait";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { AddCrewMemberFormSkeleton } from "./form/add";
 import { AddExperienceFormSkeleton } from "./form/experience/add";
-import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 const AddCrewMemberForm = dynamic(() => import("./form/add"), {
   ssr: false,
   loading: () => <AddCrewMemberFormSkeleton />,
@@ -40,7 +40,7 @@ const AddMemberMultiStep = ({
   traits = [],
   levels = [],
 }: Props) => {
-  const [tabSelected, setTabSelected] = useState<AllTabs>("experience");
+  const [tabSelected, setTabSelected] = useState<AllTabs>("create");
   const [crewMemberId, setCrewMemberId] = useState("");
 
   return (

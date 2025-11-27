@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
-import { ResourceType } from "@/core/db/resource-type/types/resource-type";
+import { ResourceType } from "@/core/cog/resource-type/types/resource-type";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";

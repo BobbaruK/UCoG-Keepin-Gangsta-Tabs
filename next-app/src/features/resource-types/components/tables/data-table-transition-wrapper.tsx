@@ -1,6 +1,6 @@
 "use client";
 
-import { ResourceType } from "@/core/db/resource-type/types/resource-type";
+import { ResourceType } from "@/core/cog/resource-type/types/resource-type";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";

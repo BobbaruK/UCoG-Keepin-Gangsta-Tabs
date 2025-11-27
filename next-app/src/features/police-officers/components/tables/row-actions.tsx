@@ -18,7 +18,7 @@ import {
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
-import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";

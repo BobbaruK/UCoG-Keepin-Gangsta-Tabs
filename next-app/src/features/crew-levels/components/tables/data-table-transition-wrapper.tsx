@@ -1,6 +1,6 @@
 "use client";
 
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";

@@ -1,5 +1,5 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { VehicleType } from "@/core/db/vehicle-type/types/vehicle-type";
+import { VehicleType } from "@/core/cog/vehicle-type/types/vehicle-type";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

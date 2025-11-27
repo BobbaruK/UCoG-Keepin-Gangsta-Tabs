@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BATCH_ITEMS } from "@/constants/misc";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
-import { VehicleType } from "@/core/db/vehicle-type/types/vehicle-type";
+import { VehicleType } from "@/core/cog/vehicle-type/types/vehicle-type";
 import { useTableContext } from "@/core/table/providers/table-provider";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";

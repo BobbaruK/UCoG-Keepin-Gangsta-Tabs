@@ -1,6 +1,6 @@
 "use client";
 
-import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import { DataTable } from "@/core/table/components/data-table";
 import TableProvider from "@/core/table/providers/table-provider";
 import { useTransition } from "react";

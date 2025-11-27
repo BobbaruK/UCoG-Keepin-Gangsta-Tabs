@@ -1,6 +1,6 @@
 import { CustomAvatar } from "@/components/custom-avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
 
 interface Props {
   captainRole: CaptainRole;

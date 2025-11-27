@@ -30,7 +30,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
-import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
 import { cog_side_effect } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";

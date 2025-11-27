@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";

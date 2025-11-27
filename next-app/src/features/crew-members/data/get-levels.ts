@@ -1,5 +1,5 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Trait } from "@/core/db/trait/types/trait";
+import { Trait } from "@/core/cog/trait/types/trait";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 
 interface Props {

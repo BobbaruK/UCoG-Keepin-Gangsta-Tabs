@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SideEffect } from "@/core/db/side-effect/types/side-effect";
+import { SideEffect } from "@/core/cog/side-effect/types/side-effect";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 
 interface Props {

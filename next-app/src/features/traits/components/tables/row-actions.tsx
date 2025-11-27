@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { traitsTitle } from "@/constants/page-title/traits";
-import { Trait } from "@/core/db/trait/types/trait";
+import { Trait } from "@/core/cog/trait/types/trait";
 import { deleteTrait } from "@/features/traits/actions/delete";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";

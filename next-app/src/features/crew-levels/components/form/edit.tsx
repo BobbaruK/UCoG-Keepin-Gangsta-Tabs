@@ -24,7 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
 import { CrewLevelType } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";

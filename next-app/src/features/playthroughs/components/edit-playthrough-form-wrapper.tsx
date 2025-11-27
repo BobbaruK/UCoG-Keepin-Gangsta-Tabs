@@ -1,6 +1,6 @@
 "use client";
 
-import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { cog_law } from "@/generated/prisma";
 import dynamic from "next/dynamic";
 import { EditPlaythroughFormSkeleton } from "./form/edit";

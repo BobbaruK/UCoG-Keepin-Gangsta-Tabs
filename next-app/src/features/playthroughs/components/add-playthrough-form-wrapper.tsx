@@ -1,7 +1,7 @@
 "use client";
 
-import { Nationality } from "@/core/db/nationality/types/nationality";
-import { Trait } from "@/core/db/trait/types/trait";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
+import { Trait } from "@/core/cog/trait/types/trait";
 import { cog_law } from "@/generated/prisma";
 import dynamic from "next/dynamic";
 import { AddPlaythroughFormSkeleton } from "./form/add";

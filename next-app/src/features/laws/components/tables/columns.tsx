@@ -4,7 +4,7 @@ import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
-import { Law } from "@/core/db/law/types/law";
+import { Law } from "@/core/cog/law/types/law";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

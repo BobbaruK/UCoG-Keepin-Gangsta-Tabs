@@ -6,7 +6,7 @@ import { TraitsIcon } from "@/components/icons/traits";
 import { Badge } from "@/components/ui/badge";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
 import { traitsTitle } from "@/constants/page-title/traits";
-import { Trait } from "@/core/db/trait/types/trait";
+import { Trait } from "@/core/cog/trait/types/trait";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

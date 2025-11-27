@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Nationality } from "@/core/db/nationality/types/nationality";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
 
 interface Props {
   nationality: Nationality;

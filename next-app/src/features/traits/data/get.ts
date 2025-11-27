@@ -1,6 +1,6 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { traitInclude } from "@/core/db/trait/constants/include";
-import { Trait } from "@/core/db/trait/types/trait";
+import { traitInclude } from "@/core/cog/trait/constants/include";
+import { Trait } from "@/core/cog/trait/types/trait";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

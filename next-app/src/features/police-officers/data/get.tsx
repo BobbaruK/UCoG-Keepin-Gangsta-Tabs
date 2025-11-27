@@ -1,6 +1,6 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { policeOfficerInclude } from "@/core/db/police-officer/constants/include";
-import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { policeOfficerInclude } from "@/core/cog/police-officer/constants/include";
+import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

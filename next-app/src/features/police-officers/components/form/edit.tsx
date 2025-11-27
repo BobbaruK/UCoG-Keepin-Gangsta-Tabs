@@ -19,7 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
-import { PoliceOfficer } from "@/core/db/police-officer/types/police-officer";
+import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";

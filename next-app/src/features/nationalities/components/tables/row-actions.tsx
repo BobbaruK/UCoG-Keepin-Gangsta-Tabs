@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
-import { Nationality } from "@/core/db/nationality/types/nationality";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
 import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";

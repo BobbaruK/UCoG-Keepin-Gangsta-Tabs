@@ -4,7 +4,7 @@ import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
 import { FlagIcon } from "@/components/icons/flag";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
-import { Nationality } from "@/core/db/nationality/types/nationality";
+import { Nationality } from "@/core/cog/nationality/types/nationality";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

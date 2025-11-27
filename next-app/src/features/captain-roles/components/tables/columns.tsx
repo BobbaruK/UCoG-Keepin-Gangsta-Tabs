@@ -4,7 +4,7 @@ import { CustomAvatar } from "@/components/custom-avatar";
 import { Badge } from "@/components/ui/badge";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { sideEffectsTitle } from "@/constants/page-title/side-effects";
-import { CaptainRole } from "@/core/db/captain-role/types/captain-role";
+import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

@@ -17,7 +17,7 @@ import { Switch } from "@/components/ui/switch";
 import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
-import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";

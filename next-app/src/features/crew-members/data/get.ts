@@ -1,6 +1,6 @@
 import { PAGINATION_DEFAULT } from "@/constants/table";
-import { crewMemberInclude } from "@/core/db/crew-member/constants/include";
-import { CrewMember } from "@/core/db/crew-member/types/crew-member";
+import { crewMemberInclude } from "@/core/cog/crew-member/constants/include";
+import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { Prisma } from "@/generated/prisma";
 import db from "@/lib/prisma";
 

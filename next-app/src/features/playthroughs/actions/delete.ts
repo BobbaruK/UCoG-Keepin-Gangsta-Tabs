@@ -2,7 +2,7 @@
 
 import { MESSAGES_FN } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { Playthrough } from "@/core/db/playthrough/types/playthrough";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";

@@ -3,7 +3,7 @@
 import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
-import { CrewLevel } from "@/core/db/crew-level/types/crew-level";
+import { CrewLevel } from "@/core/cog/crew-level/types/crew-level";
 import { SelectCell } from "@/core/table/components/select-column/cell";
 import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";

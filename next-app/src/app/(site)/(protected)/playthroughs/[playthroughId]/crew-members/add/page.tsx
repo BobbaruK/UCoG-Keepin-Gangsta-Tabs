@@ -5,7 +5,7 @@ import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { redirectNonOwnerUsers } from "@/core/admin/lib/redirect-non-owner-users";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { redirectPlaythroughFinished } from "@/core/db/playthrough/utils/redirect-playthrough-finished";
+import { redirectPlaythroughFinished } from "@/core/cog/playthrough/utils/redirect-playthrough-finished";
 import { getCaptainRoles } from "@/features/captain-roles/data/get";
 import AddMemberMultiStep from "@/features/crew-members/components/add-member-multistep";
 import { getCrewLevels } from "@/features/crew-members/data/get-levels";

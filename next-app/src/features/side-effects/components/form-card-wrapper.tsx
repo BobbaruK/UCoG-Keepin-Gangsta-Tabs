@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { SideEffect } from "@/core/db/side-effect/types/side-effect";
+import { SideEffect } from "@/core/cog/side-effect/types/side-effect";
 import dynamic from "next/dynamic";
 import { AddSideEffectFormSkeleton } from "./forms/add";
 import { EditSideEffectFormSkeleton } from "./forms/edit";
