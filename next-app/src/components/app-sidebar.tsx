@@ -20,15 +20,7 @@ import { signOut } from "@/core/auth/actions/sign-out";
 import { UserRole } from "@/generated/prisma";
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
-import {
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-} from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

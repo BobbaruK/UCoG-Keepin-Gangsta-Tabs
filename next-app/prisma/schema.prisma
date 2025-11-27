@@ -272,6 +272,14 @@ model cog_crew_level {
   cogCrewExperiences cog_crew_experience[]
 }
 
+model cog_auto_route_type {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+}
+
 // Main Table
 
 model cog_playthrough {

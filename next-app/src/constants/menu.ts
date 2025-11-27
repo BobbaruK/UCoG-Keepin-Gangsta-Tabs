@@ -1,10 +1,12 @@
 import { AnvilIcon } from "@/components/icons/anvil";
+import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { CarIcon } from "@/components/icons/car";
 import { CastleIcon } from "@/components/icons/castle";
 import { CrewIcon } from "@/components/icons/crew";
 import { DrillIcon } from "@/components/icons/drill";
 import { FlagIcon } from "@/components/icons/flag";
 import { LawIcon } from "@/components/icons/law";
+import { LevelIcon } from "@/components/icons/level";
 import { SirenIcon } from "@/components/icons/siren";
 import { StarIcon } from "@/components/icons/star";
 import { TraitsIcon } from "@/components/icons/traits";
@@ -17,6 +19,7 @@ import {
   PlaythroughMenuItem,
 } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
+import { autoRouteTypesTitle } from "./page-title/auto-route-types";
 import { captainRolesTitle } from "./page-title/captain-roles";
 import { crewLevelsTitle } from "./page-title/crew-levels";
 import { crewMembersTitle } from "./page-title/crew-members";
@@ -29,7 +32,6 @@ import { resourcesTitle } from "./page-title/resources";
 import { sideEffectsTitle } from "./page-title/side-effects";
 import { traitsTitle } from "./page-title/traits";
 import { vehicleTypesTitle } from "./page-title/vehicle-types";
-import { LevelIcon } from "@/components/icons/level";
 
 export const menuItems: MenuItem[] = [
   {
@@ -45,6 +47,11 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const menuBasicTables: MenuItem[] = [
+  {
+    title: autoRouteTypesTitle.label.plural,
+    url: autoRouteTypesTitle.href,
+    icon: AutoRouteTypesIcon,
+  },
   {
     title: crewLevelsTitle.label.plural,
     url: crewLevelsTitle.href,
