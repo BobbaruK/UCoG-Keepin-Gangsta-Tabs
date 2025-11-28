@@ -4,8 +4,8 @@ import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
-import { FlagIcon } from "@/components/icons/flag";
 import { MoreIcon } from "@/components/icons/more";
+import { NationalityIcon } from "@/components/icons/nationality";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -116,7 +116,7 @@ const RowActions = ({ nationality }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${nationalitiesTitle.href}/${nationality.id}`}>
-              <FlagIcon />
+              <NationalityIcon />
               Go to {nationalitiesTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

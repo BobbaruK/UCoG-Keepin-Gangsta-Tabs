@@ -3,8 +3,8 @@
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
 import { BossIcon } from "@/components/icons/boss";
-import { FlagIcon } from "@/components/icons/flag";
-import { StarIcon } from "@/components/icons/star";
+import { CaptainRoleIcon } from "@/components/icons/captain-role";
+import { NationalityIcon } from "@/components/icons/nationality";
 import { TraitsIcon } from "@/components/icons/traits";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -132,7 +132,7 @@ export const columns = ({
                     <CustomAvatar
                       className="size-6 rounded-md border-none"
                       image={nationalityFlag}
-                      icon={<FlagIcon size={16} />}
+                      icon={<NationalityIcon size={16} />}
                       fit="contain"
                     />
                   </Link>
@@ -153,7 +153,7 @@ export const columns = ({
                           <CustomAvatar
                             className="size-6 rounded-md border-none"
                             image={captain.image}
-                            icon={<StarIcon size={16} />}
+                            icon={<CaptainRoleIcon size={16} />}
                             fit="contain"
                           />
                         </Link>

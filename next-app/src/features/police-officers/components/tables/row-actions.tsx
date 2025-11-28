@@ -5,7 +5,7 @@ import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
-import { SirenIcon } from "@/components/icons/siren";
+import { PoliceOfficerIcon } from "@/components/icons/police-officer";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -19,7 +19,6 @@ import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
-import { UserRole } from "@/generated/prisma";
 import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
@@ -121,7 +120,7 @@ const RowActions = ({ policeOfficer }: Props) => {
             <Link
               href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}`}
             >
-              <SirenIcon />
+              <PoliceOfficerIcon />
               Go to {policeOfficersTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

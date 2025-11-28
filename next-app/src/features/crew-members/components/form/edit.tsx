@@ -4,7 +4,7 @@ import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
-import { StarIcon } from "@/components/icons/star";
+import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
@@ -330,7 +330,7 @@ const EditCrewMemberForm = ({
                                   role.id === form.getValues("captain_role"),
                               )?.image
                             }
-                            icon={<StarIcon className="text-foreground" />}
+                            icon={<CaptainRoleIcon className="text-foreground" />}
                             className="size-6 rounded-md border-none"
                             fit="contain"
                           />
@@ -381,7 +381,7 @@ const EditCrewMemberForm = ({
                               <CustomAvatar
                                 image={unassigned.image}
                                 className="size-6 rounded-md border-none"
-                                icon={<StarIcon />}
+                                icon={<CaptainRoleIcon />}
                                 fit="contain"
                               />
                               {unassigned.name}

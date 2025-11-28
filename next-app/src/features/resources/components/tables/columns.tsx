@@ -2,7 +2,7 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
-import { DrillIcon } from "@/components/icons/drill";
+import { ResourceIcon } from "@/components/icons/resource";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { resourcesTitle } from "@/constants/page-title/resources";
 import { Resource } from "@/core/cog/resource/types/resource";
@@ -97,7 +97,7 @@ export const columns = ({
             image={row.original.image}
             className="size-12 rounded-sm border-none"
             fit="contain"
-            icon={<DrillIcon />}
+            icon={<ResourceIcon />}
           />
         </Link>
       </div>

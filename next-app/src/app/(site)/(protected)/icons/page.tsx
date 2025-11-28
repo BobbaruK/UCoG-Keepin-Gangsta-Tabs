@@ -2,28 +2,25 @@ import { AccountIcon } from "@/components/icons/account";
 import { AddIcon } from "@/components/icons/add";
 import { AdminIcon } from "@/components/icons/admin";
 import { AirplayIcon } from "@/components/icons/airplay";
-import { AnvilIcon } from "@/components/icons/anvil";
 import { ArrowLeftIcon } from "@/components/icons/arrow-left";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { BanIcon } from "@/components/icons/ban";
 import { BossIcon } from "@/components/icons/boss";
 import { CalendarIcon } from "@/components/icons/calendar";
 import { CameraIcon } from "@/components/icons/camera";
-import { CarIcon } from "@/components/icons/car";
-import { CastleIcon } from "@/components/icons/castle";
+import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { ChevronDownIcon } from "@/components/icons/chevron-down";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
 import { ChevronRightIcon } from "@/components/icons/chevron-right";
 import { ChevronUpIcon } from "@/components/icons/chevron-up";
 import { CogIcon } from "@/components/icons/cog";
 import { CopyIcon } from "@/components/icons/copy";
-import { CrewIcon } from "@/components/icons/crew";
+import { CrewLevelIcon } from "@/components/icons/crew-level";
+import { CrewMemberIcon } from "@/components/icons/crew-member";
 import { DiscordIcon } from "@/components/icons/discord";
-import { DrillIcon } from "@/components/icons/drill";
 import { EditIcon } from "@/components/icons/edit";
 import { EnvelopeIcon } from "@/components/icons/envelope";
 import { ErrorIcon } from "@/components/icons/error";
-import { FlagIcon } from "@/components/icons/flag";
 import { GamepadIcon } from "@/components/icons/gamepad";
 import { GithubIcon } from "@/components/icons/github";
 import { GogglesIcon } from "@/components/icons/goggles";
@@ -32,7 +29,6 @@ import { HomeIcon } from "@/components/icons/home";
 import { ImpersonateIcon } from "@/components/icons/impersonate";
 import { KeyIcon } from "@/components/icons/key";
 import { LawIcon } from "@/components/icons/law";
-import { LevelIcon } from "@/components/icons/level";
 import { LinkIcon } from "@/components/icons/link";
 import { LoginIcon } from "@/components/icons/login";
 import { LogoutIcon } from "@/components/icons/logout";
@@ -42,13 +38,17 @@ import { MobileIcon } from "@/components/icons/mobile";
 import { MonitorIcon } from "@/components/icons/monitor";
 import { MoonIcon } from "@/components/icons/moon";
 import { MoreIcon } from "@/components/icons/more";
+import { NationalityIcon } from "@/components/icons/nationality";
 import { OwnerIcon } from "@/components/icons/owner";
+import { PlaythroughIcon } from "@/components/icons/playthrough";
+import { PoliceOfficerIcon } from "@/components/icons/police-officer";
+import { ResourceIcon } from "@/components/icons/resource";
+import { ResourceTypeIcon } from "@/components/icons/resource-type";
 import { RolesIcon } from "@/components/icons/roles";
 import { ShieldIcon } from "@/components/icons/shield";
 import { ShieldBanIcon } from "@/components/icons/shield-ban";
-import { SirenIcon } from "@/components/icons/siren";
+import { SideEffectsIcon } from "@/components/icons/side-effect";
 import { SkullIcon } from "@/components/icons/skull";
-import { StarIcon } from "@/components/icons/star";
 import { TabletIcon } from "@/components/icons/tablet";
 import { TerminalIcon } from "@/components/icons/terminal";
 import { TraitsIcon } from "@/components/icons/traits";
@@ -58,8 +58,8 @@ import { UnbanIcon } from "@/components/icons/unban";
 import { UnlinkIcon } from "@/components/icons/unlink";
 import { UserIcon } from "@/components/icons/user";
 import { UsersIcon } from "@/components/icons/users";
+import { VehicleTypesIcon } from "@/components/icons/vehicle-types";
 import { WatchIcon } from "@/components/icons/watch";
-import { WormIcon } from "@/components/icons/worm";
 import { PageStructure } from "@/components/page-structure";
 import { Card, CardContent } from "@/components/ui/card";
 import { Metadata } from "next";
@@ -258,8 +258,8 @@ const icons: {
     icon: ArrowLeftIcon,
   },
   {
-    name: "WormIcon",
-    icon: WormIcon,
+    name: "SideEffectsIcon",
+    icon: SideEffectsIcon,
   },
   {
     name: "TraitsIcon",
@@ -274,36 +274,36 @@ const icons: {
     icon: MinusIcon,
   },
   {
-    name: "FlagIcon",
-    icon: FlagIcon,
+    name: "NationalityIcon",
+    icon: NationalityIcon,
   },
   {
-    name: "CarIcon",
-    icon: CarIcon,
+    name: "VehicleTypesIcon",
+    icon: VehicleTypesIcon,
   },
   {
-    name: "AnvilIcon",
-    icon: AnvilIcon,
+    name: "ResourceTypeIcon",
+    icon: ResourceTypeIcon,
   },
   {
-    name: "DrillIcon",
-    icon: DrillIcon,
+    name: "ResourceIcon",
+    icon: ResourceIcon,
   },
   {
-    name: "CastleIcon",
-    icon: CastleIcon,
+    name: "PlaythroughIcon",
+    icon: PlaythroughIcon,
   },
   {
-    name: "SirenIcon",
-    icon: SirenIcon,
+    name: "PoliceOfficerIcon",
+    icon: PoliceOfficerIcon,
   },
   {
-    name: "StarIcon",
-    icon: StarIcon,
+    name: "CaptainRoleIcon",
+    icon: CaptainRoleIcon,
   },
   {
-    name: "CrewIcon",
-    icon: CrewIcon,
+    name: "CrewMemberIcon",
+    icon: CrewMemberIcon,
   },
   {
     name: "BossIcon",
@@ -314,8 +314,8 @@ const icons: {
     icon: SkullIcon,
   },
   {
-    name: "LevelIcon",
-    icon: LevelIcon,
+    name: "CrewLevelIcon",
+    icon: CrewLevelIcon,
   },
   {
     name: "AutoRouteTypesIcon",

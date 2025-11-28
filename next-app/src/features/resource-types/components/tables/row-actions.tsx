@@ -2,10 +2,10 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
-import { AnvilIcon } from "@/components/icons/anvil";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
+import { ResourceTypeIcon } from "@/components/icons/resource-type";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -116,7 +116,7 @@ const RowActions = ({ resourceType }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${resourceTypesTitle.href}/${resourceType.id}`}>
-              <AnvilIcon />
+              <ResourceTypeIcon />
               Go to {resourceTypesTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

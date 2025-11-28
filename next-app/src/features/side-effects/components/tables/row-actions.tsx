@@ -5,8 +5,8 @@ import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
+import { SideEffectsIcon } from "@/components/icons/side-effect";
 import { TrashIcon } from "@/components/icons/trash";
-import { WormIcon } from "@/components/icons/worm";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
   DropdownMenu,
@@ -117,7 +117,7 @@ const RowActions = ({ sideEffect }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${sideEffectsTitle.href}/${sideEffect.id}`}>
-              <WormIcon />
+              <SideEffectsIcon />
               Go to side effect
             </Link>
           </DropdownMenuItem>

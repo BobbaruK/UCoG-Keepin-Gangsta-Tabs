@@ -2,10 +2,10 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
-import { CastleIcon } from "@/components/icons/castle";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
+import { PlaythroughIcon } from "@/components/icons/playthrough";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -116,7 +116,7 @@ const RowActions = ({ playthrough }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${playthroughTitle.href}/${playthrough.id}`}>
-              <CastleIcon />
+              <PlaythroughIcon />
               Go to {playthroughTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

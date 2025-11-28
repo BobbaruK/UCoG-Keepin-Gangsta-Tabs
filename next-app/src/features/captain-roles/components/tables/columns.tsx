@@ -15,7 +15,7 @@ import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
 import { CustomButton } from "@/components/custom-button";
-import { StarIcon } from "@/components/icons/star";
+import { CaptainRoleIcon } from "@/components/icons/captain-role";
 
 export const columns = ({
   isLoading,
@@ -95,7 +95,7 @@ export const columns = ({
             image={row.original.image}
             className="size-12 rounded-sm border-none"
             fit="contain"
-            icon={<StarIcon />}
+            icon={<CaptainRoleIcon />}
           />
         </Link>
       </div>

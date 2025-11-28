@@ -3,9 +3,9 @@
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
-import { DrillIcon } from "@/components/icons/drill";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
+import { ResourceIcon } from "@/components/icons/resource";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -116,7 +116,7 @@ const RowActions = ({ resource }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${resourcesTitle.href}/${resource.id}`}>
-              <DrillIcon />
+              <ResourceIcon />
               Go to {resourcesTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

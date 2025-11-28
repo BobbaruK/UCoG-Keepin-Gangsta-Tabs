@@ -1,17 +1,17 @@
-import { AnvilIcon } from "@/components/icons/anvil";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
-import { CarIcon } from "@/components/icons/car";
-import { CastleIcon } from "@/components/icons/castle";
-import { CrewIcon } from "@/components/icons/crew";
-import { DrillIcon } from "@/components/icons/drill";
-import { FlagIcon } from "@/components/icons/flag";
+import { CaptainRoleIcon } from "@/components/icons/captain-role";
+import { CrewLevelIcon } from "@/components/icons/crew-level";
+import { CrewMemberIcon } from "@/components/icons/crew-member";
 import { LawIcon } from "@/components/icons/law";
-import { LevelIcon } from "@/components/icons/level";
-import { SirenIcon } from "@/components/icons/siren";
-import { StarIcon } from "@/components/icons/star";
+import { NationalityIcon } from "@/components/icons/nationality";
+import { PlaythroughIcon } from "@/components/icons/playthrough";
+import { PoliceOfficerIcon } from "@/components/icons/police-officer";
+import { ResourceIcon } from "@/components/icons/resource";
+import { ResourceTypeIcon } from "@/components/icons/resource-type";
+import { SideEffectsIcon } from "@/components/icons/side-effect";
 import { TraitsIcon } from "@/components/icons/traits";
 import { UsersIcon } from "@/components/icons/users";
-import { WormIcon } from "@/components/icons/worm";
+import { VehicleTypesIcon } from "@/components/icons/vehicle-types";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import {
   MenuAdminItem,
@@ -42,7 +42,7 @@ export const menuItems: MenuItem[] = [
   {
     title: playthroughTitle.label.plural,
     url: playthroughTitle.href,
-    icon: CastleIcon,
+    icon: PlaythroughIcon,
   },
 ];
 
@@ -55,32 +55,32 @@ export const menuBasicTables: MenuItem[] = [
   {
     title: crewLevelsTitle.label.plural,
     url: crewLevelsTitle.href,
-    icon: LevelIcon,
+    icon: CrewLevelIcon,
   },
   {
     title: captainRolesTitle.label.plural,
     url: captainRolesTitle.href,
-    icon: StarIcon,
+    icon: CaptainRoleIcon,
   },
   {
     title: resourcesTitle.label.plural,
     url: resourcesTitle.href,
-    icon: DrillIcon,
+    icon: ResourceIcon,
   },
   {
     title: resourceTypesTitle.label.plural,
     url: resourceTypesTitle.href,
-    icon: AnvilIcon,
+    icon: ResourceTypeIcon,
   },
   {
     title: vehicleTypesTitle.label.plural,
     url: vehicleTypesTitle.href,
-    icon: CarIcon,
+    icon: VehicleTypesIcon,
   },
   {
     title: nationalitiesTitle.label.plural,
     url: nationalitiesTitle.href,
-    icon: FlagIcon,
+    icon: NationalityIcon,
   },
   {
     title: lawsTitle.label.plural,
@@ -95,7 +95,7 @@ export const menuBasicTables: MenuItem[] = [
   {
     title: sideEffectsTitle.label.plural,
     url: sideEffectsTitle.href,
-    icon: WormIcon,
+    icon: SideEffectsIcon,
   },
 ];
 
@@ -113,33 +113,33 @@ export const playthroughMenu = (
   {
     title: "Crew members",
     url: `${playthroughTitle.href}/${playthroughId + crewMembersTitle.href}`,
-    icon: CrewIcon,
+    icon: CrewMemberIcon,
   },
   {
     title: "Auto routes",
     url: `${playthroughTitle.href}/${playthroughId}/auto-routes`,
-    icon: SirenIcon,
+    icon: PoliceOfficerIcon,
   },
   {
     title: "Buildings",
     url: `${playthroughTitle.href}/${playthroughId}/buildings`,
-    icon: SirenIcon,
+    icon: PoliceOfficerIcon,
   },
   {
     title: "Gambling",
     url: `${playthroughTitle.href}/${playthroughId}/gambling`,
-    icon: SirenIcon,
+    icon: PoliceOfficerIcon,
   },
   {
     title: capitalizeFirstLetter(
       policeOfficersTitle.label.plural.toLowerCase(),
     ),
     url: `${playthroughTitle.href}/${playthroughId + policeOfficersTitle.href}`,
-    icon: SirenIcon,
+    icon: PoliceOfficerIcon,
   },
   {
     title: "Elections",
     url: `${playthroughTitle.href}/${playthroughId}/elections`,
-    icon: SirenIcon,
+    icon: PoliceOfficerIcon,
   },
 ];

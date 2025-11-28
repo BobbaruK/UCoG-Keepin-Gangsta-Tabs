@@ -1,6 +1,6 @@
 import { LucideIconProps } from "@/types/icons";
 import { Siren } from "lucide-react";
 
-export const SirenIcon = ({ ...props }: LucideIconProps) => {
+export const PoliceOfficerIcon = ({ ...props }: LucideIconProps) => {
   return <Siren {...props} />;
 };

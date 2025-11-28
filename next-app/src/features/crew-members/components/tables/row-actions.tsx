@@ -3,7 +3,7 @@
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
-import { CrewIcon } from "@/components/icons/crew";
+import { CrewMemberIcon } from "@/components/icons/crew-member";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
@@ -125,7 +125,7 @@ const RowActions = ({ crewMember }: Props) => {
             <Link
               href={`${playthroughTitle.href}/${crewMember.playthrough.id + crewMembersTitle.href}/${crewMember.id}`}
             >
-              <CrewIcon />
+              <CrewMemberIcon />
               Go to {crewMembersTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

@@ -2,11 +2,11 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
-import { CarIcon } from "@/components/icons/car";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
+import { VehicleTypesIcon } from "@/components/icons/vehicle-types";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
   DropdownMenu,
@@ -115,7 +115,7 @@ const RowActions = ({ vehicleType }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${vehicleTypesTitle.href}/${vehicleType.id}`}>
-              <CarIcon />
+              <VehicleTypesIcon />
               Go to {vehicleTypesTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

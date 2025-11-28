@@ -5,7 +5,7 @@ import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
 import { MoreIcon } from "@/components/icons/more";
-import { StarIcon } from "@/components/icons/star";
+import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import {
@@ -116,7 +116,7 @@ const RowActions = ({ captainRole }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${captainRolesTitle.href}/${captainRole.id}`}>
-              <StarIcon />
+              <CaptainRoleIcon />
               Go to {captainRolesTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

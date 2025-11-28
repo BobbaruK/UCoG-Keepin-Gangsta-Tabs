@@ -4,7 +4,7 @@ import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { CopyIcon } from "@/components/icons/copy";
 import { EditIcon } from "@/components/icons/edit";
-import { LevelIcon } from "@/components/icons/level";
+import { CrewLevelIcon } from "@/components/icons/crew-level";
 import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
@@ -116,7 +116,7 @@ const RowActions = ({ crewLevel }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link href={`${crewLevelsTitle.href}/${crewLevel.id}`}>
-              <LevelIcon />
+              <CrewLevelIcon />
               Go to {crewLevelsTitle.label.singular.toLowerCase()}
             </Link>
           </DropdownMenuItem>

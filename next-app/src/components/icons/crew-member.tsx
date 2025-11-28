@@ -1,6 +1,6 @@
 import { LucideIconProps } from "@/types/icons";
 import { BicepsFlexed } from "lucide-react";
 
-export const CrewIcon = ({ ...props }: LucideIconProps) => {
+export const CrewMemberIcon = ({ ...props }: LucideIconProps) => {
   return <BicepsFlexed {...props} />;
 };
