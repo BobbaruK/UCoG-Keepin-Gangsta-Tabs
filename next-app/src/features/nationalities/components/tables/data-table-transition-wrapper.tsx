@@ -43,7 +43,7 @@ export const DataTableTransitionWrapper = ({
           left: ["select"],
           right: ["actions"],
         }}
-        twSkeletonHeightCell="h-[64px]"
+        twSkeletonHeightCell="h-[65px]"
       />
     </TableProvider>
   );

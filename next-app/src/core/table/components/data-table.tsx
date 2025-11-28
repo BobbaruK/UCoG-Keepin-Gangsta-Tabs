@@ -219,7 +219,7 @@ export function DataTable<TData, TValue>({
                           : pageSize
                         : PAGINATION_DEFAULT,
                   }).map((_, index) => (
-                    <TableRow key={index} className="h-[65px]">
+                    <TableRow key={index} className="">
                       {table.getRowModel().rows[0]
                         ? table
                             .getRowModel()
