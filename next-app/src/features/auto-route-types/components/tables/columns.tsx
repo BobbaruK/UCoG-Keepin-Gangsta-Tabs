@@ -88,7 +88,7 @@ export const columns = ({
           linkHref={`${autoRouteTypesTitle.href}/${row.original.id}`}
           variant={"link"}
           className=""
-          skeletonClassName="h-9 w-[232px]"
+          skeletonClassName="h-8 w-[121px]"
           noEffect
         />
       </div>
