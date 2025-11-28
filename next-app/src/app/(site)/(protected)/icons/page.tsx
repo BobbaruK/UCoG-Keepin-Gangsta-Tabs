@@ -3,6 +3,7 @@ import { AddIcon } from "@/components/icons/add";
 import { AdminIcon } from "@/components/icons/admin";
 import { AirplayIcon } from "@/components/icons/airplay";
 import { ArrowLeftIcon } from "@/components/icons/arrow-left";
+import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { BanIcon } from "@/components/icons/ban";
 import { BossIcon } from "@/components/icons/boss";
@@ -320,6 +321,10 @@ const icons: {
   {
     name: "AutoRouteTypesIcon",
     icon: AutoRouteTypesIcon,
+  },
+  {
+    name: "AutoRouteIcon",
+    icon: AutoRouteIcon,
   },
 ];
 
