@@ -95,7 +95,7 @@ const AddPoliceOfficerPage = async ({ params }: Props) => {
       <FormCardWrapper
         data={{
           type: "add",
-          playthroughId,
+          playthrough,
         }}
       />
 

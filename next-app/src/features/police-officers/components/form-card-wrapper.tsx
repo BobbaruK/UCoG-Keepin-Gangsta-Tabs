@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
 import dynamic from "next/dynamic";
 import { AddPoliceOfficerFormSkeleton } from "./form/add";
@@ -18,7 +19,7 @@ type Props = {
   data:
     | {
         type: "add";
-        playthroughId: string;
+        playthrough: Playthrough;
       }
     | {
         type: "edit";
@@ -31,7 +32,7 @@ const FormCardWrapper = ({ data }: Props) => {
     <Card>
       <CardContent>
         {data.type === "add" && (
-          <AddPoliceOfficerForm playthrough={data.playthroughId} />
+          <AddPoliceOfficerForm playthrough={data.playthrough} />
         )}
         {data.type === "edit" && (
           <EditPoliceOfficerForm policeOfficer={data.policeOfficer} />
