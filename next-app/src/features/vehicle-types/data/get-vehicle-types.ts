@@ -13,7 +13,7 @@ export const getVehicleTypes = async ({
   perPage?: number;
   pageNumber?: number;
   orderBy?: Prisma.cog_vehicle_typeOrderByWithRelationInput;
-}) => {
+} = {}) => {
   const pageSize = perPage || PAGINATION_DEFAULT;
   const skip = pageNumber ? pageNumber * pageSize : 0;
 
