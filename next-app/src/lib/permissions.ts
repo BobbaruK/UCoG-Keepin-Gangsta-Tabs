@@ -19,11 +19,12 @@ const statement = {
   resources: CRUD,
   captain_roles: CRUD,
   crew_levels: CRUD,
+  auto_route_types: CRUD,
   playthrough: CRUD,
   crew_member: CRUD,
   crew_experience: CRUD,
   police_officers: CRUD,
-  auto_route_types: CRUD,
+  auto_route: CRUD,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -46,6 +47,7 @@ export const roles = {
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
+    auto_route: [...statement.auto_route],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
@@ -64,6 +66,7 @@ export const roles = {
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
+    auto_route: [...statement.auto_route],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
@@ -82,5 +85,6 @@ export const roles = {
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
+    auto_route: [...statement.auto_route],
   }),
 };

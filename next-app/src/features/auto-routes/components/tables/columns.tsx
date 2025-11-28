@@ -17,6 +17,7 @@ import { setFullName } from "@/lib/utils/full-name";
 import { ColumnDef } from "@tanstack/react-table";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
+import { Badge } from "@/components/ui/badge";
 
 export const columns = ({
   isLoading,
@@ -107,7 +108,7 @@ export const columns = ({
     },
     accessorFn: (originalRow) =>
       originalRow.crew_member?.full_name.toLowerCase(),
-    enableHiding: false,
+    enableHiding: true,
     enableSorting: true,
     enablePinning: true,
     size: 110,
@@ -153,7 +154,7 @@ export const columns = ({
       label: "Type",
     },
     // accessorFn: (originalRow) => originalRow.vehicle_type?.name.toLowerCase(),
-    enableHiding: false,
+    enableHiding: true,
     enableSorting: true,
     enablePinning: true,
     size: 110,
@@ -175,7 +176,7 @@ export const columns = ({
       if (!row.original.route_type.length) return "None";
 
       return (
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex items-center gap-1">
           {row.original.route_type.map((type) => (
             <CustomButton
               key={type.id}
@@ -198,7 +199,7 @@ export const columns = ({
       label: "Vehicle type",
     },
     accessorFn: (originalRow) => originalRow.vehicle_type?.name.toLowerCase(),
-    enableHiding: false,
+    enableHiding: true,
     enableSorting: true,
     enablePinning: true,
     size: 110,
@@ -220,7 +221,7 @@ export const columns = ({
       if (!row.original.vehicle_type) return "None";
 
       return (
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex items-center gap-1">
           <CustomButton
             buttonLabel={row.original.vehicle_type.name}
             linkHref={`${vehicleTypesTitle.href}/${row.original.cog_vehicle_typeId}`}
@@ -238,6 +239,37 @@ export const columns = ({
         </div>
       );
     },
+  },
+  // Steps
+  {
+    ...columnId({ id: "steps" }),
+    meta: {
+      label: "Steps",
+    },
+    accessorFn: (originalRow) => originalRow.steps,
+    enableHiding: true,
+    enableSorting: true,
+    enablePinning: true,
+    size: 110,
+    minSize: 105,
+    maxSize: 150,
+    header: ({ column }) => {
+      return (
+        <THeadDropdown
+          id="steps"
+          label={"Steps"}
+          isLoading={isLoading}
+          startTransition={startTransition}
+          column={column}
+        />
+      );
+    },
+
+    cell: ({ row }) => (
+      <div className="px-2">
+        <Badge>{row.original.steps}</Badge>
+      </div>
+    ),
   },
   // Created At
   {
