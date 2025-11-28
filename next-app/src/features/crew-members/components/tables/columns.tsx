@@ -2,6 +2,7 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
+import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { BossIcon } from "@/components/icons/boss";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { NationalityIcon } from "@/components/icons/nationality";
@@ -12,6 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { autoRoutesTitle } from "@/constants/page-title/auto-routes";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
@@ -24,6 +26,7 @@ import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
 import { CrewLevelType } from "@/generated/prisma";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { setFullName } from "@/lib/utils/full-name";
 import { ColumnDef } from "@tanstack/react-table";
@@ -174,6 +177,24 @@ export const columns = ({
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Killed</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+
+            {row.original.cogAutoRoute && (
+              <Tooltip>
+                <TooltipTrigger asChild className="ms-auto">
+                  <Link
+                    href={`${playthroughTitle.href}/${row.original.cog_playthroughId + autoRoutesTitle.href}/${row.original.cogAutoRoute.id}`}
+                  >
+                    <AutoRouteIcon size={16} />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {capitalizeFirstLetter(
+                    autoRoutesTitle.label.singular.toLowerCase(),
+                  )}
+                  : {row.original.cogAutoRoute.name}
                 </TooltipContent>
               </Tooltip>
             )}

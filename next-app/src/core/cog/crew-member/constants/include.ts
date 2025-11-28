@@ -68,4 +68,5 @@ export const crewMemberInclude = {
       },
     },
   },
+  cogAutoRoute: true,
 } satisfies Prisma.cog_crew_memberInclude;

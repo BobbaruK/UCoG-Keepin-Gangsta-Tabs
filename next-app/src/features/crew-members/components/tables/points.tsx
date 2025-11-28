@@ -1,3 +1,4 @@
+import { CustomButton } from "@/components/custom-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -133,12 +134,13 @@ const Points = ({ crewMember, type }: Props) => {
                   <span>+{traitsPointsPositive.sideEffect.value}</span>
                 </Badge>
                 from trait
-                <Link
-                  href={`${traitsTitle.href}/${traitsPointsPositive.id}`}
-                  className="font-bold"
-                >
-                  {traitsPointsPositive.name}
-                </Link>
+                <CustomButton
+                  buttonLabel={traitsPointsPositive.name}
+                  linkHref={`${traitsTitle.href}/${traitsPointsPositive.id}`}
+                  noEffect
+                  size={"sm"}
+                  variant={"link"}
+                />
               </li>
             )}
             {traitsPointsNegative && traitsPointsNegative.sideEffect && (
@@ -147,12 +149,13 @@ const Points = ({ crewMember, type }: Props) => {
                   <span>{traitsPointsNegative.sideEffect.value}</span>
                 </Badge>
                 from trait
-                <Link
-                  href={`${traitsTitle.href}/${traitsPointsNegative.id}`}
-                  className="font-bold"
-                >
-                  {traitsPointsNegative.name}
-                </Link>
+                <CustomButton
+                  buttonLabel={traitsPointsNegative.name}
+                  linkHref={`${traitsTitle.href}/${traitsPointsNegative.id}`}
+                  noEffect
+                  size={"sm"}
+                  variant={"link"}
+                />
               </li>
             )}
           </ul>
@@ -182,12 +185,13 @@ const Points = ({ crewMember, type }: Props) => {
                       </span>
                     </Badge>
                     from law
-                    <Link
-                      href={`${lawsTitle.href}/${law.id}`}
-                      className="font-bold"
-                    >
-                      {law.name}
-                    </Link>
+                    <CustomButton
+                      buttonLabel={law.name}
+                      linkHref={`${lawsTitle.href}/${law.id}`}
+                      noEffect
+                      size={"sm"}
+                      variant={"link"}
+                    />
                   </li>
                 );
             })}
@@ -207,12 +211,13 @@ const Points = ({ crewMember, type }: Props) => {
                 </span>
               </Badge>
               from role
-              <Link
-                href={`${captainRolesTitle.href}/${captain.id}`}
-                className="font-bold"
-              >
-                {captain.name}
-              </Link>
+              <CustomButton
+                buttonLabel={captain.name}
+                linkHref={`${captainRolesTitle.href}/${captain.id}`}
+                noEffect
+                size={"sm"}
+                variant={"link"}
+              />
             </li>
           </ul>
         )}
@@ -223,8 +228,13 @@ const Points = ({ crewMember, type }: Props) => {
               <Badge variant={"success"} className="w-8">
                 <span>+{driver}</span>
               </Badge>
-              from crew&apos;s experience:{" "}
-              <strong>Efficient Driver: Level {driverLevel}</strong>
+              from crew&apos;s experience{" "}
+              <CustomButton
+                buttonLabel={`Efficient Driver: Level ${driverLevel}`}
+                noEffect
+                size={"sm"}
+                variant={"link"}
+              />
             </li>
           </ul>
         )}
