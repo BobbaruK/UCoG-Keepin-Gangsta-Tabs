@@ -1,3 +1,4 @@
+import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { CrewLevelIcon } from "@/components/icons/crew-level";
@@ -118,7 +119,7 @@ export const playthroughMenu = (
   {
     title: "Auto routes",
     url: `${playthroughTitle.href}/${playthroughId}/auto-routes`,
-    icon: PoliceOfficerIcon,
+    icon: AutoRouteIcon,
   },
   {
     title: "Buildings",

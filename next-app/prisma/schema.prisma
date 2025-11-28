@@ -53,6 +53,7 @@ model auth_user {
   cogPlaythroughs   cog_playthrough[]
   cogPoliceOfficers cog_police_officer[]
   cogCrewMembers    cog_crew_member[]
+  cogAutoRoutes     cog_auto_route[]
 
   @@index([email, slug])
   @@map("user")
@@ -202,6 +203,8 @@ model cog_vehicle_type {
 
   name     String @unique
   capacity Int
+
+  cogAutoRoutes cog_auto_route[]
 }
 
 enum ResourceCategory {
@@ -272,14 +275,6 @@ model cog_crew_level {
   cogCrewExperiences cog_crew_experience[]
 }
 
-model cog_auto_route_type {
-  id        String   @id @unique @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  name String @unique
-}
-
 // Main Table
 
 model cog_playthrough {
@@ -301,7 +296,7 @@ model cog_playthrough {
   crew_members    cog_crew_member[]
   // buildings
   // gambling_buildings
-  // auto_routes
+  auto_routes     cog_auto_route[]
   // wards
   user            auth_user            @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
   auth_userId     String
@@ -344,13 +339,20 @@ model cog_crew_member {
 
   captain            cog_captain_role? @relation(fields: [cog_captain_roleId], references: [id])
   cog_captain_roleId String?
-  nationality        cog_nationality   @relation(fields: [cog_nationalityId], references: [id])
-  cog_nationalityId  String
-  traits             cog_trait[]
-  playthrough        cog_playthrough   @relation(fields: [cog_playthroughId], references: [id], onDelete: Cascade)
-  cog_playthroughId  String
-  user               auth_user         @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
-  auth_userId        String
+
+  nationality       cog_nationality @relation(fields: [cog_nationalityId], references: [id])
+  cog_nationalityId String
+
+  traits cog_trait[]
+
+  auto_route       cog_auto_route? @relation(fields: [cog_auto_routeId], references: [id])
+  cog_auto_routeId String?         @unique
+
+  playthrough       cog_playthrough @relation(fields: [cog_playthroughId], references: [id], onDelete: Cascade)
+  cog_playthroughId String
+
+  user        auth_user @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
+  auth_userId String
 
   @@index([full_name])
 }
@@ -366,4 +368,38 @@ model cog_crew_experience {
   cog_crew_levelId  String
   cogCrewMember     cog_crew_member @relation(fields: [cog_crew_memberId], references: [id], onDelete: Cascade)
   cog_crew_memberId String
+}
+
+// Auto Routes
+
+model cog_auto_route {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name  String @unique
+  steps Int
+
+  crew_member cog_crew_member?
+
+  vehicle_type       cog_vehicle_type? @relation(fields: [cog_vehicle_typeId], references: [id])
+  cog_vehicle_typeId String?
+
+  route_type cog_auto_route_type[]
+
+  playthrough       cog_playthrough @relation(fields: [cog_playthroughId], references: [id], onDelete: Cascade)
+  cog_playthroughId String
+
+  user        auth_user @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
+  auth_userId String
+}
+
+model cog_auto_route_type {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+
+  cogAutoRoute cog_auto_route[]
 }
