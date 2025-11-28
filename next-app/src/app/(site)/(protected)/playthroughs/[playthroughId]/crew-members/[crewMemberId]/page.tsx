@@ -160,6 +160,7 @@ const CrewMemberPage = async ({ params }: Props) => {
       <PlaythroughMenu playthroughId={playthrough.id} />
 
       <PlaythroughPresentation
+        session={session}
         type="default"
         playthrough={playthrough}
         laws={laws?.data}

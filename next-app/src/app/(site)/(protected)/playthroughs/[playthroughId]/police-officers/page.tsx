@@ -158,7 +158,11 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <PlaythroughPresentation playthrough={playthrough} laws={laws?.data} />
+      <PlaythroughPresentation
+        session={session}
+        playthrough={playthrough}
+        laws={laws?.data}
+      />
 
       <DataTableTransitionWrapper
         data={policeOfficers?.data || []}

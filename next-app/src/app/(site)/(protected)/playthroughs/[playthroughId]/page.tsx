@@ -1,11 +1,8 @@
-import { CustomAlert } from "@/components/custom-alert";
 import { PageStructure } from "@/components/page-structure";
 import { PageTitle } from "@/components/page-title";
-import { MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
-import { getCrewMembers } from "@/features/crew-members/data/get";
 import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
@@ -82,7 +79,11 @@ const PlaythroughPage = async ({ params }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <PlaythroughPresentation type="detailed" playthrough={playthrough} />
+      <PlaythroughPresentation
+        session={session}
+        type="detailed"
+        playthrough={playthrough}
+      />
 
       <div>
         <pre>{JSON.stringify(playthrough, null, 2)}</pre>

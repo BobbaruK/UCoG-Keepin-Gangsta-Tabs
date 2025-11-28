@@ -23,22 +23,24 @@ import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Law } from "@/core/cog/law/types/law";
 import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { useSession } from "@/lib/auth-client";
+import { Session } from "@/types/session";
 import Link from "next/link";
 import { useState } from "react";
 
 interface Props {
+  session: Session | null;
   playthrough: Playthrough;
   laws?: Law[];
   type?: "default" | "detailed";
 }
 
 const PlaythroughPresentation = ({
+  session,
   playthrough,
   type = "default",
   laws = [],
 }: Props) => {
   const [minimalSeeMore, setMinimalSeeMore] = useState(false);
-  const { data: session } = useSession();
 
   const boss = playthrough.crew_members.find(
     (member) => member.is_boss === true,
@@ -159,7 +161,7 @@ const PlaythroughPresentation = ({
             {boss?.full_name}
           </Link>
         </CardDescription>
-        {playthrough.auth_userId === session?.user.id && (
+        {session && playthrough.auth_userId === session.user.id && (
           <CardAction>
             <CustomButton
               buttonLabel="Edit"
