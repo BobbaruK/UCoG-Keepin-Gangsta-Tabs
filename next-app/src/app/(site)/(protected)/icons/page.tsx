@@ -7,6 +7,7 @@ import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { BanIcon } from "@/components/icons/ban";
 import { BossIcon } from "@/components/icons/boss";
+import { BuildingTypeIcon } from "@/components/icons/building-type";
 import { CalendarIcon } from "@/components/icons/calendar";
 import { CameraIcon } from "@/components/icons/camera";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
@@ -325,6 +326,10 @@ const icons: {
   {
     name: "AutoRouteIcon",
     icon: AutoRouteIcon,
+  },
+  {
+    name: "BuildingTypeIcon",
+    icon: BuildingTypeIcon,
   },
 ];
 
