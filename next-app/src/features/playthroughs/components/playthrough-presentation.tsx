@@ -22,7 +22,6 @@ import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Law } from "@/core/cog/law/types/law";
 import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
-import { useSession } from "@/lib/auth-client";
 import { Session } from "@/types/session";
 import Link from "next/link";
 import { useState } from "react";
@@ -54,8 +53,11 @@ const PlaythroughPresentation = ({
   const muscleLength =
     membersLength - 1 /* Boss */ - captainsLength - managersLength;
 
-  const autoRoutesLength = 1 - 1;
-  const stepsCount = 1 - 1;
+  const autoRoutesLength = playthrough.auto_routes.length;
+  const stepsCount = playthrough.auto_routes.reduce(
+    (acc, curr) => acc + curr.steps,
+    0,
+  );
 
   const copsLength = playthrough.police_officers.length;
 
@@ -188,24 +190,26 @@ const PlaythroughPresentation = ({
               <p>This outfit has:</p>
               <ul className="list-inside list-disc">
                 <li>
-                  <Badge variant={"success"}>{membersLength}</Badge> member
+                  <Badge variant={"outline"}>{membersLength}</Badge> member
                   {membersLength === 1 ? "" : "s"}, of which{" "}
-                  <Badge variant={"success"}>{captainsLength}</Badge>{" "}
+                  <Badge variant={"outline"}>{captainsLength}</Badge>{" "}
                   {captainsLength === 1 ? "is" : "are"} captain
                   {captainsLength === 1 ? "" : "s"},{" "}
-                  <Badge variant={"success"}>{managersLength}</Badge>{" "}
+                  <Badge variant={"outline"}>{managersLength}</Badge>{" "}
                   {managersLength === 1 ? "is" : "are"} manager
                   {captainsLength === 1 ? "" : "s"} and{" "}
-                  <Badge variant={"success"}>{muscleLength}</Badge>{" "}
+                  <Badge variant={"outline"}>{muscleLength}</Badge>{" "}
                   {muscleLength === 1 ? "is" : "are"} muscle.
                 </li>
                 <li>
-                  <Badge variant={"info"}>{autoRoutesLength}</Badge> auto-route
+                  <Badge variant={"outline"}>{autoRoutesLength}</Badge>{" "}
+                  auto-route
                   {autoRoutesLength === 1 ? "" : "s"} with{" "}
-                  <Badge variant={"info"}>{stepsCount}</Badge> steps in total.
+                  <Badge variant={"outline"}>{stepsCount}</Badge> steps in
+                  total.
                 </li>
                 <li>
-                  <Badge variant={"success"}>{copsLength}</Badge> cop
+                  <Badge variant={"outline"}>{copsLength}</Badge> cop
                   {copsLength === 1 ? "" : "s"} bribed.
                 </li>
                 <li>

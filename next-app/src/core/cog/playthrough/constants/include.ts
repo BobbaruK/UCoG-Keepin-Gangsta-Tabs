@@ -26,4 +26,5 @@ export const playthroughInclude = {
   },
   crew_members: true,
   police_officers: true,
+  auto_routes: true,
 } satisfies Prisma.cog_playthroughInclude;
