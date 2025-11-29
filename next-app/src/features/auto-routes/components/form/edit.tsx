@@ -1,70 +1,96 @@
 "use client";
 
+import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
+import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
   Field,
-  FieldContent,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { MultiSelect } from "@/components/ui/multi-select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
+import { autoRouteTypesTitle } from "@/constants/page-title/auto-route-types";
+import { autoRoutesTitle } from "@/constants/page-title/auto-routes";
+import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { policeOfficersTitle } from "@/constants/page-title/police-officers";
-import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
+import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
+import { AutoRouteType } from "@/core/cog/auto-route-type/types/auto-route-type";
+import { AutoRoute } from "@/core/cog/auto-route/types/auto-route";
+import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
+import { VehicleType } from "@/core/cog/vehicle-type/types/vehicle-type";
 import { cn } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
-import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
+import { setFullName } from "@/lib/utils/full-name";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { editPoliceOfficer } from "../../actions/edit";
+import { deleteAutoRoute } from "../../actions/delete";
+import { editAutoRoute } from "../../actions/edit";
 import { AddAutoRouteSchema } from "../../schemas/add";
-import { deletePoliceOfficer } from "../../actions/delete";
-import { revPath } from "@/actions/revalidate";
 
 interface Props {
-  policeOfficer: PoliceOfficer;
+  autoRoute: AutoRoute;
+  crewMembers?: CrewMember[];
+  vehicleTypes?: VehicleType[];
+  autoRouteTypes?: AutoRouteType[];
 }
 
-const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
+const EditAutoRouteForm = ({
+  autoRoute,
+  crewMembers = [],
+  vehicleTypes = [],
+  autoRouteTypes = [],
+}: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const form = useForm<z.infer<typeof AddAutoRouteSchema>>({
     resolver: zodResolver(AddAutoRouteSchema),
     defaultValues: {
-      name: policeOfficer.name,
-      bribedTurn: policeOfficer.bribed_turn,
-      can_call_in_a_raid: policeOfficer.can_call_in_a_raid,
-      has_rival_hooligan_relative: policeOfficer.has_rival_hooligan_relative,
-      political_contact_used: policeOfficer.political_contact_used,
+      name: autoRoute.name,
+      steps: autoRoute.steps,
+      crew_member: autoRoute.crew_member_id || "",
+      vehicle_type: autoRoute.cog_vehicle_typeId || "",
+      route_type: autoRoute.route_type.map((type) => type.id),
     },
   });
-
-  const turns = useWatch({
-    control: form.control,
-    name: "bribedTurn", // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
-  });
+  const [comboxAutoRoute, setComboxAutoRoute] = useState(false);
+  const [comboxVehicleType, setComboxVehicleType] = useState(false);
 
   const { formId, inputId } = formInputId(
-    `edit-${policeOfficersTitle.label.singular.toLowerCase()}-form`,
+    `edit-${autoRoutesTitle.label.singular.toLowerCase()}-form`,
   );
 
   const onSubmit = (values: z.infer<typeof AddAutoRouteSchema>) => {
     startTransition(async () => {
-      editPoliceOfficer(policeOfficer, values)
+      editAutoRoute(autoRoute, values)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
@@ -72,7 +98,7 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
           if (data.success) {
             toast.success(data.success);
             router.push(
-              `${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}`,
+              `${playthroughTitle.href}/${autoRoute.cog_playthroughId + autoRoutesTitle.href}`,
             );
           }
         })
@@ -86,7 +112,7 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
     startTransition(async () => {
       setOpenDeleteDialog(false);
 
-      await deletePoliceOfficer(policeOfficer)
+      await deleteAutoRoute(autoRoute)
         .then(async (data) => {
           if (data.error) {
             toast.error(data.error);
@@ -96,10 +122,10 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
 
             setTimeout(() => {
               revPath(
-                `${playthroughTitle.href}/${policeOfficer.cogPlaythrough.id}/${policeOfficersTitle.href}`,
+                `${playthroughTitle.href}/${autoRoute.cog_playthroughId}/${autoRoutesTitle.href}`,
               );
               router.push(
-                `${playthroughTitle.href}/${policeOfficer.cogPlaythrough.id}/${policeOfficersTitle.href}`,
+                `${playthroughTitle.href}/${autoRoute.cog_playthroughId}/${autoRoutesTitle.href}`,
               );
             }, 250);
           }
@@ -128,7 +154,7 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
                   {...field}
                   id={inputId(field.name)}
                   aria-invalid={fieldState.invalid}
-                  placeholder="Marian Jackson"
+                  placeholder="Buy Stoneware Crocks"
                   autoComplete="off"
                   type="text"
                   disabled={isPending}
@@ -141,38 +167,27 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
           />
 
           <Controller
-            name="bribedTurn"
+            name="steps"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={inputId(field.name)}>
-                  Bribed turn (
-                  {dateFormatter({
-                    date: turnToDate(turns),
-                    options: {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    },
-                  })}
-                  )
-                </FieldLabel>
+                <FieldLabel htmlFor={inputId(field.name)}>Steps</FieldLabel>
                 <div className="flex items-center gap-2">
                   <Input
                     {...field}
                     id={inputId(field.name)}
                     aria-invalid={fieldState.invalid}
-                    placeholder="213"
+                    placeholder="12"
                     autoComplete="off"
                     type="number"
                     disabled={true}
                     className="opacity-100!"
-                    {...form.register("bribedTurn", { valueAsNumber: true })}
+                    {...form.register("steps", { valueAsNumber: true })}
                   />
                   <Counter
                     value={field.value}
-                    emitClick={(val) => form.setValue("bribedTurn", val)}
-                    minValue={1}
+                    emitClick={(val) => form.setValue("steps", val)}
+                    minValue={0}
                     isPending={isPending}
                   />
                 </div>
@@ -184,92 +199,261 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
           />
 
           <Controller
-            name="can_call_in_a_raid"
+            name="crew_member"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field
-                data-invalid={fieldState.invalid}
-                orientation={"horizontal"}
-              >
-                <FieldContent>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    Can call in a raid
-                  </FieldLabel>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  {capitalizeFirstLetter(
+                    crewMembersTitle.label.singular.toLowerCase(),
                   )}
-                </FieldContent>
+                </FieldLabel>
 
-                <Switch
-                  id={inputId(field.name)}
-                  aria-invalid={fieldState.invalid}
-                  name={field.name}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  disabled={isPending}
-                />
+                <Popover
+                  open={comboxAutoRoute}
+                  onOpenChange={setComboxAutoRoute}
+                >
+                  <PopoverTrigger asChild>
+                    <Button
+                      {...field}
+                      id={inputId(field.name)}
+                      aria-invalid={fieldState.invalid}
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={comboxAutoRoute}
+                      className={cn(
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
+                    >
+                      {form.getValues("crew_member")
+                        ? crewMembers.find(
+                            (member) =>
+                              member.id === form.getValues("crew_member"),
+                          )?.full_name
+                        : `Select ${crewMembersTitle.label.singular.toLowerCase()}...`}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Command>
+                      <CommandInput
+                        placeholder={`Search ${crewMembersTitle.label.singular.toLowerCase()}...`}
+                        className="h-9"
+                      />
+                      <CommandList>
+                        <CommandEmpty>
+                          No {crewMembersTitle.label.singular.toLowerCase()}{" "}
+                          found.
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {crewMembers.map((member) => (
+                            <CommandItem
+                              key={member.id}
+                              value={member.full_name}
+                              onSelect={(currentValue) => {
+                                const crewMember = crewMembers.find(
+                                  (member) => member.full_name === currentValue,
+                                );
+
+                                form.setValue(
+                                  "crew_member",
+                                  crewMember &&
+                                    crewMember.id ===
+                                      form.getValues("crew_member")
+                                    ? ""
+                                    : crewMember?.id,
+                                );
+                                setComboxAutoRoute(false);
+                              }}
+                              disabled={
+                                !!member.cogAutoRoute &&
+                                member.id !== autoRoute.crew_member_id
+                              }
+                            >
+                              {
+                                setFullName({
+                                  firstName: member.first_name,
+                                  lastName: member.last_name,
+                                  alias: member.alias,
+                                }).outputFE
+                              }{" "}
+                              {member.cogAutoRoute && (
+                                <>
+                                  <AutoRouteIcon />
+                                  {member.cogAutoRoute.name}
+                                </>
+                              )}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  form.getValues("crew_member") === member.id
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
 
-          <FieldSeparator />
-
           <Controller
-            name="has_rival_hooligan_relative"
+            name="vehicle_type"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field
-                data-invalid={fieldState.invalid}
-                orientation={"horizontal"}
-              >
-                <FieldContent>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    Has a rival or hooligan relative?
-                  </FieldLabel>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  {capitalizeFirstLetter(
+                    vehicleTypesTitle.label.singular.toLowerCase(),
                   )}
-                </FieldContent>
+                </FieldLabel>
 
-                <Switch
-                  id={inputId(field.name)}
-                  aria-invalid={fieldState.invalid}
-                  name={field.name}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  disabled={isPending}
-                />
+                <Popover
+                  open={comboxVehicleType}
+                  onOpenChange={setComboxVehicleType}
+                >
+                  <PopoverTrigger asChild>
+                    <Button
+                      {...field}
+                      id={inputId(field.name)}
+                      aria-invalid={fieldState.invalid}
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={comboxVehicleType}
+                      className={cn(
+                        "dark:bg-input/30 hover:dark:bg-accent justify-between bg-transparent shadow-xs",
+                        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                      )}
+                      disabled={isPending}
+                    >
+                      {form.getValues("vehicle_type")
+                        ? vehicleTypes.find(
+                            (types) =>
+                              types.id === form.getValues("vehicle_type"),
+                          )?.name
+                        : `Select ${vehicleTypesTitle.label.singular.toLowerCase()}...`}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0" align="start">
+                    <Command>
+                      <CommandInput
+                        placeholder={`Search ${vehicleTypesTitle.label.singular.toLowerCase()}...`}
+                        className="h-9"
+                      />
+                      <CommandList>
+                        <CommandEmpty>
+                          No {vehicleTypesTitle.label.singular.toLowerCase()}{" "}
+                          found.
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {vehicleTypes.map((type) => (
+                            <CommandItem
+                              key={type.id}
+                              value={type.name}
+                              onSelect={(currentValue) => {
+                                const vehicleType = vehicleTypes.find(
+                                  (vType) => vType.name === currentValue,
+                                );
+
+                                form.setValue(
+                                  "vehicle_type",
+                                  vehicleType &&
+                                    vehicleType?.id ===
+                                      form.getValues("vehicle_type")
+                                    ? ""
+                                    : vehicleType?.id,
+                                );
+                                setComboxVehicleType(false);
+                              }}
+                            >
+                              {type.name}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  form.getValues("vehicle_type") === type.id
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
 
-          <FieldSeparator />
-
           <Controller
-            name="political_contact_used"
+            name="route_type"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field
-                data-invalid={fieldState.invalid}
-                orientation={"horizontal"}
-              >
-                <FieldContent>
-                  <FieldLabel htmlFor={inputId(field.name)}>
-                    Political contact used?
-                  </FieldLabel>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </FieldContent>
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={inputId(field.name)}>
+                  {autoRouteTypesTitle.label.plural}
+                </FieldLabel>
 
-                <Switch
+                <MultiSelect
                   id={inputId(field.name)}
                   aria-invalid={fieldState.invalid}
-                  name={field.name}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  options={
+                    autoRouteTypes.map((type) => ({
+                      value: type.id,
+                      label: type.name,
+                      // disabled: true,
+                    })) || []
+                  }
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                  placeholder={`Choose ${autoRouteTypesTitle.label.plural.toLowerCase()}...`}
+                  hideSelectAll
+                  variant={"default"}
                   disabled={isPending}
+                  className={cn(
+                    "h-9 min-h-9",
+                    // "dark:bg-input/30 hover:dark:bg-accent hover:dark:text-accent-foreground justify-between bg-transparent shadow-xs",
+                    // "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                    // "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                  )}
+                  animationConfig={{
+                    badgeAnimation: "slide",
+                    optionHoverAnimation: "none",
+                    popoverAnimation: "none",
+                  }}
+                  responsive={{
+                    mobile: {
+                      maxCount: 0,
+                    },
+                    tablet: {
+                      compactMode: true,
+                      maxCount: 1,
+                    },
+                  }}
                 />
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -298,8 +482,8 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
           }}
           header={
             DIALOG_MESSAGES({
-              resource: policeOfficersTitle.label.singular.toLowerCase(),
-              resourceName: policeOfficer.name,
+              resource: autoRoutesTitle.label.singular.toLowerCase(),
+              resourceName: autoRoute.name,
             }).DELETE
           }
         >
@@ -326,7 +510,7 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
         />
 
         <CustomButton
-          buttonLabel={`Save ${policeOfficersTitle.label.singular.toLowerCase()}`}
+          buttonLabel={`Save ${autoRoutesTitle.label.singular.toLowerCase()}`}
           type="submit"
           disabled={isPending}
           skeletonClassName="h-9 w-[148px]"
@@ -337,9 +521,9 @@ const EditPoliceOfficerForm = ({ policeOfficer }: Props) => {
   );
 };
 
-export default EditPoliceOfficerForm;
+export default EditAutoRouteForm;
 
-export function EditPoliceOfficerFormSkeleton({
+export function EditAutoRouteFormSkeleton({
   className,
   ...restProps
 }: React.HTMLAttributes<HTMLDivElement>) {
@@ -358,24 +542,22 @@ export function EditPoliceOfficerFormSkeleton({
           <Skeleton className="size-9 min-w-9" />
         </div>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col justify-end gap-3">
         <Skeleton className="h-[19.25px] w-28" />
-        <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+        <Skeleton className="h-9 w-full" />
       </div>
-      <FieldSeparator />
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col justify-end gap-3">
         <Skeleton className="h-[19.25px] w-28" />
-        <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+        <Skeleton className="h-9 w-full" />
       </div>
-      <FieldSeparator />
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col justify-end gap-3">
         <Skeleton className="h-[19.25px] w-28" />
-        <Skeleton className="h-[18.39px] w-8 rounded-2xl" />
+        <Skeleton className="h-9 w-full" />
       </div>
       <div className="flex flex-wrap items-center justify-end gap-4">
         <Skeleton className="bg-destructive h-9 w-[89px]" />
         <Skeleton className="bg-muted h-9 w-[68px] border" />
-        <Skeleton className="bg-success h-9 w-[148px]" />
+        <Skeleton className="bg-success h-9 w-[132px]" />
       </div>
     </div>
   );

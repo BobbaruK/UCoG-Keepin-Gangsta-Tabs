@@ -121,7 +121,12 @@ const RowActions = ({ autoRoute }: Props) => {
               href={`${playthroughTitle.href}/${autoRoute.cog_playthroughId + autoRoutesTitle.href}/${autoRoute.id}`}
             >
               <AutoRouteIcon />
-              Go to {autoRoutesTitle.label.singular.toLowerCase()}
+              Go to
+              <span className="line-clamp-1 max-w-[120px]">
+                &quot;
+                {autoRoute.name}
+                &quot;
+              </span>
             </Link>
           </DropdownMenuItem>
 
@@ -136,7 +141,12 @@ const RowActions = ({ autoRoute }: Props) => {
                     href={`${playthroughTitle.href}/${autoRoute.cog_playthroughId + autoRoutesTitle.href}/${autoRoute.id}/edit`}
                   >
                     <EditIcon />
-                    Edit {autoRoutesTitle.label.singular.toLowerCase()}
+                    Edit
+                    <span className="line-clamp-1 max-w-[120px]">
+                      &quot;
+                      {autoRoute.name}
+                      &quot;
+                    </span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -146,7 +156,12 @@ const RowActions = ({ autoRoute }: Props) => {
                   onClick={() => setOpenDeleteDialog(true)}
                 >
                   <TrashIcon />
-                  Delete {autoRoutesTitle.label.singular.toLowerCase()}
+                  Delete
+                  <span className="line-clamp-1 max-w-[120px]">
+                    &quot;
+                    {autoRoute.name}
+                    &quot;
+                  </span>
                 </DropdownMenuItem>
               </>
             )}

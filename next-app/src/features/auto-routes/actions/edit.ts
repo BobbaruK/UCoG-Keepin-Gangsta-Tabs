@@ -3,7 +3,7 @@
 import { MESSAGES, MESSAGES_FN } from "@/constants/messages";
 import { autoRoutesTitle } from "@/constants/page-title/auto-routes";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
+import { AutoRoute } from "@/core/cog/auto-route/types/auto-route";
 import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
@@ -14,16 +14,12 @@ import { AddAutoRouteSchema } from "../schemas/add";
 
 const UNAUTHORIZED = MESSAGES_FN({
   resource: autoRoutesTitle.label.singular.toLowerCase() + "(s)",
-}).RESOURCE_CREATE_UNAUTHORIZED;
+}).RESOURCE_EDIT_UNAUTHORIZED;
 
-export const addAutoRoute = async ({
-  playthrough,
-  values,
-}: {
-  playthrough: Playthrough;
-
-  values: z.infer<typeof AddAutoRouteSchema>;
-}): Promise<
+export const editAutoRoute = async (
+  autoRoute: AutoRoute,
+  values: z.infer<typeof AddAutoRouteSchema>,
+): Promise<
   | {
       error: string;
       success?: undefined;
@@ -44,17 +40,16 @@ export const addAutoRoute = async ({
     headers: await headers(),
   });
 
-  if (!session) {
+  if (!session)
     return {
       error: UNAUTHORIZED,
     };
-  }
 
   const permissions = await auth.api.userHasPermission({
     body: {
       userId: session.user.id,
       role: session.user.role as UserRole,
-      permission: { auto_route: ["create"] },
+      permission: { auto_route: ["update"] },
     },
   });
 
@@ -63,38 +58,41 @@ export const addAutoRoute = async ({
       error: UNAUTHORIZED,
     };
 
-  if (playthrough.auth_userId !== session.user.id)
+  if (autoRoute.auth_userId !== session.user.id)
     return {
       error: MESSAGES_FN({
-        resource: playthroughTitle.label.singular.toLowerCase(),
-      }).RESOURCE_CREATE_UNAUTHORIZED_OTHER,
+        resource: autoRoutesTitle.label.singular.toLowerCase() + "(s)",
+      }).RESOURCE_EDIT_UNAUTHORIZED_OTHER,
     };
 
-  if (playthrough.is_finished)
+  if (autoRoute.playthrough.is_finished)
     return {
-      error: `You cannot add data to a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
+      error: `You cannot edit data from a finished ${playthroughTitle.label.singular.toLowerCase()}.`,
     };
 
   try {
-    const autoRoute = await db.cog_auto_route.create({
+    const updatedAutoRoute = await db.cog_auto_route.update({
+      where: {
+        id: autoRoute.id,
+      },
       data: {
         name: name || "Noname",
         steps,
         crew_member_id: crew_member || null,
         cog_vehicle_typeId: vehicle_type || null,
-        cog_playthroughId: playthrough.id,
-        auth_userId: session.user.id,
         route_type: {
-          connect: route_type.map((type) => ({ id: type })),
+          set: route_type.map((type) => ({ id: type })),
         },
+        cog_playthroughId: autoRoute.cog_playthroughId,
+        auth_userId: session.user.id,
       },
     });
 
     return {
       success: MESSAGES_FN({
         resource: autoRoutesTitle.label.singular.toLowerCase(),
-        resourceName: autoRoute.name,
-      }).RESOURCE_CREATE_SUCCESS,
+        resourceName: updatedAutoRoute.name,
+      }).RESOURCE_EDIT_SUCCESS,
     };
   } catch (error) {
     return catchError(error);

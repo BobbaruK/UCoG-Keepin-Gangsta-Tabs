@@ -40,7 +40,7 @@ export const deleteAutoRoute = async (
     body: {
       userId: session.user.id,
       role: session.user.role as UserRole,
-      permissions: { police_officers: ["delete"] },
+      permissions: { auto_route: ["delete"] },
     },
   });
 

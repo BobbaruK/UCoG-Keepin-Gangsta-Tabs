@@ -11,6 +11,7 @@ import PlaythroughError from "@/features/playthroughs/components/playthrough-err
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
 import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
+import { Prisma } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { Metadata } from "next";
@@ -65,10 +66,33 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
 
   if (!playthrough) return <PlaythroughError session={session} />;
 
+  const orderAutoRoutesFn =
+    (): Prisma.cog_auto_routeOrderByWithRelationInput => {
+      switch (sortBy) {
+        case "driver":
+          return {
+            crew_member: {
+              full_name: sort,
+            },
+          };
+
+        case "vehicle_type":
+          return {
+            vehicle_type: {
+              capacity: sort,
+            },
+          };
+        default:
+          return {
+            [sortBy]: sort,
+          };
+      }
+    };
+
   const autoRoutes = await getAutoRoutes({
     pageNumber: pageIndex,
     perPage: pageSize,
-    orderBy: { [sortBy]: sort },
+    orderBy: orderAutoRoutesFn(),
     where: {
       cog_playthroughId: playthroughId,
       name: {
@@ -135,9 +159,9 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
         dataSelected={selectedAutoRoutes?.data || []}
       />
 
-      <div>
+      {/* <div>
         <pre>{JSON.stringify({ autoRoutes }, null, 2)}</pre>
-      </div>
+      </div> */}
     </PageStructure>
   );
 };

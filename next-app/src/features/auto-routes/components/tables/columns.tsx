@@ -127,7 +127,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => {
-      if (!row.original.crew_member) return "None";
+      if (!row.original.crew_member) return <div className="px-3">None</div>;
 
       return (
         <CustomButton
@@ -155,7 +155,7 @@ export const columns = ({
     },
     // accessorFn: (originalRow) => originalRow.vehicle_type?.name.toLowerCase(),
     enableHiding: true,
-    enableSorting: true,
+    enableSorting: false,
     enablePinning: true,
     size: 110,
     minSize: 105,
@@ -173,23 +173,20 @@ export const columns = ({
     },
 
     cell: ({ row }) => {
-      if (!row.original.route_type.length) return "None";
+      if (!row.original.route_type.length)
+        return <div className="px-3">None</div>;
 
-      return (
-        <div className="flex items-center gap-1">
-          {row.original.route_type.map((type) => (
-            <CustomButton
-              key={type.id}
-              buttonLabel={type.name}
-              linkHref={`${autoRouteTypesTitle.href}/${type.id}`}
-              size={"sm"}
-              variant={"link"}
-              skeletonClassName="h-8 w-[71px]"
-              noEffect
-            />
-          ))}
-        </div>
-      );
+      return row.original.route_type.map((type) => (
+        <CustomButton
+          key={type.id}
+          buttonLabel={type.name}
+          linkHref={`${autoRouteTypesTitle.href}/${type.id}`}
+          size={"sm"}
+          variant={"link"}
+          skeletonClassName="h-8 w-[71px]"
+          noEffect
+        />
+      ));
     },
   },
   // Vehicle type
@@ -218,7 +215,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => {
-      if (!row.original.vehicle_type) return "None";
+      if (!row.original.vehicle_type) return <div className="px-3">None</div>;
 
       return (
         <div className="flex items-center gap-1">
@@ -266,7 +263,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="px-2">
+      <div className="px-3">
         <Badge>{row.original.steps}</Badge>
       </div>
     ),
