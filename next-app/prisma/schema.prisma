@@ -430,3 +430,12 @@ model cog_building_backroom {
 
   name String @unique
 }
+
+model cog_building_passive_production_duration {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name  String @unique
+  turns Int
+}

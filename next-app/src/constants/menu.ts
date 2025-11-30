@@ -1,6 +1,7 @@
 import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { BuildingBackroomIcon } from "@/components/icons/building-backroom";
+import { BuildingPassiveDurationIcon } from "@/components/icons/building-passive-duration";
 import { BuildingSizeIcon } from "@/components/icons/building-size";
 import { BuildingTypeIcon } from "@/components/icons/building-type";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
@@ -25,6 +26,7 @@ import {
 import { TbDashboard } from "react-icons/tb";
 import { autoRouteTypesTitle } from "./page-title/auto-route-types";
 import { buildingBackroomsTitle } from "./page-title/building-backrooms";
+import { buildingPassiveDurationTitle } from "./page-title/building-passive-duration";
 import { buildingSizesTitle } from "./page-title/building-sizes";
 import { buildingTypesTitle } from "./page-title/building-types";
 import { captainRolesTitle } from "./page-title/captain-roles";
@@ -68,6 +70,11 @@ export const menuBasicTables: MenuItem[] = [
     title: buildingBackroomsTitle.label.plural,
     url: buildingBackroomsTitle.href,
     icon: BuildingBackroomIcon,
+  },
+  {
+    title: buildingPassiveDurationTitle.label.plural,
+    url: buildingPassiveDurationTitle.href,
+    icon: BuildingPassiveDurationIcon,
   },
   {
     title: autoRouteTypesTitle.label.plural,
