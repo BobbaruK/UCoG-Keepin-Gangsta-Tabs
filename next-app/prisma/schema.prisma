@@ -414,6 +414,15 @@ model cog_building_type {
   name String @unique
 }
 
+model cog_building_size {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String @unique
+  capacity Int
+}
+
 model cog_building_backroom {
   id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())

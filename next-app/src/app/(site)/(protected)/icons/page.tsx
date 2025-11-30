@@ -8,6 +8,7 @@ import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { BanIcon } from "@/components/icons/ban";
 import { BossIcon } from "@/components/icons/boss";
 import { BuildingBackroomIcon } from "@/components/icons/building-backroom";
+import { BuildingSizeIcon } from "@/components/icons/building-size";
 import { BuildingTypeIcon } from "@/components/icons/building-type";
 import { CalendarIcon } from "@/components/icons/calendar";
 import { CameraIcon } from "@/components/icons/camera";
@@ -335,6 +336,10 @@ const icons: {
   {
     name: "BuildingBackroomIcon",
     icon: BuildingBackroomIcon,
+  },
+  {
+    name: "BuildingSizeIcon",
+    icon: BuildingSizeIcon,
   },
 ];
 
