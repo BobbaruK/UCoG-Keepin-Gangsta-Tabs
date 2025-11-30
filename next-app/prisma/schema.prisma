@@ -239,43 +239,7 @@ model cog_resource_type {
   cogResources cog_resource[]
 }
 
-model cog_captain_role {
-  id        String   @id @unique @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  name        String  @unique
-  image       String?
-  description String?
-
-  sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id], onDelete: SetDefault)
-  cog_side_effectId String?
-
-  crew_members cog_crew_member[]
-}
-
-enum CrewLevelType {
-  DRIVER
-  GAMBLING
-  GENERAL
-  PRODUCTION
-  SPEAKEASY
-}
-
-model cog_crew_level {
-  id        String   @id @unique @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  type        CrewLevelType @default(DRIVER)
-  name        String
-  max_level   Int
-  description String?
-
-  cogCrewExperiences cog_crew_experience[]
-}
-
-// Main Table
+//    Main Table
 
 model cog_playthrough {
   id        String   @id @unique @default(cuid())
@@ -302,7 +266,7 @@ model cog_playthrough {
   auth_userId     String
 }
 
-// Police
+//    Police
 
 model cog_police_officer {
   id        String   @id @unique @default(cuid())
@@ -321,7 +285,7 @@ model cog_police_officer {
   auth_userId       String
 }
 
-// Crew
+//    Crew
 
 model cog_crew_member {
   id        String   @id @unique @default(cuid())
@@ -369,7 +333,43 @@ model cog_crew_experience {
   cog_crew_memberId String
 }
 
-// Auto Routes
+model cog_captain_role {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String  @unique
+  image       String?
+  description String?
+
+  sideEffect        cog_side_effect? @relation(fields: [cog_side_effectId], references: [id], onDelete: SetDefault)
+  cog_side_effectId String?
+
+  crew_members cog_crew_member[]
+}
+
+enum CrewLevelType {
+  DRIVER
+  GAMBLING
+  GENERAL
+  PRODUCTION
+  SPEAKEASY
+}
+
+model cog_crew_level {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type        CrewLevelType @default(DRIVER)
+  name        String
+  max_level   Int
+  description String?
+
+  cogCrewExperiences cog_crew_experience[]
+}
+
+//    Auto Routes
 
 model cog_auto_route {
   id        String   @id @unique @default(cuid())
@@ -402,4 +402,14 @@ model cog_auto_route_type {
   name String @unique
 
   cogAutoRoute cog_auto_route[]
+}
+
+//    Buildings
+
+model cog_building_type {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
 }

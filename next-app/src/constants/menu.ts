@@ -1,5 +1,6 @@
 import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
+import { BuildingTypeIcon } from "@/components/icons/building-type";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { CrewLevelIcon } from "@/components/icons/crew-level";
 import { CrewMemberIcon } from "@/components/icons/crew-member";
@@ -21,6 +22,7 @@ import {
 } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
 import { autoRouteTypesTitle } from "./page-title/auto-route-types";
+import { buildingTypesTitle } from "./page-title/building-types";
 import { captainRolesTitle } from "./page-title/captain-roles";
 import { crewLevelsTitle } from "./page-title/crew-levels";
 import { crewMembersTitle } from "./page-title/crew-members";
@@ -48,6 +50,11 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const menuBasicTables: MenuItem[] = [
+  {
+    title: buildingTypesTitle.label.plural,
+    url: buildingTypesTitle.href,
+    icon: BuildingTypeIcon,
+  },
   {
     title: autoRouteTypesTitle.label.plural,
     url: autoRouteTypesTitle.href,
