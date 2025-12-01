@@ -112,6 +112,7 @@ export const roles = {
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
+    auto_route: [...statement.auto_route],
     building: [...statement.building],
   }),
 };

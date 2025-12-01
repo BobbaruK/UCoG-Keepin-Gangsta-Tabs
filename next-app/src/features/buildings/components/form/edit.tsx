@@ -362,7 +362,10 @@ const EditBuildingForm = ({
                                   setComboxSize(false);
                                 }}
                                 disabled={
-                                  !!member.cogBuildings || !!member.cogAutoRoute
+                                  !!(
+                                    !!member.cogBuildings &&
+                                    member.id !== building.manager_id
+                                  ) || !!member.cogAutoRoute
                                 }
                               >
                                 {member.full_name}

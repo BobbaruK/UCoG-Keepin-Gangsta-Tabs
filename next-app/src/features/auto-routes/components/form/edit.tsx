@@ -4,6 +4,7 @@ import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
 import { AutoRouteIcon } from "@/components/icons/auto-route";
+import { BuildingIcon } from "@/components/icons/building";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
@@ -269,8 +270,9 @@ const EditAutoRouteForm = ({
                                 setComboxAutoRoute(false);
                               }}
                               disabled={
-                                !!member.cogAutoRoute &&
-                                member.id !== autoRoute.crew_member_id
+                                !!member.cogBuildings ||
+                                (!!member.cogAutoRoute &&
+                                  member.id !== autoRoute.crew_member_id)
                               }
                             >
                               {
@@ -279,7 +281,18 @@ const EditAutoRouteForm = ({
                                   lastName: member.last_name,
                                   alias: member.alias,
                                 }).outputFE
-                              }{" "}
+                              }
+
+                              {member.cogBuildings && (
+                                <>
+                                  <BuildingIcon />
+                                  {member.cogBuildings.name}{" "}
+                                  {member.cogBuildings.backroom && (
+                                    <>({member.cogBuildings.backroom?.name})</>
+                                  )}
+                                </>
+                              )}
+
                               {member.cogAutoRoute && (
                                 <>
                                   <AutoRouteIcon />

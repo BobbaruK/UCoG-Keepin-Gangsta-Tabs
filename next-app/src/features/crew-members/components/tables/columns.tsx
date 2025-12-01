@@ -35,6 +35,8 @@ import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import Points from "./points";
 import RowActions from "./row-actions";
+import { BuildingIcon } from "@/components/icons/building";
+import { buildingTitle } from "@/constants/page-title/building";
 
 export const columns = ({
   isLoading,
@@ -194,7 +196,30 @@ export const columns = ({
                   {capitalizeFirstLetter(
                     autoRoutesTitle.label.singular.toLowerCase(),
                   )}
-                  : {row.original.cogAutoRoute.name}
+                  : <strong>{row.original.cogAutoRoute.name}</strong>
+                </TooltipContent>
+              </Tooltip>
+            )}
+            {row.original.cogBuildings && (
+              <Tooltip>
+                <TooltipTrigger asChild className="ms-auto">
+                  <Link
+                    href={`${playthroughTitle.href}/${row.original.cog_playthroughId + buildingTitle.href}/${row.original.cogBuildings.id}`}
+                  >
+                    <BuildingIcon size={16} />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {capitalizeFirstLetter(
+                    buildingTitle.label.singular.toLowerCase(),
+                  )}
+                  :{" "}
+                  <strong>
+                    {" "}
+                    {row.original.cogBuildings.name}{" "}
+                    {row.original.cogBuildings.backroom &&
+                      `(${row.original.cogBuildings.backroom.name})`}
+                  </strong>
                 </TooltipContent>
               </Tooltip>
             )}

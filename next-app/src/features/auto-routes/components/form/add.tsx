@@ -3,6 +3,7 @@
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
 import { AutoRouteIcon } from "@/components/icons/auto-route";
+import { BuildingIcon } from "@/components/icons/building";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -238,7 +239,9 @@ const AddAutoRouteForm = ({
                                 );
                                 setComboxAutoRoute(false);
                               }}
-                              disabled={!!member.cogAutoRoute}
+                              disabled={
+                                !!member.cogBuildings || !!member.cogAutoRoute
+                              }
                             >
                               {
                                 setFullName({
@@ -246,7 +249,18 @@ const AddAutoRouteForm = ({
                                   lastName: member.last_name,
                                   alias: member.alias,
                                 }).outputFE
-                              }{" "}
+                              }
+
+                              {member.cogBuildings && (
+                                <>
+                                  <BuildingIcon />
+                                  {member.cogBuildings.name}{" "}
+                                  {member.cogBuildings.backroom && (
+                                    <>({member.cogBuildings.backroom?.name})</>
+                                  )}
+                                </>
+                              )}
+
                               {member.cogAutoRoute && (
                                 <>
                                   <AutoRouteIcon />
