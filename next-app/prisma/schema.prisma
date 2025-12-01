@@ -225,8 +225,9 @@ model cog_resource {
   category ResourceCategory @default(INGREDIENTS)
   price    Int
 
-  resource_type       cog_resource_type @relation(fields: [cog_resource_typeId], references: [id])
+  resource_type       cog_resource_type                 @relation(fields: [cog_resource_typeId], references: [id])
   cog_resource_typeId String
+  passive_productions cog_building_passive_production[]
 }
 
 model cog_resource_type {
@@ -429,6 +430,18 @@ model cog_building_backroom {
   updatedAt DateTime @updatedAt
 
   name String @unique
+}
+
+model cog_building_passive_production {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  quantity Int
+
+  resource   cog_resource @relation(fields: [resourceId], references: [id])
+  resourceId String
 }
 
 model cog_building_passive_production_duration {

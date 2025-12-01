@@ -23,6 +23,7 @@ const statement = {
   building_types: CRUD,
   building_backroom: CRUD,
   building_size: CRUD,
+  building_passive_production: CRUD,
   building_passive_production_duration: CRUD,
   playthrough: CRUD,
   crew_member: CRUD,
@@ -50,6 +51,7 @@ export const roles = {
     building_types: ["read"],
     building_backroom: ["read"],
     building_size: ["read"],
+    building_passive_production: ["read"],
     building_passive_production_duration: ["read"],
     playthrough: [...statement.playthrough],
     crew_member: [...statement.crew_member],
@@ -73,6 +75,7 @@ export const roles = {
     building_types: [...statement.building_types],
     building_backroom: [...statement.building_backroom],
     building_size: [...statement.building_size],
+    building_passive_production: [...statement.building_passive_production],
     building_passive_production_duration: [
       ...statement.building_passive_production_duration,
     ],
@@ -98,6 +101,7 @@ export const roles = {
     building_types: [...statement.building_types],
     building_backroom: [...statement.building_backroom],
     building_size: [...statement.building_size],
+    building_passive_production: [...statement.building_passive_production],
     building_passive_production_duration: [
       ...statement.building_passive_production_duration,
     ],
