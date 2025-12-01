@@ -65,7 +65,7 @@ export const columns = ({
     meta: {
       label: "Resource",
     },
-    accessorFn: (originalRow) => originalRow.resourceId.toLowerCase(),
+    accessorFn: (originalRow) => originalRow.resourceId?.toLowerCase(),
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
@@ -86,24 +86,28 @@ export const columns = ({
 
     cell: ({ row }) => (
       <div className="flex items-center gap-1 px-3">
-        <Link href={`${resourcesTitle.href}/${row.original.resource.id}`}>
-          <CustomAvatar
-            image={row.original.resource.image}
-            className="rounded-sm border-none"
-            fit="contain"
-            icon={<ResourceIcon />}
-          />
-        </Link>
+        {row.original.resource && (
+          <>
+            <Link href={`${resourcesTitle.href}/${row.original.resource.id}`}>
+              <CustomAvatar
+                image={row.original.resource.image}
+                className="rounded-sm border-none"
+                fit="contain"
+                icon={<ResourceIcon />}
+              />
+            </Link>
 
-        <CustomButton
-          buttonLabel={String(row.original.resource.name)}
-          size={"sm"}
-          linkHref={`${resourcesTitle.href}/${row.original.resource.id}`}
-          variant={"link"}
-          className=""
-          skeletonClassName="h-8 w-[121px]"
-          noEffect
-        />
+            <CustomButton
+              buttonLabel={String(row.original.resource.name)}
+              size={"sm"}
+              linkHref={`${resourcesTitle.href}/${row.original.resource.id}`}
+              variant={"link"}
+              className=""
+              skeletonClassName="h-8 w-[121px]"
+              noEffect
+            />
+          </>
+        )}
       </div>
     ),
   },
