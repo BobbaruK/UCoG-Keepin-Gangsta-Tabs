@@ -479,8 +479,8 @@ model cog_building_passive_production {
 
   quantity Int
 
-  resource   cog_resource @relation(fields: [resourceId], references: [id])
-  resourceId String
+  resource   cog_resource? @relation(fields: [resourceId], references: [id], onDelete: SetNull)
+  resourceId String?
 
   buildings cog_building[]
 }
