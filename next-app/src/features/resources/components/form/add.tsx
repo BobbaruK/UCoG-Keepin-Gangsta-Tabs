@@ -36,9 +36,9 @@ import { MESSAGES } from "@/constants/messages";
 import { resourcesTitle } from "@/constants/page-title/resources";
 import { cog_resource_type, ResourceCategory } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { capitalizeFirstLetter } from "better-auth";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -64,7 +64,7 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
       category: ResourceCategory.INGREDIENTS,
       image: "",
       type: "",
-      price: 1,
+      price: 0,
     },
   });
 
@@ -200,7 +200,7 @@ const AddResourceForm = ({ resourceTypes }: Props) => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("price", val)}
-                    minValue={1}
+                    minValue={0}
                     isPending={isPending}
                   />
                 </div>

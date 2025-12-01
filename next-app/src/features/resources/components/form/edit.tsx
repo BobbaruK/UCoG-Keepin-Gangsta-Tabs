@@ -233,7 +233,7 @@ const EditResourceForm = ({ resource, resourceTypes }: Props) => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("price", val)}
-                    minValue={1}
+                    minValue={0}
                     isPending={isPending}
                   />
                 </div>
@@ -432,7 +432,7 @@ export function EditResourceFormSkeleton({
       <div className="flex flex-wrap items-center justify-end gap-4">
         <Skeleton className="bg-destructive h-9 w-[89px]" />
         <Skeleton className="bg-muted h-9 w-[68px] border" />
-        <Skeleton className="bg-success h-9 w-[128px]" />
+        <Skeleton className="bg-success h-9 w-32" />
       </div>
     </div>
   );

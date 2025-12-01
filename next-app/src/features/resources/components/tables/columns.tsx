@@ -195,9 +195,11 @@ export const columns = ({
 
     cell: ({ row }) => (
       <div className="px-2">
-        {formatCurrency({
-          value: row.original.price,
-        })}
+        {row.original.price === 0
+          ? `Can't be bought/sold`
+          : formatCurrency({
+              value: row.original.price,
+            })}
       </div>
     ),
   },
