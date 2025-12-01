@@ -7,9 +7,10 @@ import { PageBreadcrumbs } from "@/core/breadcrumb/components/page-breadcrumbs";
 import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { DataTableTransitionWrapper } from "@/features/auto-routes/components/tables/data-table-transition-wrapper";
 import { getAutoRoutes } from "@/features/auto-routes/data/get";
+import { getLaws } from "@/features/laws/data/get-laws";
 import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
-import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
+import PlaythroughPeak from "@/features/playthroughs/components/playthrough-peak";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { Prisma } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
@@ -111,6 +112,8 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
     perPage: -1,
   });
 
+  const laws = await getLaws();
+
   return (
     <PageStructure>
       <PageBreadcrumbs
@@ -147,10 +150,10 @@ const CrewMembersPage = async ({ params, searchParams }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <PlaythroughPresentation
+      <PlaythroughPeak
         session={session}
-        type="default"
         playthrough={playthrough}
+        laws={laws?.data}
       />
 
       <DataTableTransitionWrapper

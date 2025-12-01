@@ -10,7 +10,7 @@ import { getBuildings } from "@/features/buildings/data/get";
 import { getLaws } from "@/features/laws/data/get-laws";
 import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
-import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
+import PlaythroughPeak from "@/features/playthroughs/components/playthrough-peak";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { Prisma } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
@@ -198,7 +198,7 @@ const BuildingsPage = async ({ params, searchParams }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <PlaythroughPresentation
+      <PlaythroughPeak
         session={session}
         playthrough={playthrough}
         laws={laws?.data}

@@ -8,7 +8,7 @@ import { breadCrumbsFn } from "@/core/breadcrumb/lib/breadcrumbs";
 import { getLaws } from "@/features/laws/data/get-laws";
 import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
-import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
+import PlaythroughPeak from "@/features/playthroughs/components/playthrough-peak";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { DataTableTransitionWrapper } from "@/features/police-officers/components/tables/data-table-transition-wrapper";
 import { getPoliceOfficers } from "@/features/police-officers/data/get";
@@ -158,7 +158,7 @@ const PoliceOfficersPage = async ({ params, searchParams }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <PlaythroughPresentation
+      <PlaythroughPeak
         session={session}
         playthrough={playthrough}
         laws={laws?.data}

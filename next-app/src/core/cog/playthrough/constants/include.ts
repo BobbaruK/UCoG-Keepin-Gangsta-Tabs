@@ -24,7 +24,25 @@ export const playthroughInclude = {
       banned: true,
     },
   },
-  crew_members: true,
+  crew_members: {
+    include: {
+      cogBuildings: true,
+    },
+  },
   police_officers: true,
   auto_routes: true,
+  buildings: {
+    select: {
+      id: true,
+      name: true,
+      backroom_id: true,
+      size: {
+        select: {
+          id: true,
+          name: true,
+          capacity: true,
+        },
+      },
+    },
+  },
 } satisfies Prisma.cog_playthroughInclude;

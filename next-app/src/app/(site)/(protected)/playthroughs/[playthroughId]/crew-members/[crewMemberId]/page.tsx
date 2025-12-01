@@ -10,7 +10,7 @@ import { getCrewMember } from "@/features/crew-members/data/get";
 import { getLaws } from "@/features/laws/data/get-laws";
 import PlaythroughError from "@/features/playthroughs/components/playthrough-error";
 import PlaythroughMenu from "@/features/playthroughs/components/playthrough-menu-wrapper";
-import PlaythroughPresentation from "@/features/playthroughs/components/playthrough-presentation";
+import PlaythroughPeak from "@/features/playthroughs/components/playthrough-peak";
 import { getPlaythrough } from "@/features/playthroughs/data/get";
 import { auth } from "@/lib/auth";
 import { setFullName } from "@/lib/utils/full-name";
@@ -159,9 +159,8 @@ const CrewMemberPage = async ({ params }: Props) => {
 
       <PlaythroughMenu playthroughId={playthrough.id} />
 
-      <PlaythroughPresentation
+      <PlaythroughPeak
         session={session}
-        type="default"
         playthrough={playthrough}
         laws={laws?.data}
       />
