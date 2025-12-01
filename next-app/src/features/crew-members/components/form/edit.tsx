@@ -45,11 +45,11 @@ import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { Nationality } from "@/core/cog/nationality/types/nationality";
 import { Trait } from "@/core/cog/trait/types/trait";
 import { cn } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { dateFormatter, turnToDate } from "@/lib/utils/format-date";
 import { setFullName } from "@/lib/utils/full-name";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { capitalizeFirstLetter } from "better-auth";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -330,7 +330,9 @@ const EditCrewMemberForm = ({
                                   role.id === form.getValues("captain_role"),
                               )?.image
                             }
-                            icon={<CaptainRoleIcon className="text-foreground" />}
+                            icon={
+                              <CaptainRoleIcon className="text-foreground" />
+                            }
                             className="size-6 rounded-md border-none"
                             fit="contain"
                           />
