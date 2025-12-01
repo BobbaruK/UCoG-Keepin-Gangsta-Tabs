@@ -69,4 +69,13 @@ export const crewMemberInclude = {
     },
   },
   cogAutoRoute: true,
+  cogBuildings: {
+    include: {
+      backroom: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  },
 } satisfies Prisma.cog_crew_memberInclude;

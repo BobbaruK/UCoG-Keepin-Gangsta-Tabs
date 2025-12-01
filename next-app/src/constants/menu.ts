@@ -1,5 +1,6 @@
 import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
+import { BuildingIcon } from "@/components/icons/building";
 import { BuildingBackroomIcon } from "@/components/icons/building-backroom";
 import { BuildingPassiveIcon } from "@/components/icons/building-passive";
 import { BuildingPassiveDurationIcon } from "@/components/icons/building-passive-duration";
@@ -159,7 +160,7 @@ export const playthroughMenu = (
   {
     title: "Buildings",
     url: `${playthroughTitle.href}/${playthroughId}/buildings`,
-    icon: PoliceOfficerIcon,
+    icon: BuildingIcon,
   },
   {
     title: "Gambling",

@@ -54,6 +54,7 @@ model auth_user {
   cogPoliceOfficers cog_police_officer[]
   cogCrewMembers    cog_crew_member[]
   cogAutoRoutes     cog_auto_route[]
+  cogBuildings      cog_building[]
 
   @@index([email, slug])
   @@map("user")
@@ -259,7 +260,7 @@ model cog_playthrough {
 
   police_officers cog_police_officer[]
   crew_members    cog_crew_member[]
-  // buildings
+  buildings       cog_building[]
   // gambling_buildings
   auto_routes     cog_auto_route[]
   // wards
@@ -317,6 +318,8 @@ model cog_crew_member {
   auth_userId String
 
   cogAutoRoute cog_auto_route?
+
+  cogBuildings cog_building?
 
   @@index([full_name])
 }
@@ -407,12 +410,45 @@ model cog_auto_route_type {
 
 //    Buildings
 
+model cog_building {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+
+  manager    cog_crew_member? @relation(fields: [manager_id], references: [id])
+  manager_id String?          @unique
+
+  type    cog_building_type? @relation(fields: [type_id], references: [id])
+  type_id String?
+
+  size    cog_building_size @relation(fields: [size_id], references: [id])
+  size_id String
+
+  passive_productions cog_building_passive_production[]
+
+  passive_productions_duration   cog_building_passive_production_duration? @relation(fields: [passive_production_duration_id], references: [id])
+  passive_production_duration_id String?
+
+  backroom    cog_building_backroom? @relation(fields: [backroom_id], references: [id])
+  backroom_id String?
+
+  playthrough    cog_playthrough @relation(fields: [playthrough_id], references: [id], onDelete: Cascade)
+  playthrough_id String
+
+  user    auth_user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+}
+
 model cog_building_type {
   id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   name String @unique
+
+  buildings cog_building[]
 }
 
 model cog_building_size {
@@ -422,6 +458,8 @@ model cog_building_size {
 
   name     String @unique
   capacity Int
+
+  buildings cog_building[]
 }
 
 model cog_building_backroom {
@@ -430,6 +468,8 @@ model cog_building_backroom {
   updatedAt DateTime @updatedAt
 
   name String @unique
+
+  buildings cog_building[]
 }
 
 model cog_building_passive_production {
@@ -437,11 +477,12 @@ model cog_building_passive_production {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name     String
   quantity Int
 
   resource   cog_resource @relation(fields: [resourceId], references: [id])
   resourceId String
+
+  buildings cog_building[]
 }
 
 model cog_building_passive_production_duration {
@@ -451,4 +492,6 @@ model cog_building_passive_production_duration {
 
   name  String @unique
   turns Int
+
+  buildings cog_building[]
 }

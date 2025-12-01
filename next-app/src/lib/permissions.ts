@@ -30,6 +30,7 @@ const statement = {
   crew_experience: CRUD,
   police_officers: CRUD,
   auto_route: CRUD,
+  building: CRUD,
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -58,6 +59,7 @@ export const roles = {
     crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
     auto_route: [...statement.auto_route],
+    building: [...statement.building],
   }),
   [UserRole.ADMIN]: ac.newRole({
     ...adminAc.statements,
@@ -84,6 +86,7 @@ export const roles = {
     crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
     auto_route: [...statement.auto_route],
+    building: [...statement.building],
   }),
   [UserRole.OWNER]: ac.newRole({
     ...adminAc.statements,
@@ -109,6 +112,6 @@ export const roles = {
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],
     police_officers: [...statement.police_officers],
-    auto_route: [...statement.auto_route],
+    building: [...statement.building],
   }),
 };

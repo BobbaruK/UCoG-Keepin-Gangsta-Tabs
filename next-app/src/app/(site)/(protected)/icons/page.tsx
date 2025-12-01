@@ -7,6 +7,7 @@ import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { AutoRouteTypesIcon } from "@/components/icons/auto-route-types";
 import { BanIcon } from "@/components/icons/ban";
 import { BossIcon } from "@/components/icons/boss";
+import { BuildingIcon } from "@/components/icons/building";
 import { BuildingBackroomIcon } from "@/components/icons/building-backroom";
 import { BuildingPassiveIcon } from "@/components/icons/building-passive";
 import { BuildingPassiveDurationIcon } from "@/components/icons/building-passive-duration";
@@ -350,6 +351,10 @@ const icons: {
   {
     name: "BuildingPassiveIcon",
     icon: BuildingPassiveIcon,
+  },
+  {
+    name: "BuildingIcon",
+    icon: BuildingIcon,
   },
 ];
 
