@@ -498,6 +498,24 @@ model cog_building_passive_production_duration {
 
 //    Gambling
 
+enum GamblingFeatureType {
+  ENHANCED
+  OCCASIONAL
+  REGULAR
+}
+
+model cog_gambling_feature {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name         String
+  weekly_cost  Int
+  cash_on_hand Int
+  is_dlc       Boolean             @default(false)
+  type         GamblingFeatureType @default(OCCASIONAL)
+}
+
 model cog_gambling_size {
   id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
