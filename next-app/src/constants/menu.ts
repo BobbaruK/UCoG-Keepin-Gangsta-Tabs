@@ -9,6 +9,7 @@ import { BuildingTypeIcon } from "@/components/icons/building-type";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { CrewLevelIcon } from "@/components/icons/crew-level";
 import { CrewMemberIcon } from "@/components/icons/crew-member";
+import { GamblingSizeIcon } from "@/components/icons/gambling-size";
 import { LawIcon } from "@/components/icons/law";
 import { NationalityIcon } from "@/components/icons/nationality";
 import { PlaythroughIcon } from "@/components/icons/playthrough";
@@ -35,6 +36,7 @@ import { buildingTypesTitle } from "./page-title/building-types";
 import { captainRolesTitle } from "./page-title/captain-roles";
 import { crewLevelsTitle } from "./page-title/crew-levels";
 import { crewMembersTitle } from "./page-title/crew-members";
+import { gamblingSizeTitle } from "./page-title/gambling-size";
 import { lawsTitle } from "./page-title/laws";
 import { nationalitiesTitle } from "./page-title/nationalities";
 import { playthroughTitle } from "./page-title/playthrough";
@@ -59,6 +61,11 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const menuBasicTables: MenuItem[] = [
+  {
+    title: gamblingSizeTitle.label.plural,
+    url: gamblingSizeTitle.href,
+    icon: GamblingSizeIcon,
+  },
   {
     title: buildingTypesTitle.label.plural,
     url: buildingTypesTitle.href,

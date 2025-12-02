@@ -495,3 +495,15 @@ model cog_building_passive_production_duration {
 
   buildings cog_building[]
 }
+
+//    Gambling
+
+model cog_gambling_size {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name         String
+  max_features Int
+  is_dlc       Boolean @default(false)
+}

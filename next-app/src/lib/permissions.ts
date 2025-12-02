@@ -25,6 +25,7 @@ const statement = {
   building_size: CRUD,
   building_passive_production: CRUD,
   building_passive_production_duration: CRUD,
+  gambling_sizes: CRUD,
   playthrough: CRUD,
   crew_member: CRUD,
   crew_experience: CRUD,
@@ -54,6 +55,7 @@ export const roles = {
     building_size: ["read"],
     building_passive_production: ["read"],
     building_passive_production_duration: ["read"],
+    gambling_sizes: ["read"],
     playthrough: [...statement.playthrough],
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],
@@ -81,6 +83,7 @@ export const roles = {
     building_passive_production_duration: [
       ...statement.building_passive_production_duration,
     ],
+    gambling_sizes: [...statement.gambling_sizes],
     playthrough: [...statement.playthrough],
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],
@@ -108,6 +111,7 @@ export const roles = {
     building_passive_production_duration: [
       ...statement.building_passive_production_duration,
     ],
+    gambling_sizes: [...statement.gambling_sizes],
     playthrough: [...statement.playthrough],
     crew_member: [...statement.crew_member],
     crew_experience: [...statement.crew_experience],

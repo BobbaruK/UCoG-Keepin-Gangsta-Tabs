@@ -28,6 +28,7 @@ import { DiscordIcon } from "@/components/icons/discord";
 import { EditIcon } from "@/components/icons/edit";
 import { EnvelopeIcon } from "@/components/icons/envelope";
 import { ErrorIcon } from "@/components/icons/error";
+import { GamblingSizeIcon } from "@/components/icons/gambling-size";
 import { GamepadIcon } from "@/components/icons/gamepad";
 import { GithubIcon } from "@/components/icons/github";
 import { GogglesIcon } from "@/components/icons/goggles";
@@ -355,6 +356,10 @@ const icons: {
   {
     name: "BuildingIcon",
     icon: BuildingIcon,
+  },
+  {
+    name: "GamblingSizeIcon",
+    icon: GamblingSizeIcon,
   },
 ];
 
