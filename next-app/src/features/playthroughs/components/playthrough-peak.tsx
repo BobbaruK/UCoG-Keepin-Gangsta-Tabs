@@ -19,14 +19,15 @@ import {
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
-import { weeklyCostCalculator } from "@/core/cog/gambling-feature/utils/weekly-cost-calculator";
 import { Law } from "@/core/cog/law/types/law";
 import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
+import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formatCurrency } from "@/lib/utils/format-currency";
 import { ft3m3 } from "@/lib/utils/ft3-m3";
 import { Session } from "@/types/session";
 import Link from "next/link";
 import { useState } from "react";
+import { playthroughPeak } from "../utils/playthrough-peak";
 
 interface Props {
   session: Session | null;
@@ -37,67 +38,22 @@ interface Props {
 const PlaythroughPeak = ({ playthrough, session, laws = [] }: Props) => {
   const [minimalSeeMore, setMinimalSeeMore] = useState(false);
 
-  // Boss
-  const boss = playthrough.crew_members.find(
-    (member) => member.is_boss === true,
-  );
-
-  // Members
-  const membersLength = playthrough.crew_members.length;
-
-  // Captains
-  const captains = playthrough.crew_members.filter(
-    (member) => member.cog_captain_roleId !== null,
-  );
-  const captainsLength = captains.length;
-
-  // Managers
-  const managers = playthrough.crew_members.filter(
-    (member) => member.cogBuildings !== null,
-  );
-  const managersLength = managers.length;
-
-  // Muscle
-  const muscleLength =
-    membersLength - 1 /* Boss */ - captainsLength - managersLength;
-
-  // Auto routes
-  const autoRoutesLength = playthrough.auto_routes.length;
-  const stepsCount = playthrough.auto_routes.reduce(
-    (acc, curr) => acc + curr.steps,
-    0,
-  );
-
-  // Cops
-  const copsLength = playthrough.police_officers.length;
-
-  // Buildings
-  const buildingsLength = playthrough.buildings.length;
-  const buildingsCapacity = playthrough.buildings.reduce(
-    (acc, curr) => acc + curr.size.capacity,
-    0,
-  );
-  const buildingsUsed = playthrough.buildings.filter(
-    (building) => building.backroom_id !== null,
-  );
-  const buildingsUsedLength = buildingsUsed.length;
-
-  // Gambling
-  const gamblingLength = playthrough.gambling_buildings.length;
-  const gamblingWeeklyCosts = playthrough.gambling_buildings.reduce(
-    (acc, curr) => {
-      const { totalWeeklyCost, percentage } = weeklyCostCalculator(curr);
-
-      return acc + (totalWeeklyCost - totalWeeklyCost * percentage);
-    },
-    0,
-  );
-  console.log({ gamblingWeeklyCosts });
-  const gamblingCashOnHand = playthrough.gambling_buildings.reduce(
-    (acc, curr) =>
-      acc + curr.features.reduce((acc, curr) => acc + curr.cash_on_hand, 0),
-    0,
-  );
+  const {
+    autoRoutesLength,
+    boss,
+    buildingsCapacity,
+    buildingsLength,
+    buildingsUsedLength,
+    captainsLength,
+    copsLength,
+    gamblingCashOnHand,
+    gamblingLength,
+    gamblingWeeklyCosts,
+    managersLength,
+    membersLength,
+    muscleLength,
+    stepsCount,
+  } = playthroughPeak({ playthrough });
 
   const showDanger = ({
     isActive,
@@ -161,52 +117,75 @@ const PlaythroughPeak = ({ playthrough, session, laws = [] }: Props) => {
               <p>This outfit has:</p>
               <ul className="list-inside list-disc">
                 <li>
-                  <Badge variant={"outline"}>{membersLength}</Badge> member
+                  <Badge variant={"secondary"} className="font-medium">
+                    {membersLength}
+                  </Badge>{" "}
+                  member
                   {membersLength === 1 ? "" : "s"}, of which{" "}
-                  <Badge variant={"outline"}>{captainsLength}</Badge>{" "}
+                  <Badge variant={"secondary"} className="font-medium">
+                    {captainsLength}
+                  </Badge>{" "}
                   {captainsLength === 1 ? "is" : "are"} captain
                   {captainsLength === 1 ? "" : "s"},{" "}
-                  <Badge variant={"outline"}>{managersLength}</Badge>{" "}
+                  <Badge variant={"secondary"} className="font-medium">
+                    {managersLength}
+                  </Badge>{" "}
                   {managersLength === 1 ? "is" : "are"} manager
                   {captainsLength === 1 ? "" : "s"} and{" "}
-                  <Badge variant={"outline"}>{muscleLength}</Badge>{" "}
+                  <Badge variant={"secondary"} className="font-medium">
+                    {muscleLength}
+                  </Badge>{" "}
                   {muscleLength === 1 ? "is" : "are"} muscle.
                 </li>
                 <li>
-                  <Badge variant={"outline"}>{autoRoutesLength}</Badge>{" "}
+                  <Badge variant={"secondary"} className="font-medium">
+                    {autoRoutesLength}
+                  </Badge>{" "}
                   auto-route
                   {autoRoutesLength === 1 ? "" : "s"} with{" "}
-                  <Badge variant={"outline"}>{stepsCount}</Badge> steps in
-                  total.
+                  <Badge variant={"secondary"} className="font-medium">
+                    {stepsCount}
+                  </Badge>{" "}
+                  steps in total.
                 </li>
                 <li>
-                  <Badge variant={"outline"}>{copsLength}</Badge> cop
+                  <Badge variant={"secondary"} className="font-medium">
+                    {copsLength}
+                  </Badge>{" "}
+                  cop
                   {copsLength === 1 ? "" : "s"} bribed.
                 </li>
                 <li>
-                  <Badge variant={"outline"}>{buildingsLength}</Badge> building
+                  <Badge variant={"secondary"} className="font-medium">
+                    {buildingsLength}
+                  </Badge>{" "}
+                  building
                   {buildingsLength === 1 ? "" : "s"} equalling{" "}
                   <Badge
-                    variant={"outline"}
+                    variant={"secondary"}
                     dangerouslySetInnerHTML={{
                       __html: ft3m3(buildingsCapacity).html,
                     }}
                   />{" "}
                   in total and using{" "}
-                  <Badge variant={"outline"}>{buildingsUsedLength}</Badge> of
-                  them at the moment.
+                  <Badge variant={"secondary"} className="font-medium">
+                    {buildingsUsedLength}
+                  </Badge>{" "}
+                  of them at the moment.
                 </li>
                 <li>
-                  <Badge variant={"outline"}>{gamblingLength}</Badge> gambling
-                  op
+                  <Badge variant={"secondary"} className="font-medium">
+                    {gamblingLength}
+                  </Badge>{" "}
+                  gambling op
                   {gamblingLength === 1 ? "" : "s"} costing{" "}
-                  <Badge variant={"outline"}>
+                  <Badge variant={"secondary"} className="font-medium">
                     {formatCurrency({
                       value: gamblingWeeklyCosts,
                     })}
                   </Badge>{" "}
                   weekly, with{" "}
-                  <Badge variant={"outline"}>
+                  <Badge variant={"secondary"} className="font-medium">
                     {formatCurrency({ value: gamblingCashOnHand })}
                   </Badge>{" "}
                   cash on hand required in total.
@@ -227,9 +206,15 @@ const PlaythroughPeak = ({ playthrough, session, laws = [] }: Props) => {
 
                     return (
                       <li key={law.id}>
-                        <Link href={`${lawsTitle.href}/${law.id}`}>
-                          {law.name}
-                        </Link>
+                        <CustomButton
+                          buttonLabel={capitalizeFirstLetter(
+                            law.name.toLowerCase(),
+                          )}
+                          linkHref={`${lawsTitle.href}/${law.id}`}
+                          variant={"link"}
+                          noEffect
+                          className="h-auto p-0"
+                        />
                         :{" "}
                         <Badge
                           variant={showDanger({
