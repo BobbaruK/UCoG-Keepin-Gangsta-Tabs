@@ -9,6 +9,7 @@ import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { gamblingFeatureTitle } from "@/constants/page-title/gambling-feature";
 import { traitsTitle } from "@/constants/page-title/traits";
 import { GamblingBuilding } from "@/core/cog/gambling-building/types/gambling-building";
+import { weeklyCostCalculator } from "@/core/cog/gambling-feature/utils/weekly-cost-calculator";
 import { formatCurrency } from "@/lib/utils/format-currency";
 
 interface Props {
@@ -16,36 +17,13 @@ interface Props {
 }
 
 const WeeklyCost = ({ gamblingBuilding }: Props) => {
-  const totalWeeklyCost = gamblingBuilding.features.reduce(
-    (acc, curr) => acc + curr.weekly_cost,
-    0,
-  );
-  let percentage = 0;
-
-  const hasOrganizedTrait = gamblingBuilding.manager.traits.find((trait) =>
-    trait.name.toLowerCase().includes("organized"),
-  );
-
-  // Organized - Trait
-  if (hasOrganizedTrait) percentage += 0.1;
-
-  const hasLatestLightings = gamblingBuilding.features.find((feature) =>
-    feature.name.toLowerCase().includes("latest"),
-  );
-
-  // Latest lightings - Gambling feature
-  if (hasLatestLightings) percentage += 0.2;
-
-  // House manager - crew level
-  const houseManagerLevel = gamblingBuilding.manager.experience.find(
-    (experience) =>
-      experience.level.name.toLowerCase().includes("house manager"),
-  );
-
-  if (houseManagerLevel && houseManagerLevel.value === 1) percentage += 0.1;
-  if (houseManagerLevel && houseManagerLevel.value === 2) percentage += 0.2;
-  if (houseManagerLevel && houseManagerLevel.value === 3) percentage += 0.25;
-  if (houseManagerLevel && houseManagerLevel.value === 4) percentage += 0.5;
+  const {
+    totalWeeklyCost,
+    percentage,
+    organizedTrait,
+    latestLightings,
+    houseManagerLevel,
+  } = weeklyCostCalculator(gamblingBuilding);
 
   return (
     <Tooltip>
@@ -66,21 +44,21 @@ const WeeklyCost = ({ gamblingBuilding }: Props) => {
           </strong>
         </span>
 
-        {hasOrganizedTrait && (
+        {organizedTrait && (
           <ShowCalculation
             percent={10}
-            name={hasOrganizedTrait.name}
+            name={organizedTrait.name}
             what={traitsTitle.label.singular.toLowerCase()}
-            href={`${traitsTitle.href}/${hasOrganizedTrait.id}`}
+            href={`${traitsTitle.href}/${organizedTrait.id}`}
           />
         )}
 
-        {hasLatestLightings && (
+        {latestLightings && (
           <ShowCalculation
             percent={20}
-            name={`${hasLatestLightings.name} (DLC)`}
+            name={`${latestLightings.name} (DLC)`}
             what={gamblingFeatureTitle.label.singular.toLowerCase()}
-            href={`${gamblingFeatureTitle.href}/${hasLatestLightings.id}`}
+            href={`${gamblingFeatureTitle.href}/${latestLightings.id}`}
           />
         )}
 

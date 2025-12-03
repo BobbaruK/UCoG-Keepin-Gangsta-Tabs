@@ -1,4 +1,5 @@
 import { Prisma } from "@/generated/prisma";
+import { gamblingBuildingInclude } from "../../gambling-building/constants/include";
 
 export const playthroughInclude = {
   laws: {
@@ -44,5 +45,20 @@ export const playthroughInclude = {
         },
       },
     },
+  },
+  gambling_buildings: {
+    // select: {
+    //   id: true,
+    //   name: true,
+    //   features: {
+    //     select: {
+    //       id: true,
+    //       name: true,
+    //       weekly_cost: true,
+    //       cash_on_hand: true,
+    //     },
+    //   },
+    // },
+    include: gamblingBuildingInclude,
   },
 } satisfies Prisma.cog_playthroughInclude;

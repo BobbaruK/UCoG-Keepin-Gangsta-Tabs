@@ -19,8 +19,10 @@ import {
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
 import { lawsTitle } from "@/constants/page-title/laws";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
+import { weeklyCostCalculator } from "@/core/cog/gambling-feature/utils/weekly-cost-calculator";
 import { Law } from "@/core/cog/law/types/law";
 import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
+import { formatCurrency } from "@/lib/utils/format-currency";
 import { ft3m3 } from "@/lib/utils/ft3-m3";
 import { Session } from "@/types/session";
 import Link from "next/link";
@@ -81,7 +83,21 @@ const PlaythroughPeak = ({ playthrough, session, laws = [] }: Props) => {
   const buildingsUsedLength = buildingsUsed.length;
 
   // Gambling
-  const gamblingLength = 1 - 1;
+  const gamblingLength = playthrough.gambling_buildings.length;
+  const gamblingWeeklyCosts = playthrough.gambling_buildings.reduce(
+    (acc, curr) => {
+      const { totalWeeklyCost, percentage } = weeklyCostCalculator(curr);
+
+      return acc + (totalWeeklyCost - totalWeeklyCost * percentage);
+    },
+    0,
+  );
+  console.log({ gamblingWeeklyCosts });
+  const gamblingCashOnHand = playthrough.gambling_buildings.reduce(
+    (acc, curr) =>
+      acc + curr.features.reduce((acc, curr) => acc + curr.cash_on_hand, 0),
+    0,
+  );
 
   const showDanger = ({
     isActive,
@@ -181,11 +197,19 @@ const PlaythroughPeak = ({ playthrough, session, laws = [] }: Props) => {
                   them at the moment.
                 </li>
                 <li>
-                  <Badge variant={"info"}>{gamblingLength}</Badge> gambling op
+                  <Badge variant={"outline"}>{gamblingLength}</Badge> gambling
+                  op
                   {gamblingLength === 1 ? "" : "s"} costing{" "}
-                  <Badge variant={"info"}>{0}</Badge> weekly, with{" "}
-                  <Badge variant={"info"}>{0}</Badge> cash on hand required in
-                  total.
+                  <Badge variant={"outline"}>
+                    {formatCurrency({
+                      value: gamblingWeeklyCosts,
+                    })}
+                  </Badge>{" "}
+                  weekly, with{" "}
+                  <Badge variant={"outline"}>
+                    {formatCurrency({ value: gamblingCashOnHand })}
+                  </Badge>{" "}
+                  cash on hand required in total.
                 </li>
               </ul>
             </div>
