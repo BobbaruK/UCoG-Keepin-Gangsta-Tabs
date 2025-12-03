@@ -58,7 +58,7 @@ const EditBuildingPassiveForm = ({
     resolver: zodResolver(AddBuildingPassiveSchema),
     defaultValues: {
       quantity: buildingPassive.quantity,
-      resource: buildingPassive.resourceId,
+      resource: buildingPassive.resourceId || "",
     },
   });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -289,7 +289,7 @@ const EditBuildingPassiveForm = ({
           header={
             DIALOG_MESSAGES({
               resource: buildingPassiveTitle.label.singular.toLowerCase(),
-              resourceName: `${buildingPassive.resource.name} (${buildingPassive.quantity})`,
+              resourceName: `${buildingPassive.resource?.name} (${buildingPassive.quantity})`,
             }).DELETE
           }
         >

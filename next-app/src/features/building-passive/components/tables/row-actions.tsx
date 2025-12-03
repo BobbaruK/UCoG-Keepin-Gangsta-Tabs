@@ -3,25 +3,14 @@
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { BuildingPassiveIcon } from "@/components/icons/building-passive";
-import { CopyIcon } from "@/components/icons/copy";
-import { EditIcon } from "@/components/icons/edit";
-import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { buildingPassiveTitle } from "@/constants/page-title/building-passive";
 import { BuildingPassive } from "@/core/cog/building-passive/types/building-passive-duration";
+import RowActionDropdown from "@/core/table/components/row-action-dropdown";
 import { UserRole } from "@/generated/prisma";
-import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteBuildingPassive } from "../../actions/delete";
@@ -32,7 +21,6 @@ interface Props {
 
 const RowActions = ({ buildingPassive }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
@@ -80,7 +68,7 @@ const RowActions = ({ buildingPassive }: Props) => {
         header={
           DIALOG_MESSAGES({
             resource: buildingPassiveTitle.label.singular.toLowerCase(),
-            resourceName: buildingPassive.name,
+            resourceName: `${buildingPassive.resource?.name} (${buildingPassive.quantity})`,
           }).DELETE
         }
       >
@@ -97,53 +85,20 @@ const RowActions = ({ buildingPassive }: Props) => {
         </div>
       </ResponsiveDialog>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild disabled={isPending}>
-          <CustomButton
-            buttonLabel="More"
-            size={"icon"}
-            icon={MoreIcon}
-            iconPlacement="left"
-            variant={"outline"}
-            className="size-8"
-            skeletonClassName="size-8"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleCopy(buildingPassive.id)}>
-            <CopyIcon /> Copy ID
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href={`${buildingPassiveTitle.href}/${buildingPassive.id}`}>
-              <BuildingPassiveIcon />
-              Go to {buildingPassiveTitle.label.singular.toLowerCase()}
-            </Link>
-          </DropdownMenuItem>
-
-          {session && session.user.role !== UserRole.USER && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link
-                  href={`${buildingPassiveTitle.href}/${buildingPassive.id}/edit`}
-                >
-                  <EditIcon />
-                  Edit {buildingPassiveTitle.label.singular.toLowerCase()}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {buildingPassiveTitle.label.singular.toLowerCase()}
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowActionDropdown
+        id={buildingPassive.id}
+        resourceName={`${buildingPassive.resource?.name} (${buildingPassive.quantity})`}
+        goTo={{
+          href: `${buildingPassiveTitle.href}/${buildingPassive.id}`,
+          icon: BuildingPassiveIcon,
+        }}
+        showEditDelete={
+          (session && session.user.role !== UserRole.USER) || false
+        }
+        editHref={`${buildingPassiveTitle.href}/${buildingPassive.id}/edit`}
+        isPending={isPending}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+      />
     </>
   );
 };
