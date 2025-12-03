@@ -63,35 +63,6 @@ const BuildingsPage = async ({ params, searchParams }: Props) => {
     headers: await headers(),
   });
 
-  // const orderBy = (): Prisma.cog_police_officerOrderByWithRelationInput => {
-  //   switch (sortBy) {
-  //     case "bribedTurn":
-  //       return {
-  //         bribed_turn: sort,
-  //       };
-
-  //     case "rivalRelative":
-  //       return {
-  //         has_rival_hooligan_relative: sort,
-  //       };
-
-  //     case "politicalContact":
-  //       return {
-  //         political_contact_used: sort,
-  //       };
-
-  //     case "callRaid":
-  //       return {
-  //         can_call_in_a_raid: sort,
-  //       };
-
-  //     default:
-  //       return {
-  //         [sortBy]: sort,
-  //       };
-  //   }
-  // };
-
   const playthrough = await getPlaythrough(id);
 
   if (!playthrough) return <PlaythroughError session={session} />;
@@ -145,7 +116,7 @@ const BuildingsPage = async ({ params, searchParams }: Props) => {
     perPage: pageSize,
     orderBy: orderBuildingsFn(),
     where: {
-      // cog_playthroughId: id,
+      playthrough_id: id,
       name: {
         contains: search,
         mode: "insensitive",
