@@ -2,26 +2,15 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
-import { CopyIcon } from "@/components/icons/copy";
-import { EditIcon } from "@/components/icons/edit";
-import { MoreIcon } from "@/components/icons/more";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { CaptainRole } from "@/core/cog/captain-role/types/captain-role";
+import RowActionDropdown from "@/core/table/components/row-action-dropdown";
 import { UserRole } from "@/generated/prisma";
-import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteCaptainRole } from "../../actions/delete";
@@ -32,7 +21,6 @@ interface Props {
 
 const RowActions = ({ captainRole }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
@@ -97,51 +85,20 @@ const RowActions = ({ captainRole }: Props) => {
         </div>
       </ResponsiveDialog>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild disabled={isPending}>
-          <CustomButton
-            buttonLabel="More"
-            size={"icon"}
-            icon={MoreIcon}
-            iconPlacement="left"
-            variant={"outline"}
-            className="size-8"
-            skeletonClassName="size-8"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleCopy(captainRole.id)}>
-            <CopyIcon /> Copy ID
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href={`${captainRolesTitle.href}/${captainRole.id}`}>
-              <CaptainRoleIcon />
-              Go to {captainRolesTitle.label.singular.toLowerCase()}
-            </Link>
-          </DropdownMenuItem>
-
-          {session && session.user.role !== UserRole.USER && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={`${captainRolesTitle.href}/${captainRole.id}/edit`}>
-                  <EditIcon />
-                  Edit {captainRolesTitle.label.singular.toLowerCase()}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {captainRolesTitle.label.singular.toLowerCase()}
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowActionDropdown
+        id={captainRole.id}
+        resourceName={captainRole.name}
+        goTo={{
+          href: `${captainRolesTitle.href}/${captainRole.id}`,
+          icon: CaptainRoleIcon,
+        }}
+        showEditDelete={
+          (session && session.user.role !== UserRole.USER) || false
+        }
+        editHref={`${captainRolesTitle.href}/${captainRole.id}/edit`}
+        isPending={isPending}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+      />
     </>
   );
 };
