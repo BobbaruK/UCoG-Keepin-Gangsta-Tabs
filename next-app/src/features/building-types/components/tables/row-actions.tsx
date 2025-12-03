@@ -3,25 +3,14 @@
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
 import { BuildingTypeIcon } from "@/components/icons/building-type";
-import { CopyIcon } from "@/components/icons/copy";
-import { EditIcon } from "@/components/icons/edit";
-import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { buildingTypesTitle } from "@/constants/page-title/building-types";
 import { BuildingType } from "@/core/cog/building-type/types/building-type";
+import RowActionDropdown from "@/core/table/components/row-action-dropdown";
 import { UserRole } from "@/generated/prisma";
-import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteBuildingType } from "../../actions/delete";
@@ -32,7 +21,6 @@ interface Props {
 
 const RowActions = ({ buildingType }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
@@ -97,53 +85,20 @@ const RowActions = ({ buildingType }: Props) => {
         </div>
       </ResponsiveDialog>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild disabled={isPending}>
-          <CustomButton
-            buttonLabel="More"
-            size={"icon"}
-            icon={MoreIcon}
-            iconPlacement="left"
-            variant={"outline"}
-            className="size-8"
-            skeletonClassName="size-8"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleCopy(buildingType.id)}>
-            <CopyIcon /> Copy ID
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href={`${buildingTypesTitle.href}/${buildingType.id}`}>
-              <BuildingTypeIcon />
-              Go to {buildingTypesTitle.label.singular.toLowerCase()}
-            </Link>
-          </DropdownMenuItem>
-
-          {session && session.user.role !== UserRole.USER && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link
-                  href={`${buildingTypesTitle.href}/${buildingType.id}/edit`}
-                >
-                  <EditIcon />
-                  Edit {buildingTypesTitle.label.singular.toLowerCase()}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {buildingTypesTitle.label.singular.toLowerCase()}
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowActionDropdown
+        id={buildingType.id}
+        resourceName={buildingType.name}
+        goTo={{
+          href: `${buildingTypesTitle.href}/${buildingType.id}`,
+          icon: BuildingTypeIcon,
+        }}
+        showEditDelete={
+          (session && session.user.role !== UserRole.USER) || false
+        }
+        editHref={`${buildingTypesTitle.href}/${buildingType.id}/edit`}
+        isPending={isPending}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+      />
     </>
   );
 };
