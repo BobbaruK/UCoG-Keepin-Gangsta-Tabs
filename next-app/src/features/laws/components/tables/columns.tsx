@@ -124,7 +124,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="px-2">
+      <div className="px-2.5">
         {row.original.sideEffect ? (
           <Badge
             asChild
@@ -177,7 +177,7 @@ export const columns = ({
       const law = row.original;
       const type = law.type;
 
-      return <div className="px-2">{capitalizeFirstLetter(type)}</div>;
+      return <div className="px-2.5">{capitalizeFirstLetter(type)}</div>;
     },
   },
   // Enact
@@ -205,7 +205,7 @@ export const columns = ({
       );
     },
     cell: ({ row }) => (
-      <div className="px-2">{row.original.enact || "N/A"} </div>
+      <div className="px-2.5">{row.original.enact || "N/A"} </div>
     ),
   },
   // Revoke
@@ -233,7 +233,7 @@ export const columns = ({
       );
     },
     cell: ({ row }) => (
-      <div className="px-2">{row.original.revoke || "N/A"} </div>
+      <div className="px-2.5">{row.original.revoke || "N/A"} </div>
     ),
   },
   // Description
@@ -278,9 +278,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -296,7 +296,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,
@@ -325,7 +325,7 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <div className="grid place-items-center px-2">
+      <div className="grid place-items-center px-2.5">
         <THeadDropdown
           id="actions"
           label={"Actions"}
