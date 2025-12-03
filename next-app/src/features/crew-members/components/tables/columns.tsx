@@ -4,7 +4,9 @@ import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
 import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { BossIcon } from "@/components/icons/boss";
+import { BuildingIcon } from "@/components/icons/building";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
+import { GamblingBuildingIcon } from "@/components/icons/gambling-building";
 import { NationalityIcon } from "@/components/icons/nationality";
 import { TraitsIcon } from "@/components/icons/traits";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +16,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { autoRoutesTitle } from "@/constants/page-title/auto-routes";
+import { buildingTitle } from "@/constants/page-title/building";
 import { captainRolesTitle } from "@/constants/page-title/captain-roles";
 import { crewLevelsTitle } from "@/constants/page-title/crew-levels";
 import { crewMembersTitle } from "@/constants/page-title/crew-members";
+import { gamblingBuildingsTitle } from "@/constants/page-title/gambling-buildings";
 import { nationalitiesTitle } from "@/constants/page-title/nationalities";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { traitsTitle } from "@/constants/page-title/traits";
@@ -35,10 +39,6 @@ import Link from "next/link";
 import { TransitionStartFunction } from "react";
 import Points from "./points";
 import RowActions from "./row-actions";
-import { BuildingIcon } from "@/components/icons/building";
-import { buildingTitle } from "@/constants/page-title/building";
-import { gamblingBuildingsTitle } from "@/constants/page-title/gambling-buildings";
-import { GamblingBuildingIcon } from "@/components/icons/gambling-building";
 
 export const columns = ({
   isLoading,
@@ -130,7 +130,7 @@ export const columns = ({
       const captain = member.captain;
 
       return (
-        <div className="flex flex-col gap-2 px-2">
+        <div className="flex flex-col gap-2 px-2.5">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">
               <Tooltip>
@@ -310,7 +310,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
+      <div className="flex items-center gap-2 px-2.5">
         <Badge variant={"outline"}>{row.original.turn_recruited}</Badge>
 
         {dateFormatter({
@@ -349,7 +349,7 @@ export const columns = ({
       );
     },
     cell: ({ row }) => (
-      <div className="flex items-center gap-2 px-2">
+      <div className="flex items-center gap-2 px-2.5">
         <Points crewMember={row.original} type="MOVEMENT" />
       </div>
     ),
@@ -381,7 +381,7 @@ export const columns = ({
 
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-2 px-2">
+        <div className="flex items-center gap-2 px-2.5">
           <Points crewMember={row.original} type="ACTION" />
         </div>
       );
@@ -419,7 +419,7 @@ export const columns = ({
       );
 
       return (
-        <div className="flex flex-col gap-2 px-2">
+        <div className="flex flex-col gap-2 px-2.5">
           {experience.length > 0 ? (
             <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
@@ -483,7 +483,7 @@ export const columns = ({
       );
 
       return (
-        <div className="flex flex-col gap-2 px-2">
+        <div className="flex flex-col gap-2 px-2.5">
           {experience.length > 0 ? (
             <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
@@ -547,7 +547,7 @@ export const columns = ({
       );
 
       return (
-        <div className="flex flex-col gap-2 px-2">
+        <div className="flex flex-col gap-2 px-2.5">
           {experience.length > 0 ? (
             <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
@@ -611,7 +611,7 @@ export const columns = ({
       );
 
       return (
-        <div className="flex flex-col gap-2 px-2">
+        <div className="flex flex-col gap-2 px-2.5">
           {experience.length > 0 ? (
             <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
@@ -675,7 +675,7 @@ export const columns = ({
       );
 
       return (
-        <div className="flex flex-col gap-2 px-2">
+        <div className="flex flex-col gap-2 px-2.5">
           {experience.length > 0 ? (
             <ul className="flex flex-col gap-1">
               {experience.map((exp) => {
@@ -717,9 +717,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -735,7 +735,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning>
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,

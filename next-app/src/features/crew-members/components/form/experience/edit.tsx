@@ -192,6 +192,7 @@ const EditExperienceForm = ({ member, playthroughId, levels }: Props) => {
                             emitClick={(val) =>
                               form.setValue(`experiences.${index}.value`, val)
                             }
+                            isPending={isPending}
                             minValue={1}
                             maxValue={
                               levels?.find(
