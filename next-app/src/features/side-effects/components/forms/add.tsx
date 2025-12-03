@@ -183,6 +183,7 @@ const AddSideEffectForm = () => {
                     value={field.value}
                     allowNegative
                     emitClick={(val) => form.setValue("value", val)}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
