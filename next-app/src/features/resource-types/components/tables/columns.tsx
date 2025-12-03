@@ -1,7 +1,6 @@
 "use client";
 
 import { CustomButton } from "@/components/custom-button";
-import { Badge } from "@/components/ui/badge";
 import { resourceTypesTitle } from "@/constants/page-title/resource-types";
 import { ResourceType } from "@/core/cog/resource-type/types/resource-type";
 import { SelectCell } from "@/core/table/components/select-column/cell";
@@ -9,10 +8,10 @@ import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
 import { dateFormatter } from "@/lib/utils/format-date";
+import { ft3m3 } from "@/lib/utils/ft3-m3";
 import { ColumnDef } from "@tanstack/react-table";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
-import { ft3m3 } from "@/lib/utils/ft3-m3";
 
 export const columns = ({
   isLoading,
@@ -120,7 +119,7 @@ export const columns = ({
 
     cell: ({ row }) => (
       <div
-        className="px-2"
+        className="px-2.5"
         dangerouslySetInnerHTML={{
           __html: ft3m3(row.original.capacity).html,
         }}
@@ -138,9 +137,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -156,7 +155,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,
