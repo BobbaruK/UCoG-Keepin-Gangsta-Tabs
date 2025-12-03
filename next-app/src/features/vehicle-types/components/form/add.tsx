@@ -31,7 +31,7 @@ const AddVehicleTypeForm = () => {
     resolver: zodResolver(AddVehicleTypeSchema),
     defaultValues: {
       name: "",
-      capacity: 0,
+      capacity: 1,
     },
   });
 
@@ -108,6 +108,8 @@ const AddVehicleTypeForm = () => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("capacity", val)}
+                    minValue={1}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (

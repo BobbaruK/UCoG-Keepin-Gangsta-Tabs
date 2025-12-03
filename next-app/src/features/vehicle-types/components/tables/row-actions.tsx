@@ -2,25 +2,14 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
-import { CopyIcon } from "@/components/icons/copy";
-import { EditIcon } from "@/components/icons/edit";
-import { MoreIcon } from "@/components/icons/more";
 import { TrashIcon } from "@/components/icons/trash";
 import { VehicleTypesIcon } from "@/components/icons/vehicle-types";
 import ResponsiveDialog from "@/components/responsive-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
+import RowActionDropdown from "@/core/table/components/row-action-dropdown";
 import { cog_vehicle_type, UserRole } from "@/generated/prisma";
-import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
 import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteVehicleType } from "../../actions/delete";
@@ -31,7 +20,6 @@ interface Props {
 
 const RowActions = ({ vehicleType }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
@@ -96,51 +84,20 @@ const RowActions = ({ vehicleType }: Props) => {
         </div>
       </ResponsiveDialog>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild disabled={isPending}>
-          <CustomButton
-            buttonLabel="More"
-            size={"icon"}
-            icon={MoreIcon}
-            iconPlacement="left"
-            variant={"outline"}
-            className="size-8"
-            skeletonClassName="size-8"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleCopy(vehicleType.id)}>
-            <CopyIcon /> Copy ID
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href={`${vehicleTypesTitle.href}/${vehicleType.id}`}>
-              <VehicleTypesIcon />
-              Go to {vehicleTypesTitle.label.singular.toLowerCase()}
-            </Link>
-          </DropdownMenuItem>
-
-          {session && session.user.role !== UserRole.USER && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={`${vehicleTypesTitle.href}/${vehicleType.id}/edit`}>
-                  <EditIcon />
-                  Edit {vehicleTypesTitle.label.singular.toLowerCase()}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {vehicleTypesTitle.label.singular.toLowerCase()}
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowActionDropdown
+        id={vehicleType.id}
+        resourceName={vehicleType.name}
+        goTo={{
+          href: `${vehicleTypesTitle.href}/${vehicleType.id}`,
+          icon: VehicleTypesIcon,
+        }}
+        showEditDelete={
+          (session && session.user.role !== UserRole.USER) || false
+        }
+        editHref={`${vehicleTypesTitle.href}/${vehicleType.id}/edit`}
+        isPending={isPending}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+      />
     </>
   );
 };

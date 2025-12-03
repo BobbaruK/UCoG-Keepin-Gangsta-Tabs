@@ -142,6 +142,8 @@ const EditVehicleTypeForm = ({ vehicleType }: Props) => {
                   <Counter
                     value={field.value}
                     emitClick={(val) => form.setValue("capacity", val)}
+                    minValue={1}
+                    isPending={isPending}
                   />
                 </div>
                 {fieldState.invalid && (
