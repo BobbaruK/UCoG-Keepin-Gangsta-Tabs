@@ -18,6 +18,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export const columns = ({
   isLoading,
@@ -74,9 +75,9 @@ export const columns = ({
     enableHiding: false,
     enableSorting: true,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    size: 240,
+    minSize: 240,
+    maxSize: 240,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -111,9 +112,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    size: 210,
+    minSize: 210,
+    maxSize: 210,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -127,7 +128,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => {
-      if (!row.original.crew_member) return <div className="px-3">None</div>;
+      if (!row.original.crew_member) return <div className="px-2.5">None</div>;
 
       return (
         <CustomButton
@@ -157,9 +158,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: false,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    size: 180,
+    minSize: 180,
+    maxSize: 180,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -174,19 +175,19 @@ export const columns = ({
 
     cell: ({ row }) => {
       if (!row.original.route_type.length)
-        return <div className="px-3">None</div>;
+        return <div className="px-2.5">None</div>;
 
-      return row.original.route_type.map((type) => (
-        <CustomButton
-          key={type.id}
-          buttonLabel={type.name}
-          linkHref={`${autoRouteTypesTitle.href}/${type.id}`}
-          size={"sm"}
-          variant={"link"}
-          skeletonClassName="h-8 w-[71px]"
-          noEffect
-        />
-      ));
+      return (
+        <div className="flex flex-wrap items-center gap-2 px-2.5">
+          {row.original.route_type.map((type) => (
+            <Badge variant={"outline"} asChild key={type.id}>
+              <Link href={`${autoRouteTypesTitle.href}/${type.id}`}>
+                {type.name}
+              </Link>
+            </Badge>
+          ))}
+        </div>
+      );
     },
   },
   // Vehicle type
@@ -199,9 +200,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    size: 270,
+    minSize: 270,
+    maxSize: 270,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -215,7 +216,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => {
-      if (!row.original.vehicle_type) return <div className="px-3">None</div>;
+      if (!row.original.vehicle_type) return <div className="px-2.5">None</div>;
 
       return (
         <div className="flex items-center gap-1">
@@ -247,9 +248,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    size: 110,
-    minSize: 105,
-    maxSize: 150,
+    size: 115,
+    minSize: 115,
+    maxSize: 115,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -263,7 +264,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="px-3">
+      <div className="px-2.5">
         <Badge>{row.original.steps}</Badge>
       </div>
     ),
@@ -279,9 +280,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -297,7 +298,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,
