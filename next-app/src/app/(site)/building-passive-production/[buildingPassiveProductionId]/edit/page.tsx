@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 
   return {
-    title: `Edit ${buildingPassiveTitle.label.singular.toLowerCase()}: "${buildingPassive.resource.name} (${buildingPassive.quantity})"`,
+    title: `Edit ${buildingPassiveTitle.label.singular.toLowerCase()}: "${buildingPassive.resource?.name} (${buildingPassive.quantity})"`,
   };
 }
 
@@ -95,7 +95,7 @@ const EditBuildingPassiveDurationPage = async ({ params }: Props) => {
           },
           {
             href: `${buildingPassiveTitle.href}/${buildingPassiveProductionId}`,
-            label: `${buildingPassive.resource.name} (${buildingPassive.quantity})`,
+            label: `${buildingPassive.resource?.name} (${buildingPassive.quantity})`,
           },
           {
             label: `Edit ${buildingPassiveTitle.label.singular.toLowerCase()}`,
@@ -104,7 +104,7 @@ const EditBuildingPassiveDurationPage = async ({ params }: Props) => {
       />
 
       <PageTitle
-        label={`Edit "${buildingPassive.resource.name} (${buildingPassive.quantity})"`}
+        label={`Edit "${buildingPassive.resource?.name} (${buildingPassive.quantity})"`}
         backBtnHref={`${buildingPassiveTitle.href}/${buildingPassiveProductionId}`}
         session={session}
       />

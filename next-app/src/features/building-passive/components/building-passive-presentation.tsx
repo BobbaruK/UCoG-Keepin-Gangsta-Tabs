@@ -10,7 +10,9 @@ const BuildingPassivePresentation = ({ buildingPassive }: Props) => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <span>{buildingPassive.name}</span>
+          <span>
+            {buildingPassive.resource?.name} (${buildingPassive.quantity})
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent>
