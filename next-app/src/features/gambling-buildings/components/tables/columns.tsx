@@ -258,7 +258,7 @@ export const columns = ({
 
     cell: ({ row }) => {
       return (
-        <div className="grid place-items-center px-3">
+        <div className="grid place-items-center px-2.5">
           <WeeklyCost gamblingBuilding={row.original} />
         </div>
       );
@@ -293,7 +293,7 @@ export const columns = ({
 
     cell: ({ row }) => {
       return (
-        <div className="grid place-items-center px-3">
+        <div className="grid place-items-center px-2.5">
           <CashOnHand gamblingBuilding={row.original} />
         </div>
       );
@@ -310,9 +310,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
