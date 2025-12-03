@@ -88,7 +88,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="px-2">
+      <div className="px-2.5">
         <Link
           className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
           href={`${resourcesTitle.href}/${row.original.id}`}
@@ -165,7 +165,9 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="px-2">{capitalizeFirstLetter(row.original.category)}</div>
+      <div className="px-2.5">
+        {capitalizeFirstLetter(row.original.category)}
+      </div>
     ),
   },
   // Price
@@ -194,7 +196,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="px-2">
+      <div className="px-2.5">
         {row.original.price === 0
           ? `Can't be bought/sold`
           : formatCurrency({
@@ -271,7 +273,7 @@ export const columns = ({
     },
     cell: ({ row }) => (
       <div
-        className="px-2"
+        className="px-2.5"
         dangerouslySetInnerHTML={{
           __html: ft3m3(row.original.resource_type.capacity).html,
         }}
@@ -289,9 +291,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -307,7 +309,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,
