@@ -244,6 +244,7 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
                       name={field.name}
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      disabled={isPending}
                     />
                   </Field>
                 )}
@@ -274,6 +275,7 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
                       name={field.name}
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      disabled={isPending}
                     />
                   </Field>
                 )}
@@ -309,6 +311,7 @@ const EditPlaythroughForm = ({ playthrough, laws = [] }: Props) => {
                       name={field.name}
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      disabled={isPending}
                     />
                   </Field>
                 )}

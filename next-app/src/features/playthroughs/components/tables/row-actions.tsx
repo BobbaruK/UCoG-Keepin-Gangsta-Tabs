@@ -2,25 +2,14 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
-import { CopyIcon } from "@/components/icons/copy";
-import { EditIcon } from "@/components/icons/edit";
-import { MoreIcon } from "@/components/icons/more";
 import { PlaythroughIcon } from "@/components/icons/playthrough";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
-import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
+import RowActionDropdown from "@/core/table/components/row-action-dropdown";
 import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deletePlaythrough } from "../../actions/delete";
@@ -31,7 +20,6 @@ interface Props {
 
 const RowActions = ({ playthrough }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const { handleCopy } = useCustomCopyToClipboard();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { data: session } = useSession();
 
@@ -97,51 +85,23 @@ const RowActions = ({ playthrough }: Props) => {
         </div>
       </ResponsiveDialog>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild disabled={isPending}>
-          <CustomButton
-            buttonLabel="More"
-            size={"icon"}
-            icon={MoreIcon}
-            iconPlacement="left"
-            variant={"outline"}
-            className="size-8"
-            skeletonClassName="size-8"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleCopy(playthrough.id)}>
-            <CopyIcon /> Copy ID
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href={`${playthroughTitle.href}/${playthrough.id}`}>
-              <PlaythroughIcon />
-              Go to {playthroughTitle.label.singular.toLowerCase()}
-            </Link>
-          </DropdownMenuItem>
-
-          {session && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href={`${playthroughTitle.href}/${playthrough.id}/edit`}>
-                  <EditIcon />
-                  Edit {playthroughTitle.label.singular.toLowerCase()}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => setOpenDeleteDialog(true)}
-              >
-                <TrashIcon />
-                Delete {playthroughTitle.label.singular.toLowerCase()}
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowActionDropdown
+        id={playthrough.id}
+        resourceName={playthrough.name}
+        goTo={{
+          href: `${playthroughTitle.href}/${playthrough.id}`,
+          icon: PlaythroughIcon,
+        }}
+        showEditDelete={
+          (session &&
+            playthrough.auth_userId === session.user.id &&
+            !playthrough.is_finished) ||
+          false
+        }
+        editHref={`${playthroughTitle.href}/${playthrough.id}/edit`}
+        isPending={isPending}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+      />
     </>
   );
 };

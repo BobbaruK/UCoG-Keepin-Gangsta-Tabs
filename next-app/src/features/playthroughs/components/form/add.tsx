@@ -252,6 +252,7 @@ const AddPlaythroughForm = ({
                         name={field.name}
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={isPending}
                       />
                     </Field>
                   )}
@@ -282,6 +283,7 @@ const AddPlaythroughForm = ({
                         name={field.name}
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={isPending}
                       />
                     </Field>
                   )}
@@ -317,6 +319,7 @@ const AddPlaythroughForm = ({
                         name={field.name}
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={isPending}
                       />
                     </Field>
                   )}
