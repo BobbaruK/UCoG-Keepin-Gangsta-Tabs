@@ -22,6 +22,7 @@ interface Props
   hideLabelOnMobile?: boolean;
   target?: React.HTMLAttributeAnchorTarget;
   skeletonClassName?: React.HtmlHTMLAttributes<HTMLButtonElement>["className"];
+  noSkeleton?: boolean;
   noEffect?: boolean;
 }
 
@@ -36,6 +37,7 @@ const CustomButton = React.forwardRef<
       hideLabelOnMobile = true,
       target,
       skeletonClassName,
+      noSkeleton = false,
       noEffect,
       ...restProps
     },
@@ -55,7 +57,7 @@ const CustomButton = React.forwardRef<
     const spanClasses =
       !matches && restProps.icon && hideLabelOnMobile ? "hidden lg:inline" : "";
 
-    if (!componentLoaded)
+    if (!componentLoaded && !noSkeleton)
       return <ButtonSkeleton className={skeletonClassName} />;
 
     return (
