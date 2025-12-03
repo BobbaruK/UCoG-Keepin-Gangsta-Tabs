@@ -91,7 +91,7 @@ export const columns = ({
       const image = trait.image;
 
       return (
-        <div className="px-2">
+        <div className="px-2.5">
           <Link
             className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
             href={`${traitsTitle.href}/${sideEffectId}`}
@@ -182,7 +182,7 @@ export const columns = ({
       const sideEffectValue = sideEffect?.value;
 
       return (
-        <div className="px-2">
+        <div className="px-2.5">
           {sideEffect ? (
             <Badge
               asChild
@@ -248,9 +248,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    size: 170,
-    minSize: 170,
-    maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -266,7 +266,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,
@@ -295,7 +295,7 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <div className="grid place-items-center px-2">
+      <div className="grid place-items-center px-2.5">
         <THeadDropdown
           id="actions"
           label={"Actions"}
@@ -310,7 +310,7 @@ export const columns = ({
       const sideEffect = row.original;
 
       return (
-        <div className="grid place-items-center px-2">
+        <div className="grid place-items-center px-2.5">
           <RowActions trait={sideEffect} />
         </div>
       );
