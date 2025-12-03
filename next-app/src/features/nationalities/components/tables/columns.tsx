@@ -84,7 +84,7 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="px-2">
+      <div className="px-2.5">
         <Link
           className="flex h-auto items-center justify-start gap-2 p-0 hover:cursor-pointer"
           href={`${nationalitiesTitle.href}/${row.original.id}`}
@@ -177,9 +177,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -195,7 +195,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,
