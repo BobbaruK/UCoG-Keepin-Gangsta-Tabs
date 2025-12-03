@@ -78,4 +78,14 @@ export const crewMemberInclude = {
       },
     },
   },
+  cogGamblingBuilding: {
+    include: {
+      gambling_building_size: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  },
 } satisfies Prisma.cog_crew_memberInclude;

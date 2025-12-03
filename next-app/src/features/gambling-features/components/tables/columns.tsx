@@ -130,7 +130,7 @@ export const columns = ({
         <span
           className={cn(
             "size-3 rounded-full",
-            gamblingFeatureColors(row.original.type),
+            gamblingFeatureColors({ type: row.original.type, noHover: true }),
           )}
         />
       </div>

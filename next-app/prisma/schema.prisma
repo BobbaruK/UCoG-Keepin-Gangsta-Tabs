@@ -50,11 +50,12 @@ model auth_user {
   accounts   auth_account[]
   twofactors auth_two_factor[]
 
-  cogPlaythroughs   cog_playthrough[]
-  cogPoliceOfficers cog_police_officer[]
-  cogCrewMembers    cog_crew_member[]
-  cogAutoRoutes     cog_auto_route[]
-  cogBuildings      cog_building[]
+  cogPlaythroughs      cog_playthrough[]
+  cogPoliceOfficers    cog_police_officer[]
+  cogCrewMembers       cog_crew_member[]
+  cogAutoRoutes        cog_auto_route[]
+  cogBuildings         cog_building[]
+  cogGamblingBuildings cog_gambling_building[]
 
   @@index([email, slug])
   @@map("user")
@@ -258,14 +259,14 @@ model cog_playthrough {
 
   laws cog_law[]
 
-  police_officers cog_police_officer[]
-  crew_members    cog_crew_member[]
-  buildings       cog_building[]
-  // gambling_buildings
-  auto_routes     cog_auto_route[]
+  police_officers    cog_police_officer[]
+  crew_members       cog_crew_member[]
+  buildings          cog_building[]
+  gambling_buildings cog_gambling_building[]
+  auto_routes        cog_auto_route[]
   // wards
-  user            auth_user            @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
-  auth_userId     String
+  user               auth_user               @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
+  auth_userId        String
 }
 
 //    Police
@@ -317,9 +318,9 @@ model cog_crew_member {
   user        auth_user @relation(fields: [auth_userId], references: [id], onDelete: Cascade)
   auth_userId String
 
-  cogAutoRoute cog_auto_route?
-
-  cogBuildings cog_building?
+  cogAutoRoute        cog_auto_route?
+  cogBuildings        cog_building?
+  cogGamblingBuilding cog_gambling_building?
 
   @@index([full_name])
 }
@@ -498,6 +499,28 @@ model cog_building_passive_production_duration {
 
 //    Gambling
 
+model cog_gambling_building {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+
+  gambling_building_size    cog_gambling_size @relation(fields: [gambling_building_size_id], references: [id])
+  gambling_building_size_id String
+
+  manager    cog_crew_member @relation(fields: [manager_id], references: [id])
+  manager_id String          @unique
+
+  playthrough    cog_playthrough @relation(fields: [playthrough_id], references: [id], onDelete: Cascade)
+  playthrough_id String
+
+  features cog_gambling_feature[]
+
+  user    auth_user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+}
+
 enum GamblingFeatureType {
   ENHANCED
   OCCASIONAL
@@ -514,6 +537,8 @@ model cog_gambling_feature {
   cash_on_hand Int
   is_dlc       Boolean             @default(false)
   type         GamblingFeatureType @default(OCCASIONAL)
+
+  buildings cog_gambling_building[]
 }
 
 model cog_gambling_size {
@@ -524,4 +549,6 @@ model cog_gambling_size {
   name         String
   max_features Int
   is_dlc       Boolean @default(false)
+
+  gambling_buildings cog_gambling_building[]
 }

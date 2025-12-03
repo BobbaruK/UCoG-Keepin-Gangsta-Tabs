@@ -5,16 +5,22 @@ import { cn } from "@/lib/utils";
 
 const Legend = () => {
   return (
-    <div className="flex flex-wrap items-center gap-4 p-2">
+    <span className="flex flex-wrap items-center gap-4 p-2">
       {gamblingFeatureTypes.map((type) => (
         <small key={type} className="flex items-center gap-2">
           <span
-            className={cn("size-3 rounded-full", gamblingFeatureColors(type))}
+            className={cn(
+              "size-3 rounded-full",
+              gamblingFeatureColors({
+                type,
+                noHover: true,
+              }),
+            )}
           />
           {gamblingFeatureTypesUtil(type)}
         </small>
       ))}
-    </div>
+    </span>
   );
 };
 

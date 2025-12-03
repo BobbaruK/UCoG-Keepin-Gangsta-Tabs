@@ -9,6 +9,7 @@ import { BuildingTypeIcon } from "@/components/icons/building-type";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { CrewLevelIcon } from "@/components/icons/crew-level";
 import { CrewMemberIcon } from "@/components/icons/crew-member";
+import { GamblingBuildingIcon } from "@/components/icons/gambling-building";
 import { GamblingFeatureIcon } from "@/components/icons/gambling-feature";
 import { GamblingSizeIcon } from "@/components/icons/gambling-size";
 import { LawIcon } from "@/components/icons/law";
@@ -29,6 +30,8 @@ import {
 } from "@/types/menu-items";
 import { TbDashboard } from "react-icons/tb";
 import { autoRouteTypesTitle } from "./page-title/auto-route-types";
+import { autoRoutesTitle } from "./page-title/auto-routes";
+import { buildingTitle } from "./page-title/building";
 import { buildingBackroomsTitle } from "./page-title/building-backrooms";
 import { buildingPassiveTitle } from "./page-title/building-passive";
 import { buildingPassiveDurationTitle } from "./page-title/building-passive-duration";
@@ -37,6 +40,7 @@ import { buildingTypesTitle } from "./page-title/building-types";
 import { captainRolesTitle } from "./page-title/captain-roles";
 import { crewLevelsTitle } from "./page-title/crew-levels";
 import { crewMembersTitle } from "./page-title/crew-members";
+import { gamblingBuildingsTitle } from "./page-title/gambling-buildings";
 import { gamblingFeatureTitle } from "./page-title/gambling-feature";
 import { gamblingSizeTitle } from "./page-title/gambling-size";
 import { lawsTitle } from "./page-title/laws";
@@ -168,18 +172,18 @@ export const playthroughMenu = (
   },
   {
     title: "Auto routes",
-    url: `${playthroughTitle.href}/${playthroughId}/auto-routes`,
+    url: `${playthroughTitle.href}/${playthroughId + autoRoutesTitle.href}`,
     icon: AutoRouteIcon,
   },
   {
     title: "Buildings",
-    url: `${playthroughTitle.href}/${playthroughId}/buildings`,
+    url: `${playthroughTitle.href}/${playthroughId + buildingTitle.href}`,
     icon: BuildingIcon,
   },
   {
     title: "Gambling",
-    url: `${playthroughTitle.href}/${playthroughId}/gambling`,
-    icon: PoliceOfficerIcon,
+    url: `${playthroughTitle.href}/${playthroughId + gamblingBuildingsTitle.href}`,
+    icon: GamblingBuildingIcon,
   },
   {
     title: capitalizeFirstLetter(
