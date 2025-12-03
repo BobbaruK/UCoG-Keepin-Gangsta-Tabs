@@ -20,20 +20,18 @@ import { dateFormatter } from "@/lib/utils/format-date";
 import { ft3m3 } from "@/lib/utils/ft3-m3";
 import { setFullName } from "@/lib/utils/full-name";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { Fragment, TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
-import Link from "next/link";
 
 export const columns = ({
   isLoading,
   startTransition,
   visibleUsers,
-  respectForTheLaw = false,
 }: {
   isLoading: boolean;
   startTransition: TransitionStartFunction;
   visibleUsers: Building[];
-  respectForTheLaw?: boolean;
 }): ColumnDef<Building>[] => [
   // Select
   {
@@ -142,7 +140,7 @@ export const columns = ({
             noEffect
           />
         ) : (
-          <div className="px-3">None</div>
+          <div className="px-2.5">None</div>
         )}
       </div>
     ),
@@ -234,7 +232,7 @@ export const columns = ({
             noEffect
           />
         ) : (
-          <div className="px-3">None</div>
+          <div className="px-2.5">None</div>
         )}
       </div>
     ),
@@ -276,7 +274,7 @@ export const columns = ({
             noEffect
           />
         ) : (
-          <div className="px-3">None</div>
+          <div className="px-2.5">None</div>
         )}
       </div>
     ),
@@ -307,20 +305,20 @@ export const columns = ({
     },
 
     cell: ({ row }) => (
-      <div className="flex items-center gap-1 px-3">
+      <div className="flex items-center gap-1 px-2.5">
         {row.original.passive_productions.length ? (
           row.original.passive_productions.map((production) => (
             <Fragment key={production.id}>
               <Link href={`${buildingPassiveTitle.href}/${production.id}`}>
                 <CustomAvatar
-                  image={production.resource.image}
+                  image={production.resource?.image}
                   className="size-6 rounded-sm border-none"
                   icon={<ResourceIcon />}
                   fit="contain"
                 />
               </Link>
               <CustomButton
-                buttonLabel={`${production.resource.name} (${production.quantity})`}
+                buttonLabel={`${production.resource?.name} (${production.quantity})`}
                 linkHref={`${buildingPassiveTitle.href}/${production.id}`}
                 size={"sm"}
                 variant={"link"}
@@ -373,7 +371,7 @@ export const columns = ({
             noEffect
           />
         ) : (
-          <div className="px-3">None</div>
+          <div className="px-2.5">None</div>
         )}
       </div>
     ),
@@ -389,9 +387,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
