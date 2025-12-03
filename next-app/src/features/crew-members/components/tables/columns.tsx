@@ -37,6 +37,8 @@ import Points from "./points";
 import RowActions from "./row-actions";
 import { BuildingIcon } from "@/components/icons/building";
 import { buildingTitle } from "@/constants/page-title/building";
+import { gamblingBuildingsTitle } from "@/constants/page-title/gambling-buildings";
+import { GamblingBuildingIcon } from "@/components/icons/gambling-building";
 
 export const columns = ({
   isLoading,
@@ -220,6 +222,23 @@ export const columns = ({
                     {row.original.cogBuildings.backroom &&
                       `(${row.original.cogBuildings.backroom.name})`}
                   </strong>
+                </TooltipContent>
+              </Tooltip>
+            )}
+            {row.original.cogGamblingBuilding && (
+              <Tooltip>
+                <TooltipTrigger asChild className="ms-auto">
+                  <Link
+                    href={`${playthroughTitle.href}/${row.original.cog_playthroughId + gamblingBuildingsTitle.href}/${row.original.cogGamblingBuilding.id}`}
+                  >
+                    <GamblingBuildingIcon size={16} />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {capitalizeFirstLetter(
+                    gamblingBuildingsTitle.label.singular.toLowerCase(),
+                  )}
+                  : <strong>{row.original.cogGamblingBuilding.name}</strong>
                 </TooltipContent>
               </Tooltip>
             )}

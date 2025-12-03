@@ -2,8 +2,6 @@
 
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
-import { AutoRouteIcon } from "@/components/icons/auto-route";
-import { BuildingIcon } from "@/components/icons/building";
 import { ResourceIcon } from "@/components/icons/resource";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +35,7 @@ import { BuildingPassiveDuration } from "@/core/cog/building-passive-duration/ty
 import { BuildingPassive } from "@/core/cog/building-passive/types/building-passive-duration";
 import { BuildingSize } from "@/core/cog/building-size/types/building-size";
 import { BuildingType } from "@/core/cog/building-type/types/building-type";
+import IsMemberBusy from "@/core/cog/crew-member/components/is-member-busy";
 import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { Playthrough } from "@/core/cog/playthrough/types/playthrough";
 import { cn } from "@/lib/utils";
@@ -329,29 +328,12 @@ const AddBuildingForm = ({
                                   setComboxSize(false);
                                 }}
                                 disabled={
-                                  !!member.cogBuildings || !!member.cogAutoRoute
+                                  !!member.cogBuildings ||
+                                  !!member.cogAutoRoute ||
+                                  !!member.cogGamblingBuilding
                                 }
                               >
-                                {member.full_name}
-
-                                {member.cogBuildings && (
-                                  <>
-                                    <BuildingIcon />
-                                    {member.cogBuildings.name}{" "}
-                                    {member.cogBuildings.backroom && (
-                                      <>
-                                        ({member.cogBuildings.backroom?.name})
-                                      </>
-                                    )}
-                                  </>
-                                )}
-
-                                {member.cogAutoRoute && (
-                                  <>
-                                    <AutoRouteIcon />
-                                    {member.cogAutoRoute.name}
-                                  </>
-                                )}
+                                <IsMemberBusy crewMember={member} />
 
                                 <Check
                                   className={cn(
@@ -574,10 +556,10 @@ const AddBuildingForm = ({
                   options={
                     passiveProductions.map((passive) => ({
                       value: passive.id,
-                      label: `${passive.resource.name} (${passive.quantity})`,
+                      label: `${passive.resource?.name} (${passive.quantity})`,
                       image: (
                         <CustomAvatar
-                          image={passive.resource.image}
+                          image={passive.resource?.image}
                           className="size-4 rounded-sm border-none"
                           fit="contain"
                           icon={<ResourceIcon />}

@@ -3,8 +3,6 @@
 import { revPath } from "@/actions/revalidate";
 import Counter from "@/components/counter";
 import { CustomButton } from "@/components/custom-button";
-import { AutoRouteIcon } from "@/components/icons/auto-route";
-import { BuildingIcon } from "@/components/icons/building";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
@@ -39,12 +37,12 @@ import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { vehicleTypesTitle } from "@/constants/page-title/vehicle-types";
 import { AutoRouteType } from "@/core/cog/auto-route-type/types/auto-route-type";
 import { AutoRoute } from "@/core/cog/auto-route/types/auto-route";
+import IsMemberBusy from "@/core/cog/crew-member/components/is-member-busy";
 import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { VehicleType } from "@/core/cog/vehicle-type/types/vehicle-type";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils/capitalize-first-letter";
 import { formInputId } from "@/lib/utils/form-input-id";
-import { setFullName } from "@/lib/utils/full-name";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -270,35 +268,14 @@ const EditAutoRouteForm = ({
                                 setComboxAutoRoute(false);
                               }}
                               disabled={
-                                !!member.cogBuildings ||
                                 (!!member.cogAutoRoute &&
-                                  member.id !== autoRoute.crew_member_id)
+                                  member.id !== autoRoute.crew_member_id) ||
+                                !!member.cogGamblingBuilding ||
+                                !!member.cogBuildings
                               }
                             >
-                              {
-                                setFullName({
-                                  firstName: member.first_name,
-                                  lastName: member.last_name,
-                                  alias: member.alias,
-                                }).outputFE
-                              }
+                              <IsMemberBusy crewMember={member} />
 
-                              {member.cogBuildings && (
-                                <>
-                                  <BuildingIcon />
-                                  {member.cogBuildings.name}{" "}
-                                  {member.cogBuildings.backroom && (
-                                    <>({member.cogBuildings.backroom?.name})</>
-                                  )}
-                                </>
-                              )}
-
-                              {member.cogAutoRoute && (
-                                <>
-                                  <AutoRouteIcon />
-                                  {member.cogAutoRoute.name}
-                                </>
-                              )}
                               <Check
                                 className={cn(
                                   "ml-auto",

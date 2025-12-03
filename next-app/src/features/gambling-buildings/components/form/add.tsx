@@ -51,6 +51,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { addGamblingBuilding } from "../../actions/add";
 import { AddGamblingBuildingSchema } from "../../schemas/add-gambling-building";
+import IsMemberBusy from "@/core/cog/crew-member/components/is-member-busy";
 
 interface Props {
   playthrough: Playthrough;
@@ -318,43 +319,7 @@ const AddGamblingBuildingForm = ({
                                   !!member.cogGamblingBuilding
                                 }
                               >
-                                {member.full_name}
-
-                                {member.cogBuildings && (
-                                  <>
-                                    <BuildingIcon />
-                                    {member.cogBuildings.name}{" "}
-                                    {member.cogBuildings.backroom && (
-                                      <>
-                                        ({member.cogBuildings.backroom?.name})
-                                      </>
-                                    )}
-                                  </>
-                                )}
-
-                                {member.cogAutoRoute && (
-                                  <>
-                                    <AutoRouteIcon />
-                                    {member.cogAutoRoute.name}
-                                  </>
-                                )}
-
-                                {member.cogGamblingBuilding && (
-                                  <>
-                                    <GamblingBuildingIcon />
-                                    <span>
-                                      {member.cogGamblingBuilding.name}{" "}
-                                      <small>
-                                        (
-                                        {
-                                          member.cogGamblingBuilding
-                                            .gambling_building_size.name
-                                        }
-                                        )
-                                      </small>
-                                    </span>
-                                  </>
-                                )}
+                                <IsMemberBusy crewMember={member} />
 
                                 <Check
                                   className={cn(

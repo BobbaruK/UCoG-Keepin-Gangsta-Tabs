@@ -51,6 +51,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { addAutoRoute } from "../../actions/add";
 import { AddAutoRouteSchema } from "../../schemas/add";
+import IsMemberBusy from "@/core/cog/crew-member/components/is-member-busy";
 
 interface Props {
   playthrough: Playthrough;
@@ -240,33 +241,13 @@ const AddAutoRouteForm = ({
                                 setComboxAutoRoute(false);
                               }}
                               disabled={
-                                !!member.cogBuildings || !!member.cogAutoRoute
+                                !!member.cogBuildings ||
+                                !!member.cogAutoRoute ||
+                                !!member.cogGamblingBuilding
                               }
                             >
-                              {
-                                setFullName({
-                                  firstName: member.first_name,
-                                  lastName: member.last_name,
-                                  alias: member.alias,
-                                }).outputFE
-                              }
+                              <IsMemberBusy crewMember={member} />
 
-                              {member.cogBuildings && (
-                                <>
-                                  <BuildingIcon />
-                                  {member.cogBuildings.name}{" "}
-                                  {member.cogBuildings.backroom && (
-                                    <>({member.cogBuildings.backroom?.name})</>
-                                  )}
-                                </>
-                              )}
-
-                              {member.cogAutoRoute && (
-                                <>
-                                  <AutoRouteIcon />
-                                  {member.cogAutoRoute.name}
-                                </>
-                              )}
                               <Check
                                 className={cn(
                                   "ml-auto",

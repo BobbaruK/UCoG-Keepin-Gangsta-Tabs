@@ -3,7 +3,6 @@
 import { revPath } from "@/actions/revalidate";
 import { CustomAvatar } from "@/components/custom-avatar";
 import { CustomButton } from "@/components/custom-button";
-import { AutoRouteIcon } from "@/components/icons/auto-route";
 import { ResourceIcon } from "@/components/icons/resource";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
@@ -21,7 +20,6 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -41,12 +39,13 @@ import { BuildingPassive } from "@/core/cog/building-passive/types/building-pass
 import { BuildingSize } from "@/core/cog/building-size/types/building-size";
 import { BuildingType } from "@/core/cog/building-type/types/building-type";
 import { Building } from "@/core/cog/building/types/building";
+import IsMemberBusy from "@/core/cog/crew-member/components/is-member-busy";
 import { CrewMember } from "@/core/cog/crew-member/types/crew-member";
 import { cn } from "@/lib/utils";
 import { formInputId } from "@/lib/utils/form-input-id";
 import { ft3m3 } from "@/lib/utils/ft3-m3";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BuildingIcon, Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -365,29 +364,12 @@ const EditBuildingForm = ({
                                   !!(
                                     !!member.cogBuildings &&
                                     member.id !== building.manager_id
-                                  ) || !!member.cogAutoRoute
+                                  ) ||
+                                  !!member.cogAutoRoute ||
+                                  !!member.cogGamblingBuilding
                                 }
                               >
-                                {member.full_name}
-
-                                {member.cogBuildings && (
-                                  <>
-                                    <BuildingIcon />
-                                    {member.cogBuildings.name}{" "}
-                                    {member.cogBuildings.backroom && (
-                                      <>
-                                        ({member.cogBuildings.backroom?.name})
-                                      </>
-                                    )}
-                                  </>
-                                )}
-
-                                {member.cogAutoRoute && (
-                                  <>
-                                    <AutoRouteIcon />
-                                    {member.cogAutoRoute.name}
-                                  </>
-                                )}
+                                <IsMemberBusy crewMember={member} />
 
                                 <Check
                                   className={cn(
@@ -610,10 +592,10 @@ const EditBuildingForm = ({
                   options={
                     passiveProductions.map((passive) => ({
                       value: passive.id,
-                      label: `${passive.resource.name} (${passive.quantity})`,
+                      label: `${passive.resource?.name} (${passive.quantity})`,
                       image: (
                         <CustomAvatar
-                          image={passive.resource.image}
+                          image={passive.resource?.image}
                           className="size-4 rounded-sm border-none"
                           fit="contain"
                           icon={<ResourceIcon />}
