@@ -8,10 +8,10 @@ import { SelectHeader } from "@/core/table/components/select-column/header";
 import { THeadDropdown } from "@/core/table/components/thead-dropdown";
 import { columnId } from "@/core/table/lib/utils/column-id";
 import { dateFormatter } from "@/lib/utils/format-date";
+import { ft3m3 } from "@/lib/utils/ft3-m3";
 import { ColumnDef } from "@tanstack/react-table";
 import { TransitionStartFunction } from "react";
 import RowActions from "./row-actions";
-import { ft3m3 } from "@/lib/utils/ft3-m3";
 
 export const columns = ({
   isLoading,
@@ -127,7 +127,7 @@ export const columns = ({
       return (
         <div
           dangerouslySetInnerHTML={{ __html: ft3m3(capacity).html }}
-          className="px-2"
+          className="px-2.5"
         />
       );
     },
@@ -143,9 +143,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -161,7 +161,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,
@@ -190,7 +190,7 @@ export const columns = ({
     minSize: 75,
     maxSize: 100,
     header: ({ column }) => (
-      <div className="grid place-items-center px-2">
+      <div className="grid place-items-center px-2.5">
         <THeadDropdown
           id="actions"
           label={"Actions"}
@@ -205,7 +205,7 @@ export const columns = ({
       const captainRole = row.original;
 
       return (
-        <div className="grid place-items-center px-2">
+        <div className="grid place-items-center px-2.5">
           <RowActions buildingSize={captainRole} />
         </div>
       );
