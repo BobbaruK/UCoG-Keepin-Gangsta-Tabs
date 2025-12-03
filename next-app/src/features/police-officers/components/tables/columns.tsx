@@ -126,7 +126,7 @@ export const columns = ({
       const bribedTurn = officer.bribed_turn;
 
       return (
-        <div className="flex items-center gap-2 px-2">
+        <div className="flex items-center gap-2 px-2.5">
           <Badge variant={"outline"}>{bribedTurn}</Badge>
           {dateFormatter({
             date: turnToDate(bribedTurn),
@@ -175,7 +175,7 @@ export const columns = ({
       });
 
       return (
-        <div className="flex items-center gap-2 px-2">
+        <div className="flex items-center gap-2 px-2.5">
           <Badge variant={"outline"}>{bribeExpires}</Badge>
           {dateFormatter({
             date: turnToDate(bribeExpires),
@@ -219,7 +219,7 @@ export const columns = ({
       const canCallRaid = officer.can_call_in_a_raid;
 
       return (
-        <div className="px-2">
+        <div className="px-2.5">
           <Badge variant={canCallRaid ? "success" : "danger"}>
             {canCallRaid ? "Yes" : "No"}
           </Badge>
@@ -257,7 +257,7 @@ export const columns = ({
       const hasRivalRelative = officer.has_rival_hooligan_relative;
 
       return (
-        <div className="px-2">
+        <div className="px-2.5">
           <Badge variant={hasRivalRelative ? "danger" : "success"}>
             {hasRivalRelative ? "Yes" : "No"}
           </Badge>
@@ -295,7 +295,7 @@ export const columns = ({
       const politicalContact = officer.political_contact_used;
 
       return (
-        <div className="px-2">
+        <div className="px-2.5">
           <Badge variant={politicalContact ? "success" : "danger"}>
             {politicalContact ? "Yes" : "No"}
           </Badge>
@@ -314,9 +314,9 @@ export const columns = ({
     enableHiding: true,
     enableSorting: true,
     enablePinning: true,
-    // size: 170,
-    // minSize: 170,
-    // maxSize: 200,
+    size: 185,
+    minSize: 185,
+    maxSize: 185,
     header: ({ column }) => {
       return (
         <THeadDropdown
@@ -332,7 +332,7 @@ export const columns = ({
       const date = getValue() as Date | null;
 
       return (
-        <div suppressHydrationWarning className="px-2">
+        <div suppressHydrationWarning className="px-2.5">
           {date
             ? dateFormatter({
                 date,

@@ -2,26 +2,15 @@
 
 import { revPath } from "@/actions/revalidate";
 import { CustomButton } from "@/components/custom-button";
-import { CopyIcon } from "@/components/icons/copy";
-import { EditIcon } from "@/components/icons/edit";
-import { MoreIcon } from "@/components/icons/more";
 import { PoliceOfficerIcon } from "@/components/icons/police-officer";
 import { TrashIcon } from "@/components/icons/trash";
 import ResponsiveDialog from "@/components/responsive-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DIALOG_MESSAGES, MESSAGES } from "@/constants/messages";
 import { playthroughTitle } from "@/constants/page-title/playthrough";
 import { policeOfficersTitle } from "@/constants/page-title/police-officers";
 import { PoliceOfficer } from "@/core/cog/police-officer/types/police-officer";
-import { useCustomCopyToClipboard } from "@/hooks/use-custom-copy-to-clipboard";
+import RowActionDropdown from "@/core/table/components/row-action-dropdown";
 import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deletePoliceOfficer } from "../../actions/delete";
@@ -33,7 +22,6 @@ interface Props {
 const RowActions = ({ policeOfficer }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const { handleCopy } = useCustomCopyToClipboard();
   const { data: session } = useSession();
 
   const handleDelete = () => {
@@ -99,59 +87,23 @@ const RowActions = ({ policeOfficer }: Props) => {
         />
       </ResponsiveDialog>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild disabled={isPending}>
-          <CustomButton
-            buttonLabel="More"
-            size={"icon"}
-            icon={MoreIcon}
-            iconPlacement="left"
-            variant={"outline"}
-            className="size-8"
-            skeletonClassName="size-8"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleCopy(policeOfficer.id)}>
-            <CopyIcon /> Copy ID
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link
-              href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}`}
-            >
-              <PoliceOfficerIcon />
-              Go to {policeOfficersTitle.label.singular.toLowerCase()}
-            </Link>
-          </DropdownMenuItem>
-
-          {session &&
+      <RowActionDropdown
+        id={policeOfficer.id}
+        resourceName={policeOfficer.name}
+        goTo={{
+          href: `${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}`,
+          icon: PoliceOfficerIcon,
+        }}
+        showEditDelete={
+          (session &&
             policeOfficer.auth_userId === session.user.id &&
-            !policeOfficer.cogPlaythrough.is_finished && (
-              <>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem asChild>
-                  <Link
-                    href={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}/edit`}
-                  >
-                    <EditIcon />
-                    Edit {policeOfficersTitle.label.singular.toLowerCase()}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem
-                  variant="destructive"
-                  onClick={() => setOpenDeleteDialog(true)}
-                >
-                  <TrashIcon />
-                  Delete {policeOfficersTitle.label.singular.toLowerCase()}
-                </DropdownMenuItem>
-              </>
-            )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            !policeOfficer.cogPlaythrough.is_finished) ||
+          false
+        }
+        editHref={`${playthroughTitle.href}/${policeOfficer.cog_playthroughId + policeOfficersTitle.href}/${policeOfficer.id}/edit`}
+        isPending={isPending}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+      />
     </>
   );
 };
