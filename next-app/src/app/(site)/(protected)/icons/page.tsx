@@ -15,6 +15,7 @@ import { BuildingSizeIcon } from "@/components/icons/building-size";
 import { BuildingTypeIcon } from "@/components/icons/building-type";
 import { CalendarIcon } from "@/components/icons/calendar";
 import { CameraIcon } from "@/components/icons/camera";
+import { CapacityCalculatorIcon } from "@/components/icons/capacity-calculator";
 import { CaptainRoleIcon } from "@/components/icons/captain-role";
 import { ChevronDownIcon } from "@/components/icons/chevron-down";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
@@ -68,6 +69,7 @@ import { UnbanIcon } from "@/components/icons/unban";
 import { UnlinkIcon } from "@/components/icons/unlink";
 import { UserIcon } from "@/components/icons/user";
 import { UsersIcon } from "@/components/icons/users";
+import { VehicleIcon } from "@/components/icons/vehicle";
 import { VehicleTypesIcon } from "@/components/icons/vehicle-types";
 import { WatchIcon } from "@/components/icons/watch";
 import { PageStructure } from "@/components/page-structure";
@@ -370,6 +372,14 @@ const icons: {
   {
     name: "GamblingBuildingIcon",
     icon: GamblingBuildingIcon,
+  },
+  {
+    name: "CapacityCalculatorIcon",
+    icon: CapacityCalculatorIcon,
+  },
+  {
+    name: "VehicleIcon",
+    icon: VehicleIcon,
   },
 ];
 
